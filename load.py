@@ -29,3 +29,21 @@ train_X = dataset[0]
 train_y = dataset[1]
 test_X = dataset[2]
 test_y = dataset[3]
+
+nb_words_max = -1
+
+for i in range(len(train_X)):
+    if len(train_X[i][3]) > nb_words_max:
+        nb_words_max = len(train_X[i][3])
+    if len(train_X[i][4]) > nb_words_max:
+        nb_words_max = len(train_X[i][4])
+
+for i in range(len(test_X)):
+    if len(test_X[i][3]) > nb_words_max:
+        nb_words_max = len(test_X[i][3])
+    if len(test_X[i][4]) > nb_words_max:
+        nb_words_max = len(test_X[i][4])
+
+print('Number of words max :')
+print(nb_words_max)
+
