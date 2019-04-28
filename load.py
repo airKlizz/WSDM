@@ -24,3 +24,8 @@ print('Dataset[2] length :')
 print(len(dataset[2]))
 print('Dataset[3] length :')
 print(len(dataset[3]))
+
+train_X = dataset[0]
+train_y = dataset[1]
+test_X = dataset[2]
+test_y = dataset[3]
