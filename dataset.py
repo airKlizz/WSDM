@@ -115,16 +115,24 @@ for line in X:
 
 word_embedding, words_dict = load_embedding(embedding_file_path, wordset, embedding_dim)
 
+no_word_vector = np.zeros(embedding_dim)
+
 for line in X:
+
     sentence = []
     for word in line[3]:
         if word in words_dict:
             sentence.append(word_embedding[words_dict[word]])
+    for _ in range(max_sen_len-len(word)):
+        sentence.append(no_word_vector)
     line[3] = np.array(sentence)
+    
     sentence = []
     for word in line[4]:
         if word in words_dict:
             sentence.append(word_embedding[words_dict[word]])
+    for _ in range(max_sen_len-len(word)):
+        sentence.append(no_word_vector)
     line[4] = np.array(sentence)
 
 for i in range(len(y)):
