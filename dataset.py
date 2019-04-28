@@ -120,20 +120,20 @@ no_word_vector = np.zeros(embedding_dim)
 for line in X:
 
     sentence = []
-    for word in line[3]:
-        if word in words_dict:
-            sentence.append(word_embedding[words_dict[word]])
-    for _ in range(max_sen_len-len(word)):
-        sentence.append(no_word_vector)
+    for i in range(max_sen_len):
+        if i < len(line[3]) and line[3][i] in words_dict:
+            sentence.append(word_embedding[words_dict[line[3][i]]])
+        else :
+            sentence.append(no_word_vector)
     line[3] = np.array(sentence)
 
     sentence = []
-    for word in line[4]:
-        if word in words_dict:
-            sentence.append(word_embedding[words_dict[word]])
-    for _ in range(max_sen_len-len(word)):
-        sentence.append(no_word_vector)
-    line[4] = np.array(sentence)
+    for i in range(max_sen_len):
+        if i < len(line[4]) and line[4][i] in words_dict:
+            sentence.append(word_embedding[words_dict[line[4][i]]])
+        else :
+            sentence.append(no_word_vector)
+    line[3] = np.array(sentence)
 
 for i in range(len(y)):
     if y[i] == 'agreed':
