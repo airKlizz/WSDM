@@ -1,4 +1,7 @@
 import pickle
+import os
+
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 data_directory = "../Data"
 
