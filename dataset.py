@@ -20,7 +20,7 @@ embedding_file_path = data_directory+"/glove.6B.100d.txt"
 dataset_file_path = data_directory+"/dataset"
 
 embedding_dim = 100
-max_sen_len = 500
+max_sen_len = 20
 
 X = []
 y = []
@@ -126,7 +126,7 @@ for line in X:
     for _ in range(max_sen_len-len(word)):
         sentence.append(no_word_vector)
     line[3] = np.array(sentence)
-    
+
     sentence = []
     for word in line[4]:
         if word in words_dict:

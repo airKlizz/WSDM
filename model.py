@@ -61,36 +61,6 @@ class model(object):
                 't_wh_2': tf.Variable(tf.random_uniform([2 * self.hidden_size], -0.01, 0.01)),
             }
 
-        with tf.name_scope('embedding'):
-            self.word_embedding = tf.constant(self.embedding_file, name="word_embedding", dtype=tf.float32)
-            self.x = tf.nn.embedding_lookup(self.word_embedding, self.input_x)
-            self.speaker_embedding = tf.Variable(tf.random_uniform([self.spkr_num, 2*self.hidden_size], -0.01, 0.01), dtype=tf.float32, trainable = True)
-            self.domain_embedding = tf.Variable(tf.random_uniform([self.dom_num, 2*self.hidden_size], -0.01, 0.01), dtype=tf.float32, trainable = True)
-            self.topic_embedding = tf.Variable(tf.random_uniform([self.tpc_num, 2*self.hidden_size], -0.01, 0.01), dtype=tf.float32, trainable = True)
-
-            self.speaker = tf.nn.embedding_lookup(self.speaker_embedding, self.spkrid)
-            self.domain = tf.nn.embedding_lookup(self.domain_embedding, self.domid)
-            self.topic = tf.nn.embedding_lookup(self.topic_embedding, self.tpcid)
-
-
-
-    def softmax(self, inputs, length, max_length):
-        inputs = tf.cast(inputs, tf.float32)
-        inputs = tf.exp(inputs)
-        length = tf.reshape(length, [-1])
-        mask = tf.reshape(tf.cast(tf.sequence_mask(length, max_length), tf.float32), tf.shape(inputs))
-        inputs *= mask
-        _sum = tf.reduce_sum(inputs, reduction_indices=2, keep_dims=True) + 1e-9
-        return inputs / _sum 
-    
-    def loss_normalize(loss):
-        loss_value = tf.Variable(1.0)
-    
-        loss_normalized = loss / loss_value.assign(loss)
-
-        return loss_normalized
-
-
     def speaker_attention(self):
         inputs = tf.reshape(self.x, [-1, self.max_sen_len, self.embedding_dim])
         sen_len = tf.reshape(self.sen_len, [-1])
