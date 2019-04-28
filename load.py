@@ -14,4 +14,5 @@ with open(dataset_file_path, 'rb') as f:
 
 print('END OF THE LOAD')
 
-print(dataset[:10])
+print(len(dataset))
+print(dataset[0])
