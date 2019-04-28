@@ -20,7 +20,7 @@ embedding_file_path = data_directory+"/glove.6B.100d.txt"
 dataset_file_path = data_directory+"/dataset"
 
 embedding_dim = 100
-max_sen_len = 20
+max_sen_len = 30
 
 X = []
 y = []
