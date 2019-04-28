@@ -38,9 +38,9 @@ nb_25 = 0
 for i in range(len(train_X)):
     nb_words_mean += len(train_X[i][3])
     nb_words_mean += len(train_X[i][4])
-    if len(train_X[i][3]) > 20:
+    if len(train_X[i][3]) > 30:
         nb_20 += 1
-    if len(train_X[i][4]) > 20:
+    if len(train_X[i][4]) > 30:
         nb_20 += 1
     if len(train_X[i][3]) > 25:
         nb_25 += 1
@@ -54,9 +54,9 @@ for i in range(len(train_X)):
 for i in range(len(test_X)):
     nb_words_mean += len(test_X[i][3])
     nb_words_mean += len(test_X[i][4])
-    if len(test_X[i][3]) > 20:
+    if len(test_X[i][3]) > 30:
         nb_20 += 1
-    if len(test_X[i][4]) > 20:
+    if len(test_X[i][4]) > 30:
         nb_20 += 1
     if len(test_X[i][3]) > 25:
         nb_25 += 1
@@ -73,7 +73,7 @@ print('Number of words max :')
 print(nb_words_max)
 print('Number of words mean :')
 print(nb_words_mean)
-print('>20 :')
+print('>30 :')
 print(nb_20)
 print('>25 :')
 print(nb_25)
