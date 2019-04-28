@@ -36,6 +36,9 @@ nb_words_mean = 0
 for i in range(len(train_X)):
     nb_words_mean += len(train_X[i][3])
     nb_words_mean += len(train_X[i][4])
+    if i < 100:
+        print(len(train_X[i][3]))
+        print(len(train_X[i][4]))
     if len(train_X[i][3]) > nb_words_max:
         nb_words_max = len(train_X[i][3])
     if len(train_X[i][4]) > nb_words_max:

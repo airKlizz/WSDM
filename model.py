@@ -5,23 +5,13 @@ class model(object):
 
     def __init__(self, max_sen_len, class_num, embedding_dim, hidden_size):
         self.max_sen_len = max_sen_len
-        self.max_doc_len = max_doc_len
         self.class_num = class_num
-        self.embedding_file = embedding_file
         self.embedding_dim = embedding_dim
         self.hidden_size = hidden_size
-        self.spkr_num = spkr_num
-        self.dom_num = dom_num
-        self.tpc_num = tpc_num
 
         with tf.name_scope('input'):
-            self.spkrid = tf.placeholder(tf.int32, [None], name="speaker_id")
-            self.domid = tf.placeholder(tf.int32, [None], name="domain_id")
-            self.tpcid = tf.placeholder(tf.int32, [None], name="topic_id")           
-            self.input_x = tf.placeholder(tf.int32, [None, self.max_doc_len, self.max_sen_len], name="input_x")
+            self.input_x = tf.placeholder(tf.int32, [None, self.max_sen_len, self.embedding_dim], name="input_x")
             self.input_y = tf.placeholder(tf.float32, [None, self.class_num], name="input_y")
-            self.sen_len = tf.placeholder(tf.int32, [None, self.max_doc_len], name="sen_len")
-            self.doc_len = tf.placeholder(tf.int32, [None], name="doc_len")
 
         with tf.name_scope('weights'):
             self.weights = {
