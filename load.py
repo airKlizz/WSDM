@@ -1,7 +1,7 @@
 import pickle
 import os
 
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 data_directory = "../Data"
 
