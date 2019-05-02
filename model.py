@@ -4,90 +4,159 @@ import numpy as np
 class model(object):
 
     def __init__(self, max_sen_len, class_num, embedding_dim, hidden_size):
+
         self.max_sen_len = max_sen_len
-        self.class_num = class_num
         self.embedding_dim = embedding_dim
+        self.class_num = class_num
         self.hidden_size = hidden_size
 
         with tf.name_scope('input'):
-            self.x = tf.placeholder(tf.int32, [None, self.max_sen_len, self.embedding_dim], name="x")
+            self.x1 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x1")
+            self.x2 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x2")
             self.y = tf.placeholder(tf.float32, [None, self.class_num], name="y")
 
         with tf.name_scope('weights'):
             self.weights = {
-                'softmax': tf.Variable(tf.random_uniform([6 * self.hidden_size, self.class_num], -0.01, 0.01)),
+                'q_1_to_2': tf.Variable(tf.random_uniform([2 * embedding_dim, self.hidden_size], -0.01, 0.01)),
+                'q_2_to_1': tf.Variable(tf.random_uniform([2 * embedding_dim, self.hidden_size], -0.01, 0.01)),
 
-                'u_softmax': tf.Variable(tf.random_uniform([2 * self.hidden_size, self.class_num], -0.01, 0.01)),
-                'u_wh_1': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                'u_v_1': tf.Variable(tf.random_uniform([2 * self.hidden_size, 1], -0.01, 0.01)),
-                'u_wh_2': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                'u_v_2': tf.Variable(tf.random_uniform([2 * self.hidden_size, 1], -0.01, 0.01)),
+                'p_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
+                'p_2_to_1': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
 
-                'p_softmax': tf.Variable(tf.random_uniform([2 * self.hidden_size, self.class_num], -0.01, 0.01)),
-                'p_wh_1': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                'p_v_1': tf.Variable(tf.random_uniform([2 * self.hidden_size, 1], -0.01, 0.01)),
-                'p_wh_2': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                'p_v_2': tf.Variable(tf.random_uniform([2 * self.hidden_size, 1], -0.01, 0.01)),
-                
-                't_softmax': tf.Variable(tf.random_uniform([2 * self.hidden_size, self.class_num], -0.01, 0.01)),
-                't_wh_1': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                't_v_1': tf.Variable(tf.random_uniform([2 * self.hidden_size, 1], -0.01, 0.01)),
-                't_wh_2': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                't_v_2': tf.Variable(tf.random_uniform([2 * self.hidden_size, 1], -0.01, 0.01)),
+                'z_1': tf.Variable(tf.random_uniform([self.hidden_size+self.max_sen_len, self.hidden_size], -0.01, 0.01)),
+                'z_2': tf.Variable(tf.random_uniform([self.hidden_size+self.max_sen_len, self.hidden_size], -0.01, 0.01)),
 
-                'wu_1': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                'wp_1': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                'wt_1': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                'wu_2': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                'wp_2': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-                'wt_2': tf.Variable(tf.random_uniform([2 * self.hidden_size, 2 * self.hidden_size], -0.01, 0.01)),
-
+                'f': tf.Variable(tf.random_uniform([2*self.hidden_size, self.class_num], -0.01, 0.01)),
             }
 
         with tf.name_scope('biases'):
             self.biases = {
-                'softmax': tf.Variable(tf.random_uniform([self.class_num], -0.01, 0.01)),
+                'q_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
+                'q_2_to_1': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
 
-                'u_softmax': tf.Variable(tf.random_uniform([self.class_num], -0.01, 0.01)),
-                'u_wh_1': tf.Variable(tf.random_uniform([2 * self.hidden_size], -0.01, 0.01)),
-                'u_wh_2': tf.Variable(tf.random_uniform([2 * self.hidden_size], -0.01, 0.01)),
+                'p_1_to_2': tf.Variable(tf.random_uniform([1], -0.01, 0.01)),
+                'p_2_to_1': tf.Variable(tf.random_uniform([1], -0.01, 0.01)),
 
-                'p_softmax': tf.Variable(tf.random_uniform([self.class_num], -0.01, 0.01)),
-                'p_wh_1': tf.Variable(tf.random_uniform([2 * self.hidden_size], -0.01, 0.01)),
-                'p_wh_2': tf.Variable(tf.random_uniform([2 * self.hidden_size], -0.01, 0.01)),
-                
-                't_softmax': tf.Variable(tf.random_uniform([self.class_num], -0.01, 0.01)),
-                't_wh_1': tf.Variable(tf.random_uniform([2 * self.hidden_size], -0.01, 0.01)),
-                't_wh_2': tf.Variable(tf.random_uniform([2 * self.hidden_size], -0.01, 0.01)),
+                'z_1': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
+                'z_2': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
+
+                'f': tf.Variable(tf.random_uniform([self.class_num], -0.01, 0.01)),
             }
 
-    def inter_attention(self):
+    def inter_attention_1_to_2(self):
+        
+        x1_shape = tf.shape(self.x1)
+        x2_shape = tf.shape(self.x2)
+
+        x1_reshape = tf.reshape(self.x1, [-1, self.embedding_dim, 1])
+        ones = tf.ones([x1_shape[0]*self.max_sen_len, 1, self.max_sen_len])
+        x1_increase = tf.matmul(x1_reshape, ones)
+        x1_increase = tf.transpose(x1_increase, perm=[0, 2, 1])
+        x1_increase = tf.reshape(x1_increase, [-1, self.max_sen_len*self.max_sen_len, self.embedding_dim])
+
+        x2_reshape = tf.reshape(self.x2, [-1, self.embedding_dim, 1])
+        ones = tf.ones([x2_shape[0]*self.max_sen_len, 1, self.max_sen_len])
+        x2_increase = tf.matmul(x2_reshape, ones)
+        x2_increase = tf.transpose(x2_increase, perm=[0, 2, 1])
+        x2_increase = tf.reshape(x2_increase, [-1, self.max_sen_len, self.max_sen_len, self.embedding_dim])
+        x2_increase = tf.transpose(x2_increase, perm=[0, 2, 1, 3])
+        x2_increase = tf.reshape(x2_increase, [-1, self.max_sen_len*self.max_sen_len, self.embedding_dim])
+
+        concat = tf.concat([x1_increase, x2_increase], axis=-1)
+        concat = tf.reshape(concat, [-1, 2*self.embedding_dim])
+
+        s_1_to_2 = tf.matmul(concat, self.weights['q_1_to_2']) + self.biaises['q_1_to_2']
+        s_1_to_2 = tf.matmul(s_1_to_2, self.weights['p_1_to_2']) + self.biaises['p_1_to_2']
+        s_1_to_2 = tf.reshape(s_1_to_2, [-1, self.max_sen_len, self.max_sen_len])
+
+        a = tf.nn.softmax(tf.reduce_max(s_r, axis=-1), axis=-1)
+
+        self.v_a_1_to_2 = tf.matmul(a, x1)
+
+    def inter_attention_2_to_1(self):
             
+        x1_shape = tf.shape(self.x1)
+        x2_shape = tf.shape(self.x2)
+
+        x2_reshape = tf.reshape(self.x2, [-1, self.embedding_dim, 1])
+        ones = tf.ones([x2_shape[0]*self.max_sen_len, 1, self.max_sen_len])
+        x2_increase = tf.matmul(x2_reshape, ones)
+        x2_increase = tf.transpose(x2_increase, perm=[0, 2, 1])
+        x2_increase = tf.reshape(x2_increase, [-1, self.max_sen_len*self.max_sen_len, self.embedding_dim])
+
+        x1_reshape = tf.reshape(self.x1, [-1, self.embedding_dim, 1])
+        ones = tf.ones([x1_shape[0]*self.max_sen_len, 1, self.max_sen_len])
+        x1_increase = tf.matmul(x1_reshape, ones)
+        x1_increase = tf.transpose(x1_increase, perm=[0, 2, 1])
+        x1_increase = tf.reshape(x1_increase, [-1, self.max_sen_len, self.max_sen_len, self.embedding_dim])
+        x1_increase = tf.transpose(x1_increase, perm=[0, 2, 1, 3])
+        x1_increase = tf.reshape(x1_increase, [-1, self.max_sen_len*self.max_sen_len, self.embedding_dim])
+
+        concat = tf.concat([x2_increase, x1_increase], axis=-1)
+        concat = tf.reshape(concat, [-1, 2*self.embedding_dim])
+
+        s_2_to_1 = tf.matmul(concat, self.weights['q_2_to_1']) + self.biaises['q_2_to_1']
+        s_2_to_1 = tf.matmul(s_2_to_1, self.weights['p_2_to_1']) + self.biaises['p_2_to_1']
+        s_2_to_1 = tf.reshape(s_2_to_1, [-1, self.max_sen_len, self.max_sen_len])
+
+        a = tf.nn.softmax(tf.reduce_max(s_r, axis=-1), axis=-1)
+
+        self.v_a_2_to_1 = tf.matmul(a, x2)
+
+    def long_short_memory_encoder_1(self):
+
+        x1_shape = tf.shape(self.x1)
+
+        x1_reshape = tf.reshape(self.x1, [-1, self.max_sen_len, self.embedding_dim])
+
+        LSTM_layer = tf.keras.layers.LSTMCell(self.hidden_size)
+        h = tf.transpose(LSTM_layer.apply(x1_reshape), perm=[0, 2, 1])
+
+        zeros = np.zeros([x1_shape[0], self.max_sen_len, self.embedding_dim])
+        for i in range(x1_shape[0]):
+            zeros[i, -1, -1] = 1
+
+        self.v_c_1 = tf.transpose(tf.reduce_sum(tf.matmul(h, zeros), axis=-1), perm=[1, 0])
+
+    def long_short_memory_encoder_2(self):
+
+        x2_shape = tf.shape(self.x2)
+
+        x2_reshape = tf.reshape(self.x2, [-1, self.max_sen_len, self.embedding_dim])
+
+        LSTM_layer = tf.keras.layers.LSTMCell(self.hidden_size)
+        h = tf.transpose(LSTM_layer.apply(x2_reshape), perm=[0, 2, 1])
+
+        zeros = np.zeros([x2_shape[0], self.max_sen_len, self.embedding_dim])
+        for i in range(x2_shape[0]):
+            zeros[i, -1, -1] = 1
+
+        self.v_c_2 = tf.transpose(tf.reduce_sum(tf.matmul(h, zeros), axis=-1), perm=[1, 0])
+
+    def prediction(self):
+
+        v1 = tf.concat([self.v_a_1_to_2, self.v_c_1])
+        v1 = tf.nn.relu(tf.matmul(v1, self.weights['z_1']) + self.biaises['z_1'])
+
+        v2 = tf.concat([self.v_a_2_to_1, self.v_c_2])
+        v2 = tf.nn.relu(tf.matmul(v2, self.weights['z_2']) + self.biaises['z_2'])
+
+        v = tf.concat([v1, v2])
+        self.v = tf.nn.softmax((tf.matmul(v, self.weights['f']) + self.biaises['f']), axis=-1)
+
+
 
     def build_model(self):
 
-        self.speaker_attention()
-        self.Domain_attention()
-        self.topic_attention()
-
-        with tf.name_scope('softmax'):
-            outputs = tf.concat([self.u_doc, self.p_doc, self.t_doc],1)
-            self.scores = tf.matmul(outputs, self.weights['softmax'])
-            self.predictions = tf.argmax(self.scores, 1, name="predictions")
-
+        self.inter_attention_1_to_2()
+        self.inter_attention_2_to_1()
+        self.long_short_memory_encoder_1()
+        self.long_short_memory_encoder_2()
+        self.prediction()
+        
         with tf.name_scope("loss"):
-            losses = tf.nn.softmax_cross_entropy_with_logits_v2(logits = self.scores, labels = self.input_y)
-            self.loss = 0.4*tf.reduce_mean(losses) + 0.3*self.u_loss  + 0.*self.p_loss + 0.3*self.t_loss
+            
 
         with tf.name_scope("metrics"):
-            correct_predictions = tf.equal(self.predictions, tf.argmax(self.input_y, 1))
-
-            self.alpha_spkr = self.alpha_spkr
-            self.alpha_dom = self.alpha_dom
-            self.alpha_tpc = self.alpha_tpc
-
-            self.prediction = tf.add(self.predictions, self.predictions, name= "prediction")
-            self.correct_num = tf.reduce_sum(tf.cast(correct_predictions, dtype=tf.int32), name="correct_num")
-            self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
-            self.C_matrix = tf.confusion_matrix(labels = tf.argmax(self.input_y, 1), predictions = self.predictions, name="c_matrix")
+            
             
