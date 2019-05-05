@@ -92,6 +92,7 @@ with tf.Graph().as_default():
                 print(idx_min, idx_max)
                 x1 = train_X[idx_min:idx_max, 3]
                 print(type(x1))
+                print(test_X[0][3])
                 print(np.shape(x1))
                 x2 = train_X[idx_min:idx_max, 4]
                 y = train_y[idx_min:idx_max]
