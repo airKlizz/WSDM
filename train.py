@@ -90,8 +90,13 @@ with tf.Graph().as_default():
                 idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
                 x1 = train_X[idx_min:idx_max, 3]
+                print(np.shape(train_X))
+                print(np.shape(x1))
                 x2 = train_X[idx_min:idx_max, 4]
+                print(np.shape(x2))
                 y = train_y[idx_min:idx_max]
+                print(np.shape(train_yy))
+                print(np.shape(y))
 
                 feed_dict = {
                     model.x1: x1,
