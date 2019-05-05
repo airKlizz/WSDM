@@ -69,7 +69,7 @@ class Model(object):
         s_1_to_2 = tf.matmul(s_1_to_2, self.weights['p_1_to_2']) + self.biases['p_1_to_2']
         s_1_to_2 = tf.reshape(s_1_to_2, [-1, self.max_sen_len, self.max_sen_len])
 
-        a = tf.nn.softmax(tf.reduce_max(s_1_to_2, axis=-1), axis=-1)
+        a = tf.reshape(tf.nn.softmax(tf.reduce_max(s_1_to_2, axis=-1), axis=-1), [-1, 1, self.max_sen_len])
 
         self.v_a_1_to_2 = tf.matmul(a, self.x1)
 
@@ -99,7 +99,7 @@ class Model(object):
         s_2_to_1 = tf.matmul(s_2_to_1, self.weights['p_2_to_1']) + self.biases['p_2_to_1']
         s_2_to_1 = tf.reshape(s_2_to_1, [-1, self.max_sen_len, self.max_sen_len])
 
-        a = tf.nn.softmax(tf.reduce_max(s_2_to_1, axis=-1), axis=-1)
+        a = tf.reshape(tf.nn.softmax(tf.reduce_max(s_2_to_1, axis=-1), axis=-1), [-1, 1, self.max_sen_len])
 
         self.v_a_2_to_1 = tf.matmul(a, self.x2)
 
