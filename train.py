@@ -21,10 +21,10 @@ dataset_file_path = data_directory+"/dataset"
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
 
-train_X = dataset[0]
-train_y = dataset[1]
-test_X = dataset[2]
-test_y = dataset[3]
+train_X = np.array(dataset[0])
+train_y = np.array(dataset[1])
+test_X = np.array(dataset[2])
+test_y = np.array(dataset[3])
 
 n_class = 3
 embedding_dim = 100
@@ -33,7 +33,7 @@ max_sen_len = 30
 hidden_size = 100
 
 learning_rate = 0.001
-batch_size = 80
+batch_size = 100
 test_batch_size = 500
 num_epochs = 10
 evaluate_every = 50
@@ -83,17 +83,13 @@ with tf.Graph().as_default():
         for epoch in range(num_epochs):
             indices = np.arange(len(train_X))
             np.random.shuffle(indices)
-            train_y = np.array(train_y)[indices]
-            train_X = np.array(train_X)[indices]
+            train_X = train_X[indices]
+            train_y = train_y[indices]
             
             for batch in range(nb_batch_per_epoch):
                 idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
-                print(idx_min, idx_max)
                 x1 = train_X[idx_min:idx_max, 3]
-                print(type(x1))
-                print(test_X[0][3])
-                print(np.shape(x1))
                 x2 = train_X[idx_min:idx_max, 4]
                 y = train_y[idx_min:idx_max]
 
@@ -117,12 +113,11 @@ with tf.Graph().as_default():
                     
                     indices = np.arange(len(test_X))
                     np.random.shuffle(indices)
-                    test_X = np.array(test_X)[indices]
-                    test_y = np.array(test_y)[indices]
+                    test_X = test_X[indices]
+                    test_y = test_y[indices]
 
                     x1 = test_X[:test_batch_size, 3]
                     print(type(x1))
-                    print(test_X[0][3])
                     print(np.shape(x1))
                     x2 = test_X[:test_batch_size, 4]
                     y = test_y[:test_batch_size]
