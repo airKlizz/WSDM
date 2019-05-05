@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 
-class model(object):
+class Model(object):
 
     def __init__(self, max_sen_len, class_num, embedding_dim, hidden_size):
 
@@ -65,13 +65,13 @@ class model(object):
         concat = tf.concat([x1_increase, x2_increase], axis=-1)
         concat = tf.reshape(concat, [-1, 2*self.embedding_dim])
 
-        s_1_to_2 = tf.matmul(concat, self.weights['q_1_to_2']) + self.biaises['q_1_to_2']
-        s_1_to_2 = tf.matmul(s_1_to_2, self.weights['p_1_to_2']) + self.biaises['p_1_to_2']
+        s_1_to_2 = tf.matmul(concat, self.weights['q_1_to_2']) + self.biases['q_1_to_2']
+        s_1_to_2 = tf.matmul(s_1_to_2, self.weights['p_1_to_2']) + self.biases['p_1_to_2']
         s_1_to_2 = tf.reshape(s_1_to_2, [-1, self.max_sen_len, self.max_sen_len])
 
-        a = tf.nn.softmax(tf.reduce_max(s_r, axis=-1), axis=-1)
+        a = tf.nn.softmax(tf.reduce_max(s_1_to_2, axis=-1), axis=-1)
 
-        self.v_a_1_to_2 = tf.matmul(a, x1)
+        self.v_a_1_to_2 = tf.matmul(a, self.x1)
 
     def inter_attention_2_to_1(self):
             
@@ -95,13 +95,13 @@ class model(object):
         concat = tf.concat([x2_increase, x1_increase], axis=-1)
         concat = tf.reshape(concat, [-1, 2*self.embedding_dim])
 
-        s_2_to_1 = tf.matmul(concat, self.weights['q_2_to_1']) + self.biaises['q_2_to_1']
-        s_2_to_1 = tf.matmul(s_2_to_1, self.weights['p_2_to_1']) + self.biaises['p_2_to_1']
+        s_2_to_1 = tf.matmul(concat, self.weights['q_2_to_1']) + self.biases['q_2_to_1']
+        s_2_to_1 = tf.matmul(s_2_to_1, self.weights['p_2_to_1']) + self.biases['p_2_to_1']
         s_2_to_1 = tf.reshape(s_2_to_1, [-1, self.max_sen_len, self.max_sen_len])
 
-        a = tf.nn.softmax(tf.reduce_max(s_r, axis=-1), axis=-1)
+        a = tf.nn.softmax(tf.reduce_max(s_2_to_1, axis=-1), axis=-1)
 
-        self.v_a_2_to_1 = tf.matmul(a, x2)
+        self.v_a_2_to_1 = tf.matmul(a, self.x2)
 
     def long_short_memory_encoder_1(self):
 
@@ -135,16 +135,16 @@ class model(object):
 
     def prediction(self):
 
-        v1 = tf.concat([self.v_a_1_to_2, self.v_c_1])
-        v1 = tf.nn.relu(tf.matmul(v1, self.weights['z_1']) + self.biaises['z_1'])
+        v1 = tf.concat([self.v_a_1_to_2, self.v_c_1], -1)
+        v1 = tf.nn.relu(tf.matmul(v1, self.weights['z_1']) + self.biases['z_1'])
 
-        v2 = tf.concat([self.v_a_2_to_1, self.v_c_2])
-        v2 = tf.nn.relu(tf.matmul(v2, self.weights['z_2']) + self.biaises['z_2'])
+        v2 = tf.concat([self.v_a_2_to_1, self.v_c_2], -1)
+        v2 = tf.nn.relu(tf.matmul(v2, self.weights['z_2']) + self.biases['z_2'])
 
-        v = tf.concat([v1, v2])
-        self.v = tf.nn.softmax((tf.matmul(v, self.weights['f']) + self.biaises['f']), axis=-1)
+        v = tf.concat([v1, v2], -1)
+        self.scores = tf.nn.softmax((tf.matmul(v, self.weights['f']) + self.biases['f']), axis=-1)
 
-
+        self.predictions = tf.arg_max(self.y, -1)
 
     def build_model(self):
 
@@ -155,8 +155,12 @@ class model(object):
         self.prediction()
         
         with tf.name_scope("loss"):
-            
+            losses = tf.nn.softmax_cross_entropy_with_logits_v2(
+                logits = self.scores,
+                labels = self.y
+            )
+            self.loss = tf.reduce_mean(losses)
 
         with tf.name_scope("metrics"):
-            
-            
+            correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, 1))
+            self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
