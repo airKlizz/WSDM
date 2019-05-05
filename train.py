@@ -89,6 +89,7 @@ with tf.Graph().as_default():
             for batch in range(nb_batch_per_epoch):
                 idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
+                print(idx_min, idx_max)
                 x1 = train_X[idx_min:idx_max, 3]
                 print(type(x1))
                 print(np.shape(x1))
