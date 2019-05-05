@@ -107,18 +107,11 @@ class Model(object):
 
         x1_reshape = tf.reshape(self.x1, [-1, self.max_sen_len, self.embedding_dim])
 
-        outputs, _ = tf.nn.bidirectional_dynamic_rnn(
-                cell_fw=tf.contrib.rnn.DropoutWrapper(tf.nn.rnn_cell.LSTMCell(self.hidden_size, forget_bias=1.0), output_keep_prob=0.3),
-                cell_bw=tf.contrib.rnn.DropoutWrapper(tf.nn.rnn_cell.LSTMCell(0, forget_bias=1.0), output_keep_prob=0.3),
-
-                inputs=x1_reshape,
-                dtype=tf.float32,
-            )
-
-        self.v_c_1 = outputs[0][-1]
+        lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
+        LSTM_layer = tf.keras.layers.RNN(lstm_cell)
+        self.v_c_1 = LSTM_layer(x1_reshape)[-1]
 
     def long_short_memory_encoder_2(self):
-
         '''
         x2_shape = tf.shape(self.x2)
 
@@ -136,15 +129,9 @@ class Model(object):
 
         x2_reshape = tf.reshape(self.x2, [-1, self.max_sen_len, self.embedding_dim])
 
-        outputs, _ = tf.nn.bidirectional_dynamic_rnn(
-                cell_fw=tf.contrib.rnn.DropoutWrapper(tf.nn.rnn_cell.LSTMCell(self.hidden_size, forget_bias=1.0), output_keep_prob=0.3),
-                cell_bw=tf.contrib.rnn.DropoutWrapper(tf.nn.rnn_cell.LSTMCell(0, forget_bias=1.0), output_keep_prob=0.3),
-
-                inputs=x2_reshape,
-                dtype=tf.float32,
-            )
-
-        self.v_c_2 = outputs[0][-1]
+        lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
+        LSTM_layer = tf.keras.layers.RNN(lstm_cell)
+        self.v_c_2 = LSTM_layer(x1_reshape)[-1]
 
     def prediction(self):
 
