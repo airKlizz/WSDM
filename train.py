@@ -78,7 +78,7 @@ with tf.Graph().as_default():
         predict_round = 0
 
         for epoch in range(num_epochs):
-            indices = np.arange(len(train_X))
+            indices = np.arange(len(train_X), dtype=np.int32)
             np.random.shuffle(indices)
             train_X = train_X[indices]
             train_y = train_y[indices]
@@ -107,7 +107,7 @@ with tf.Graph().as_default():
                     predict_round += 1
                     print("\nEvaluation round %d:" % (predict_round))
                     
-                    indices = np.arange(len(test_X))
+                    indices = np.arange(len(test_X), dtype=np.int32)
                     np.random.shuffle(indices)
                     test_X = test_X[indices]
                     test_y = test_y[indices]
