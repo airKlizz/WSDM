@@ -121,6 +121,7 @@ with tf.Graph().as_default():
 
                     x1 = test_X[:test_batch_size, 3]
                     print(type(x1))
+                    print(test_X[0][3])
                     print(np.shape(x1))
                     x2 = test_X[:test_batch_size, 4]
                     y = test_y[:test_batch_size]
