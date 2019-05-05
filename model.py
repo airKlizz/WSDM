@@ -109,7 +109,7 @@ class Model(object):
 
         lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
         LSTM_layer = tf.keras.layers.RNN(lstm_cell)
-        self.v_c_1 = LSTM_layer(x1_reshape)[-1]
+        self.v_c_1 = LSTM_layer(x1_reshape)
 
     def long_short_memory_encoder_2(self):
         '''
@@ -131,7 +131,7 @@ class Model(object):
 
         lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
         LSTM_layer = tf.keras.layers.RNN(lstm_cell)
-        self.v_c_2 = LSTM_layer(x2_reshape)[-1]
+        self.v_c_2 = LSTM_layer(x2_reshape)
 
     def prediction(self):
 
