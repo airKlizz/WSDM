@@ -33,6 +33,10 @@ test_X = dataset[2]
 test_y = dataset[3]
 
 print(np.shape(train_X))
+print(len(train_X[0][3]))
+print(len(train_X[0][4]))
 print(np.shape(train_y))
 print(np.shape(test_X))
+print(len(test_X[0][3]))
+print(len(test_X[0][4]))
 print(np.shape(test_y))
