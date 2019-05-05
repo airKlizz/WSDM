@@ -89,10 +89,9 @@ with tf.Graph().as_default():
             test2 = []
             for i in range(len(train_X)):
                 test2.append(i+1)
-            test2 = np.array(test2)
-            test2 = test2[indices]
-            train_y = train_y[indices]
-            train_X = train_X[indices]
+            test2 = np.array(test2)[indices]
+            train_y = np.array(train_y)[indices]
+            train_X = np.array(train_X)[indices]
             print(np.shape(train_y))
             
             for batch in range(nb_batch_per_epoch):
