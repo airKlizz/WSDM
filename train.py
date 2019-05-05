@@ -90,6 +90,8 @@ with tf.Graph().as_default():
                 idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
                 x1 = train_X[idx_min:idx_max, 3]
+                print(type(x1))
+                print(np.shape(x1))
                 x2 = train_X[idx_min:idx_max, 4]
                 y = train_y[idx_min:idx_max]
 
@@ -100,8 +102,8 @@ with tf.Graph().as_default():
                 }
 
                 _, step, loss, accuracy = sess.run(
-                    [train_op, global_step, model.loss, model.accuracy],
-                    feed_dict)
+                    [train_op, global_step, model.loss, model.accuracy], 
+                    feed_dict=feed_dict)
                 time_str = datetime.datetime.now().isoformat()
                 print("{}: step {}/{}, loss {:g}, acc {:g}".format(time_str, step, num_epochs*nb_batch_per_epoch, loss, accuracy))
 
@@ -128,7 +130,7 @@ with tf.Graph().as_default():
                         model.y: y
                     }
 
-                    accuracy = sess.run(model.accuracy, feed_dict)
+                    accuracy = sess.run(model.accuracy, feed_dict=feed_dict)
 
                     if accuracy >= best_accuracy:
                         best_accuracy = accuracy
