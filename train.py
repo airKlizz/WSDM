@@ -58,6 +58,8 @@ with tf.Graph().as_default():
         hidden_size = hidden_size
         )
 
+        model.build_model()
+
         global_step = tf.Variable(0, name="global_step", trainable=False)
         optimizer = tf.train.AdamOptimizer(learning_rate)
         grads_and_vars = optimizer.compute_gradients(model.loss)
