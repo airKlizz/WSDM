@@ -109,7 +109,7 @@ class Model(object):
 
         x1_reshape = tf.reshape(self.x1, [-1, self.max_sen_len, self.embedding_dim])
 
-        LSTM_layer = tf.keras.layers.LSTMCell(self.hidden_size)
+        LSTM_layer = tf.nn.rnn_cell.LSTMCell(self.hidden_size)
         h = tf.transpose(LSTM_layer.apply(x1_reshape), perm=[0, 2, 1])
 
         zeros = np.zeros([x1_shape[0], self.max_sen_len, self.embedding_dim])
