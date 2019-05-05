@@ -81,12 +81,12 @@ with tf.Graph().as_default():
             indices = np.arange(len(train_X))
             np.random.shuffle(indices)
             print(np.shape(train_X))
-            print(indices[:][0])
+            print(indices[:, 0])
             print(indices[:])
             print(indices[0])
-            train_X = train_X[indices[:][0]]
+            train_X = train_X[indices[:, 0]]
             print(np.shape(train_X))
-            train_y = train_y[indices[:][0]]
+            train_y = train_y[indices[:, 0]]
             for batch in range(nb_batch_per_epoch):
                 idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
@@ -114,8 +114,8 @@ with tf.Graph().as_default():
                     
                     indices = np.arange(len(test_X))
                     np.random.shuffle(indices)
-                    test_X = test_X[indices[:][0]]
-                    test_y = test_y[indices[:][0]]
+                    test_X = test_X[indices[:, 0]]
+                    test_y = test_y[indices[:, 0]]
 
                     x1 = test_X[:test_batch_size, 3]
                     x2 = test_X[:test_batch_size, 4]
