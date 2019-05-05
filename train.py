@@ -95,7 +95,7 @@ with tf.Graph().as_default():
                 x2 = train_X[idx_min:idx_max, 4]
                 print(np.shape(x2))
                 y = train_y[idx_min:idx_max]
-                print(np.shape(train_yy))
+                print(np.shape(train_y))
                 print(np.shape(y))
 
                 feed_dict = {
