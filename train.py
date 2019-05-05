@@ -35,7 +35,7 @@ test_batch_size = 500
 num_epochs = 10
 evaluate_every = 50
 
-nb_batch_per_epoch = len(train_X)/batch_size+1
+nb_batch_per_epoch = int(len(train_X)/batch_size+1)
 
 allow_soft_placement = True
 log_device_placement = False
@@ -80,7 +80,9 @@ with tf.Graph().as_default():
         for epoch in range(num_epochs):
             indices = np.arange(len(train_X))
             np.random.shuffle(indices)
+            print(train_X)
             train_X = train_X[indices[:][0]]
+            print(train_X)
             train_y = train_y[indices[:][0]]
             for batch in range(nb_batch_per_epoch):
                 idx_min = batch * batch_size
@@ -109,8 +111,8 @@ with tf.Graph().as_default():
                     
                     indices = np.arange(len(test_X))
                     np.random.shuffle(indices)
-                    test_X = test_X[indices]
-                    test_y = test_y[indices]
+                    test_X = test_X[indices[:][0]]
+                    test_y = test_y[indices[:][0]]
 
                     x1 = test_X[:test_batch_size, 3]
                     x2 = test_X[:test_batch_size, 4]
