@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 import pickle
 import os
 import datetime
@@ -81,7 +84,7 @@ with tf.Graph().as_default():
             indices = np.arange(len(train_X))
             np.random.shuffle(indices)
             print(np.shape(train_X))
-            train_X = train_X[slice(indices)]
+            train_X = train_X[indices]
             print(np.shape(train_X))
             train_y = train_y[slice(indices)]
             for batch in range(nb_batch_per_epoch):
