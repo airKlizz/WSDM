@@ -81,6 +81,9 @@ with tf.Graph().as_default():
             indices = np.arange(len(train_X))
             np.random.shuffle(indices)
             print(np.shape(train_X))
+            print(indices[:][0])
+            print(indices[:])
+            print(indices[0])
             train_X = train_X[indices[:][0]]
             print(np.shape(train_X))
             train_y = train_y[indices[:][0]]
