@@ -71,7 +71,7 @@ class Model(object):
 
         a = tf.reshape(tf.nn.softmax(tf.reduce_max(s_1_to_2, axis=-1), axis=-1), [-1, 1, self.max_sen_len])
 
-        self.v_a_1_to_2 = tf.matmul(a, self.x1)
+        self.v_a_1_to_2 = tf.reshape(tf.matmul(a, self.x1), [-1, self.embedding_dim])
 
     def inter_attention_2_to_1(self):
             
@@ -101,7 +101,7 @@ class Model(object):
 
         a = tf.reshape(tf.nn.softmax(tf.reduce_max(s_2_to_1, axis=-1), axis=-1), [-1, 1, self.max_sen_len])
 
-        self.v_a_2_to_1 = tf.matmul(a, self.x2)
+        self.v_a_2_to_1 = tf.reshape(tf.matmul(a, self.x2), [-1, self.embedding_dim])
 
     def long_short_memory_encoder_1(self):
 
