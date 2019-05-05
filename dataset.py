@@ -133,7 +133,7 @@ for line in X:
             sentence.append(word_embedding[words_dict[line[4][i]]])
         else :
             sentence.append(no_word_vector)
-    line[3] = np.array(sentence)
+    line[4] = np.array(sentence)
 
 for i in range(len(y)):
     if y[i] == 'agreed':
