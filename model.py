@@ -23,8 +23,8 @@ class Model(object):
                 'p_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
                 'p_2_to_1': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
 
-                'z_1': tf.Variable(tf.random_uniform([self.hidden_size+self.max_sen_len, self.hidden_size], -0.01, 0.01)),
-                'z_2': tf.Variable(tf.random_uniform([self.hidden_size+self.max_sen_len, self.hidden_size], -0.01, 0.01)),
+                'z_1': tf.Variable(tf.random_uniform([2*self.hidden_size, self.hidden_size], -0.01, 0.01)),
+                'z_2': tf.Variable(tf.random_uniform([2*self.hidden_size, self.hidden_size], -0.01, 0.01)),
 
                 'f': tf.Variable(tf.random_uniform([2*self.hidden_size, self.class_num], -0.01, 0.01)),
             }
