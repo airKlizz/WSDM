@@ -105,21 +105,21 @@ class Model(object):
 
     def long_short_memory_encoder_1(self):
 
-        x1_shape = tf.shape(self.x1)
-
         x1_reshape = tf.reshape(self.x1, [-1, self.max_sen_len, self.embedding_dim])
 
-        LSTM_layer = tf.nn.rnn_cell.LSTMCell(self.hidden_size)
-        h = tf.transpose(LSTM_layer.apply(x1_reshape), perm=[0, 2, 1])
+        outputs, _ = tf.nn.bidirectional_dynamic_rnn(
+                cell_fw=tf.contrib.rnn.DropoutWrapper(tf.nn.rnn_cell.LSTMCell(self.hidden_size, forget_bias=1.0), output_keep_prob=0.3),
+                cell_bw=tf.contrib.rnn.DropoutWrapper(tf.nn.rnn_cell.LSTMCell(0, forget_bias=1.0), output_keep_prob=0.3),
 
-        zeros = np.zeros([x1_shape[0], self.max_sen_len, self.embedding_dim])
-        for i in range(x1_shape[0]):
-            zeros[i, -1, -1] = 1
+                inputs=x1_reshape,
+                dtype=tf.float32,
+            )
 
-        self.v_c_1 = tf.transpose(tf.reduce_sum(tf.matmul(h, zeros), axis=-1), perm=[1, 0])
+        self.v_c_1 = outputs[0][-1]
 
     def long_short_memory_encoder_2(self):
 
+        '''
         x2_shape = tf.shape(self.x2)
 
         x2_reshape = tf.reshape(self.x2, [-1, self.max_sen_len, self.embedding_dim])
@@ -132,6 +132,19 @@ class Model(object):
             zeros[i, -1, -1] = 1
 
         self.v_c_2 = tf.transpose(tf.reduce_sum(tf.matmul(h, zeros), axis=-1), perm=[1, 0])
+        '''
+
+        x2_reshape = tf.reshape(self.x2, [-1, self.max_sen_len, self.embedding_dim])
+
+        outputs, _ = tf.nn.bidirectional_dynamic_rnn(
+                cell_fw=tf.contrib.rnn.DropoutWrapper(tf.nn.rnn_cell.LSTMCell(self.hidden_size, forget_bias=1.0), output_keep_prob=0.3),
+                cell_bw=tf.contrib.rnn.DropoutWrapper(tf.nn.rnn_cell.LSTMCell(0, forget_bias=1.0), output_keep_prob=0.3),
+
+                inputs=x2_reshape,
+                dtype=tf.float32,
+            )
+
+        self.v_c_2 = outputs[0][-1]
 
     def prediction(self):
 
