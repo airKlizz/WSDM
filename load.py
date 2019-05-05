@@ -1,6 +1,8 @@
 import pickle
 import os
 
+import numpy as np
+
 os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 data_directory = "../Data"
@@ -30,51 +32,7 @@ train_y = dataset[1]
 test_X = dataset[2]
 test_y = dataset[3]
 
-nb_words_max = -1
-nb_words_mean = 0
-nb_20 = 0
-nb_25 = 0
-
-for i in range(len(train_X)):
-    nb_words_mean += len(train_X[i][3])
-    nb_words_mean += len(train_X[i][4])
-    if len(train_X[i][3]) > 30:
-        nb_20 += 1
-    if len(train_X[i][4]) > 30:
-        nb_20 += 1
-    if len(train_X[i][3]) > 25:
-        nb_25 += 1
-    if len(train_X[i][4]) > 25:
-        nb_25 += 1
-    if len(train_X[i][3]) > nb_words_max:
-        nb_words_max = len(train_X[i][3])
-    if len(train_X[i][4]) > nb_words_max:
-        nb_words_max = len(train_X[i][4])
-
-for i in range(len(test_X)):
-    nb_words_mean += len(test_X[i][3])
-    nb_words_mean += len(test_X[i][4])
-    if len(test_X[i][3]) > 30:
-        nb_20 += 1
-    if len(test_X[i][4]) > 30:
-        nb_20 += 1
-    if len(test_X[i][3]) > 25:
-        nb_25 += 1
-    if len(test_X[i][4]) > 25:
-        nb_25 += 1
-    if len(test_X[i][3]) > nb_words_max:
-        nb_words_max = len(test_X[i][3])
-    if len(test_X[i][4]) > nb_words_max:
-        nb_words_max = len(test_X[i][4])
-
-nb_words_mean = nb_words_mean/(2*(len(train_X)+len(test_X)))
-
-print('Number of words max :')
-print(nb_words_max)
-print('Number of words mean :')
-print(nb_words_mean)
-print('>30 :')
-print(nb_20)
-print('>25 :')
-print(nb_25)
-
+print(np.shape(train_X))
+print(np.shape(train_y))
+print(np.shape(test_X))
+print(np.shape(test_y))
