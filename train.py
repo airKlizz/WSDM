@@ -89,6 +89,7 @@ with tf.Graph().as_default():
             test2 = []
             for i in range(len(train_X)):
                 test2.append(i+1)
+            test2 = np.array(test2)
             test2 = test2[indices]
             train_y = train_y[indices]
             train_X = train_X[indices]
