@@ -34,11 +34,12 @@ hidden_size = 100
 
 learning_rate = 0.001
 batch_size = 100
-test_batch_size = 5000
+test_batch_size = 200
 num_epochs = 10
 evaluate_every = 50
 
 nb_batch_per_epoch = int(len(train_X)/batch_size+1)
+nb_batch_per_epoch_test = int(len(test_X)/test_batch_size+1)
 
 allow_soft_placement = True
 log_device_placement = False
@@ -121,24 +122,33 @@ with tf.Graph().as_default():
                     test_X = test_X[indices]
                     test_y = test_y[indices]
 
-                    idx_min = 0
-                    idx_max = test_batch_size
-                    x1 = np.array([test_X[idx_min][3]])
-                    x2 = np.array([test_X[idx_min][4]])
+                    accuracy = 0
+                    c_matrix = np.zeros((n_class, n_class))
 
-                    for i in range(idx_min+1, idx_max):
-                        x1 = np.append(x1, np.array([test_X[i][3]]), axis=0)
-                        x2 = np.append(x2, np.array([test_X[i][4]]), axis=0)
+                    for test_batch in range(nb_batch_per_epoch_test):
+                        idx_min = test_batch * test_batch_size
+                        idx_max = min((test_batch+1) * test_batch_size, len(test_X)-1)
+                        x1 = np.array([test_X[idx_min][3]])
+                        x2 = np.array([test_X[idx_min][4]])
 
-                    y = test_y[idx_min:idx_max]
+                        for i in range(idx_min+1, idx_max):
+                            x1 = np.append(x1, np.array([test_X[i][3]]), axis=0)
+                            x2 = np.append(x2, np.array([test_X[i][4]]), axis=0)
 
-                    feed_dict = {
-                        model.x1: x1,
-                        model.x2: x2,
-                        model.y: y
-                    }
+                        y = test_y[idx_min:idx_max]
 
-                    accuracy, c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
+                        feed_dict = {
+                            model.x1: x1,
+                            model.x2: x2,
+                            model.y: y
+                        }
+
+                        batch_accuracy, batch_c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
+                        accuracy = accuracy + batch_accuracy
+                        c_matrix = np.add(c_matrix, batch_c_matrix)
+
+                    accuracy = accuracy/nb_batch_per_epoch_test
+                    c_matrix = np.divide(c_matrix, nb_batch_per_epoch_test)
                     print("Test acc {:g}".format(accuracy))
                     print("C_matrix ", c_matrix)
 
