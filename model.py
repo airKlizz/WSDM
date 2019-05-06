@@ -112,21 +112,7 @@ class Model(object):
         self.v_c_1 = LSTM_layer(x1_reshape)
 
     def long_short_memory_encoder_2(self):
-        '''
-        x2_shape = tf.shape(self.x2)
-
-        x2_reshape = tf.reshape(self.x2, [-1, self.max_sen_len, self.embedding_dim])
-
-        LSTM_layer = tf.keras.layers.LSTMCell(self.hidden_size)
-        h = tf.transpose(LSTM_layer.apply(x2_reshape), perm=[0, 2, 1])
-
-        zeros = np.zeros([x2_shape[0], self.max_sen_len, self.embedding_dim])
-        for i in range(x2_shape[0]):
-            zeros[i, -1, -1] = 1
-
-        self.v_c_2 = tf.transpose(tf.reduce_sum(tf.matmul(h, zeros), axis=-1), perm=[1, 0])
-        '''
-
+        
         x2_reshape = tf.reshape(self.x2, [-1, self.max_sen_len, self.embedding_dim])
 
         lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
@@ -162,5 +148,5 @@ class Model(object):
             self.loss = tf.reduce_mean(losses)
 
         with tf.name_scope("metrics"):
-            correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, 1))
-            self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
+            self.correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
+            self.accuracy = tf.reduce_mean(tf.cast(self.correct_predictions, "float"))
