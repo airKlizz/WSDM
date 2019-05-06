@@ -139,6 +139,8 @@ with tf.Graph().as_default():
                     }
 
                     accuracy = sess.run(model.accuracy, feed_dict=feed_dict)
+                    print("Accurency :", accuracy)
+                    print("Test acc {:g}".format(accuracy))
 
                     if accuracy >= best_accuracy:
                         best_accuracy = accuracy
