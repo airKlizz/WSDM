@@ -102,12 +102,6 @@ with tf.Graph().as_default():
                         y = np.append(y, np.array([train_y[idx]]), axis=0)
                         class_sum = np.add(class_sum, train_y[idx])
 
-                    print(idx)
-
-                print(np.shape(x1))
-                print(np.shape(x2))
-                print(np.shape(y))  
-
                 feed_dict = {
                     model.x1: x1,
                     model.x2: x2,
