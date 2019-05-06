@@ -34,7 +34,7 @@ hidden_size = 100
 
 learning_rate = 0.001
 batch_size = 100
-test_batch_size = 500
+test_batch_size = 5000
 num_epochs = 10
 evaluate_every = 50
 
