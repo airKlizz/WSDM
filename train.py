@@ -93,8 +93,8 @@ with tf.Graph().as_default():
                 x2 = np.array([])
 
                 for i in range(idx_min, idx_max):
-                    x1 = np.append(x1, train_X[i][3])
-                    x2 = np.append(x2, train_X[i][4])
+                    x1 = np.append(x1, np.array(train_X[i][3]))
+                    x2 = np.append(x2, np.array(train_X[i][4]))
 
                 print(np.shape(x1))
                 print(np.shape(x2))
