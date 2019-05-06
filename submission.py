@@ -20,6 +20,12 @@ with open(dataset_file_path, 'rb') as f:
 
 test_X = np.array(dataset[0])
 
+n_class = 3
+embedding_dim = 100
+max_sen_len = 30
+
+hidden_size = 100
+
 x1 = test_X[0][3]
 x2 = test_X[0][4]
 
@@ -47,6 +53,13 @@ with graph.as_default():
             model.x2: x2,
             model.y: np.array([0, 0, 1])
         }
+
+        model = Model(
+            max_sen_len = max_sen_len,
+            embedding_dim = embedding_dim,
+            class_num = n_class,
+            hidden_size = hidden_size
+        )
 
         accuracy, c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
         print(c_matrix)
