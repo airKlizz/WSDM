@@ -55,6 +55,10 @@ with graph.as_default():
             hidden_size = hidden_size
         )
 
+        model.build_model()
+
+        print(model.weights["f"])
+
         feed_dict = {
             model.x1: x1,
             model.x2: x2,
