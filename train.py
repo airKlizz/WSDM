@@ -138,10 +138,11 @@ with tf.Graph().as_default():
                         model.y: y
                     }
 
-                    accuracy = sess.run(model.accuracy, feed_dict=feed_dict)
+                    accuracy, c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
                     print("Test acc {:g}".format(accuracy))
+                    print("C_matrix ", c_matrix)
 
-                    if accuracy >= best_accuracy:
+                    if accuracy >= best_accuracy: 
                         best_accuracy = accuracy
                         path = saver.save(sess, checkpoint_prefix, global_step=current_step)
                         print("Saved model checkpoint to {}\n".format(path))

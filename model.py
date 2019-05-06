@@ -150,3 +150,4 @@ class Model(object):
         with tf.name_scope("metrics"):
             correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
             self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"))
+            self.c_matrix = tf.confusion_matrix(labels = tf.argmax(self.y, -1), predictions = self.predictions)
