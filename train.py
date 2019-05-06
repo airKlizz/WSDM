@@ -90,7 +90,7 @@ with tf.Graph().as_default():
                 idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
                 x1 = np.array([train_X[idx_min][3]])
-                x2 = np.array(train_X[idx_min][3])
+                x2 = np.array([train_X[idx_min][4]])
 
                 print(np.shape(x1))
 
