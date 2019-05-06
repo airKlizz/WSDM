@@ -89,20 +89,20 @@ with tf.Graph().as_default():
             
             for batch in range(nb_batch_per_epoch):
                 idx = batch * batch_size
-                x1 = np.array([train_X[idx_min][3]])
-                x2 = np.array([train_X[idx_min][4]])
-                y = np.array([train_y[idx_min]])
+                x1 = np.array([train_X[idx][3]])
+                x2 = np.array([train_X[idx][4]])
+                y = np.array([train_y[idx]])
 
-                class_sum = np.zeros(n_class)
+                class_sum = train_y[idx]
                 while np.sum(class_sum) < batch_size:
-
+                    idx = (idx+1)%len(train_X)
                     if class_sum[np.argmax(train_y[idx])] <= batch_size/n_class+1:
                         x1 = np.append(x1, np.array([train_X[idx][3]]), axis=0)
                         x2 = np.append(x2, np.array([train_X[idx][4]]), axis=0)
                         y = np.append(y, np.array([train_y[idx]]), axis=0)
                         class_sum = np.add(class_sum, train_y[idx])
 
-                    idx = (idx+1)%len(train_X)
+                    print(idx)
 
                 print(np.shape(x1))
                 print(np.shape(x2))
