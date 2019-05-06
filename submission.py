@@ -45,8 +45,8 @@ with graph.as_default():
     sess = tf.Session(config=session_config)
     with sess.as_default():
 
-        saver = tf.train.import_meta_graph("{}.meta".format(checkpoint_file))
-        saver.restore(sess, checkpoint_file)
+        #saver = tf.train.import_meta_graph("{}.meta".format(checkpoint_file))
+        #saver.restore(sess, checkpoint_file)
 
         model = Model(
             max_sen_len = max_sen_len,
