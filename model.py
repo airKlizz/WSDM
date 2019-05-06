@@ -130,7 +130,7 @@ class Model(object):
         v = tf.concat([v1, v2], -1)
         self.scores = tf.nn.softmax((tf.matmul(v, self.weights['f']) + self.biases['f']), axis=-1)
 
-        self.predictions = tf.argmax(self.y, -1)
+        self.predictions = tf.argmax(self.scores, -1)
 
     def build_model(self):
 
