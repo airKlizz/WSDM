@@ -60,7 +60,7 @@ with graph.as_default():
         feed_dict = {
             model.x1: x1,
             model.x2: x2,
-            model.y: np.array([0, 0, 1])
+            model.y: np.array([[0, 0, 1]])
         }
 
         accuracy, c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
