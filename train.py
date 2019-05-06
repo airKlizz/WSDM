@@ -138,9 +138,7 @@ with tf.Graph().as_default():
                         model.y: y
                     }
 
-                    accuracy, correct_predictions = sess.run([model.accuracy, model.correct_predictions], feed_dict=feed_dict)
-                    print("Accurency :", accuracy)
-                    print("Correct predictions :", correct_predictions)
+                    accuracy = sess.run(model.accuracy, feed_dict=feed_dict)
                     print("Test acc {:g}".format(accuracy))
 
                     if accuracy >= best_accuracy:

@@ -148,5 +148,5 @@ class Model(object):
             self.loss = tf.reduce_mean(losses)
 
         with tf.name_scope("metrics"):
-            self.correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
-            self.accuracy = tf.reduce_mean(tf.cast(self.correct_predictions, "float"))
+            correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
+            self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"))
