@@ -148,7 +148,6 @@ with tf.Graph().as_default():
                         c_matrix = np.add(c_matrix, batch_c_matrix)
 
                     accuracy = accuracy/nb_batch_per_epoch_test
-                    c_matrix = np.divide(c_matrix, nb_batch_per_epoch_test)
                     print("Test acc {:g}".format(accuracy))
                     print("C_matrix ", c_matrix)
 
