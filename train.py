@@ -92,14 +92,9 @@ with tf.Graph().as_default():
                 x1 = np.array([train_X[idx_min][3]])
                 x2 = np.array([train_X[idx_min][4]])
 
-                print(np.shape(x1))
-
                 for i in range(idx_min+1, idx_max):
                     x1 = np.append(x1, np.array([train_X[i][3]]), axis=0)
                     x2 = np.append(x2, np.array([train_X[i][4]]), axis=0)
-
-                print(np.shape(x1))
-                print(np.shape(x2))
 
                 y = train_y[idx_min:idx_max]
 
@@ -126,11 +121,16 @@ with tf.Graph().as_default():
                     test_X = test_X[indices]
                     test_y = test_y[indices]
 
-                    x1 = test_X[:test_batch_size, 3]
-                    print(type(x1))
-                    print(np.shape(x1))
-                    x2 = test_X[:test_batch_size, 4]
-                    y = test_y[:test_batch_size]
+                    idx_min = 0
+                    idx_max = test_batch_size
+                    x1 = np.array([train_X[idx_min][3]])
+                    x2 = np.array([train_X[idx_min][4]])
+
+                    for i in range(idx_min+1, idx_max):
+                        x1 = np.append(x1, np.array([train_X[i][3]]), axis=0)
+                        x2 = np.append(x2, np.array([train_X[i][4]]), axis=0)
+
+                    y = train_y[idx_min:idx_max]
 
                     feed_dict = {
                         model.x1: x1,
