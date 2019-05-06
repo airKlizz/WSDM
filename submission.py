@@ -20,7 +20,10 @@ with open(dataset_file_path, 'rb') as f:
 
 test_X = np.array(dataset[0])
 
-timestamp = "xxxxxxxxx"
+x1 = test_X[0][3]
+x2 = test_X[0][4]
+
+timestamp = "1557135948"
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
@@ -38,3 +41,12 @@ with graph.as_default():
 
         saver = tf.train.import_meta_graph("{}.meta".format(checkpoint_file))
         saver.restore(sess, checkpoint_file)
+
+        feed_dict = {
+            model.x1: x1,
+            model.x2: x2,
+            model.y: np.array([0, 0, 1])
+        }
+
+        accuracy, c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
+        print(c_matrix)
