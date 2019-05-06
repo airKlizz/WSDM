@@ -17,24 +17,34 @@ data_directory = "../Data"
 train_file_path = data_directory+"/train.csv"
 test_file_path = data_directory+"/test.csv"
 embedding_file_path = data_directory+"/glove.6B.100d.txt"
-dataset_file_path = data_directory+"/dataset"
+train_dataset_file_path = data_directory+"/train_dataset"
+test_dataset_file_path = data_directory+"/test_dataset"
 
 embedding_dim = 100
 max_sen_len = 30
 
-X = []
-y = []
+X_train = []
+y_train = []
+
+X_test = []
 
 sample_submission = []
 
 with open(train_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
-        X.append([row[i] for i in [0, 1, 2, 5, 6]])
-        y.append(row[7])
+        X_train.append([row[i] for i in [0, 1, 2, 5, 6]])
+        y_train.append(row[7])
 
-X = X[1:]
-y = y[1:]
+X_train = X_train[1:]
+y_train = y_train[1:]
+
+with open(test_file_path, newline='') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        X_test.append([row[i] for i in [0, 1, 2, 5, 6]])
+
+X_test = X_test[1:]
 
 '''
 Data preprocessing
@@ -97,7 +107,7 @@ def load_embedding(embedding_file_path, wordset, embedding_dim):
             if len(check) == 2: continue
             line = line.strip().split()
             if line[0] not in wordset: continue
-            embedding = [float(s) for s in line[1:]]
+            embedding = np.array([float(s) for s in line[1:]])
             word_embedding.append(embedding)
             words_dict[line[0]] = index
             index +=1
@@ -105,7 +115,15 @@ def load_embedding(embedding_file_path, wordset, embedding_dim):
 
 wordset = set()
 
-for line in X:
+for line in X_train:
+    line[3] = preprocessing(line[3])
+    line[4] = preprocessing(line[4])
+    for word in line[3]:
+        wordset.add(word)
+    for word in line[4]:
+        wordset.add(word)
+
+for line in X_test:
     line[3] = preprocessing(line[3])
     line[4] = preprocessing(line[4])
     for word in line[3]:
@@ -117,7 +135,7 @@ word_embedding, words_dict = load_embedding(embedding_file_path, wordset, embedd
 
 no_word_vector = np.zeros(embedding_dim)
 
-for line in X:
+for line in X_train:
 
     sentence = []
     for i in range(max_sen_len):
@@ -135,13 +153,31 @@ for line in X:
             sentence.append(no_word_vector)
     line[4] = np.array(sentence)
 
-for i in range(len(y)):
-    if y[i] == 'agreed':
-        y[i] = np.array([1, 0, 0])
-    elif y[i] == 'disagreed':
-        y[i] = np.array([0, 1, 0])
+for i in range(len(y_train)):
+    if y_train[i] == 'agreed':
+        y_train[i] = np.array([1, 0, 0])
+    elif y_train[i] == 'disagreed':
+        y_train[i] = np.array([0, 1, 0])
     else :
-        y[i] = np.array([0, 0, 1])
+        y_train[i] = np.array([0, 0, 1])
+
+for line in X_test:
+
+    sentence = []
+    for i in range(max_sen_len):
+        if i < len(line[3]) and line[3][i] in words_dict:
+            sentence.append(word_embedding[words_dict[line[3][i]]])
+        else :
+            sentence.append(no_word_vector)
+    line[3] = np.array(sentence)
+
+    sentence = []
+    for i in range(max_sen_len):
+        if i < len(line[4]) and line[4][i] in words_dict:
+            sentence.append(word_embedding[words_dict[line[4][i]]])
+        else :
+            sentence.append(no_word_vector)
+    line[4] = np.array(sentence)
 
 '''
 Split in train and test set
@@ -149,16 +185,21 @@ Split in train and test set
 
 test_percentage = 0.25
 
-train_X = X[int(test_percentage*len(X)):]
-train_y = y[int(test_percentage*len(y)):]
-test_X = X[:int(test_percentage*len(X))]
-test_y = y[:int(test_percentage*len(y))]
+train_X = X_train[int(test_percentage*len(X_train)):]
+train_y = y_train[int(test_percentage*len(y_train)):]
+test_X = X_train[:int(test_percentage*len(X_train))]
+test_y = y_train[:int(test_percentage*len(y_train))]
 
-dataset = [train_X, train_y, test_X, test_y]
+train_dataset = [train_X, train_y, test_X, test_y]
+
+test_dataset = [X_test]
 
 '''
 Save the dataset
 '''
 
-with open(dataset_file_path, 'wb') as f:
-    pickle.dump(dataset, f)
+with open(train_dataset_file_path, 'wb') as f:
+    pickle.dump(train_dataset, f)
+
+with open(test_dataset_file_path, 'wb') as f:
+    pickle.dump(test_dataset, f)
