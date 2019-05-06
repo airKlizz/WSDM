@@ -16,7 +16,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="1"
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
-dataset_file_path = data_directory+"/dataset"
+dataset_file_path = data_directory+"/train_dataset"
 
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)

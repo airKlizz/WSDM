@@ -1,6 +1,7 @@
 '''
 CREATE THE DATASET FROM THE CSV FILES
 '''
+print("Load csv files")
 
 import csv
 import pickle
@@ -28,8 +29,6 @@ y_train = []
 
 X_test = []
 
-sample_submission = []
-
 with open(train_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
@@ -49,6 +48,7 @@ X_test = X_test[1:]
 '''
 Data preprocessing
 '''
+print("data preprocessing")
 
 def remove_non_ascii(words):
     """Remove non-ASCII characters from list of tokenized words"""
@@ -182,6 +182,7 @@ for line in X_test:
 '''
 Split in train and test set
 '''
+print("split in train and test set")
 
 test_percentage = 0.25
 
@@ -195,8 +196,9 @@ train_dataset = [train_X, train_y, test_X, test_y]
 test_dataset = [X_test]
 
 '''
-Save the dataset
+Save dataset
 '''
+print("save dataset")
 
 with open(train_dataset_file_path, 'wb') as f:
     pickle.dump(train_dataset, f)
