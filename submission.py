@@ -48,18 +48,18 @@ with graph.as_default():
         saver = tf.train.import_meta_graph("{}.meta".format(checkpoint_file))
         saver.restore(sess, checkpoint_file)
 
-        feed_dict = {
-            model.x1: x1,
-            model.x2: x2,
-            model.y: np.array([0, 0, 1])
-        }
-
         model = Model(
             max_sen_len = max_sen_len,
             embedding_dim = embedding_dim,
             class_num = n_class,
             hidden_size = hidden_size
         )
+
+        feed_dict = {
+            model.x1: x1,
+            model.x2: x2,
+            model.y: np.array([0, 0, 1])
+        }
 
         accuracy, c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
         print(c_matrix)
