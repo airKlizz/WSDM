@@ -130,7 +130,7 @@ with tf.Graph().as_default():
                         x1 = np.append(x1, np.array([test_X[i][3]]), axis=0)
                         x2 = np.append(x2, np.array([test_X[i][4]]), axis=0)
 
-                    y = train_y[idx_min:idx_max]
+                    y = test_y[idx_min:idx_max]
 
                     feed_dict = {
                         model.x1: x1,
