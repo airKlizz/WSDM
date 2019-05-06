@@ -26,8 +26,8 @@ max_sen_len = 30
 
 hidden_size = 100
 
-x1 = test_X[0][3]
-x2 = test_X[0][4]
+x1 = [test_X[0][3]]
+x2 = [test_X[0][4]]
 
 timestamp = "1557135948"
 
@@ -56,8 +56,6 @@ with graph.as_default():
         )
 
         model.build_model()
-
-        print(model.weights["f"])
 
         feed_dict = {
             model.x1: x1,
