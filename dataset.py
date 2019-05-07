@@ -14,15 +14,33 @@ from nltk import word_tokenize
 import numpy as np
 
 from collections import Counter
-from imblearn.over_sampling import SMOTE
 
 data_directory = "../Data"
+
+'''
+sampling :
+    0 -> no modification
+    1 -> oversampling
+    2 -> undersampling
+    3 -> under and oversampling
+'''
+sampling = 1
+
+if sampling == 0:
+    train_dataset_file_path = data_directory+"/train_dataset_no_sampling"
+elif sampling == 1:
+    train_dataset_file_path = data_directory+"/train_dataset_oversampling"
+elif sampling == 2:
+    train_dataset_file_path = data_directory+"/train_dataset_undersampling"
+else :
+    train_dataset_file_path = data_directory+"/train_dataset_combinesampling"
+
 
 train_file_path = data_directory+"/train.csv"
 test_file_path = data_directory+"/test.csv"
 embedding_file_path = data_directory+"/glove.6B.100d.txt"
-train_dataset_file_path = data_directory+"/train_dataset"
 test_dataset_file_path = data_directory+"/test_dataset"
+
 
 embedding_dim = 100
 max_sen_len = 30
@@ -160,13 +178,10 @@ argmax_y_train = []
 
 for i in range(len(y_train)):
     if y_train[i] == 'agreed':
-        y_train[i] = np.array([1, 0, 0])
         argmax_y_train.append(0)
     elif y_train[i] == 'disagreed':
-        y_train[i] = np.array([0, 1, 0])
         argmax_y_train.append(1)
     else :
-        y_train[i] = np.array([0, 0, 1])
         argmax_y_train.append(2)
 
 for line in X_test:
@@ -196,35 +211,58 @@ print("Original dataset shape ", Counter(argmax_y_train))
 '''
 No modifiction
 '''
+if sampling == 0:
+    print("No modification")
 
 '''
 Oversampling
 '''
-
-sm = SMOTE()
-X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
-print(np.shape(X_train_reshape))
-print(np.shape(argmax_y_train))
-X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape, argmax_y_train)
-X_train_res = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
-print("Resampled dataset shape ", Counter(y_train_res))
-print(np.shape(X_train_res))
-print(np.shape(y_train_res))
+if sampling == 1:
+    from imblearn.over_sampling import SMOTE
+    print("Oversampling")
+    sm = SMOTE()
+    X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
+    X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape, argmax_y_train)
+    X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
+    print("Resampled dataset shape ", Counter(y_train_res))
 
 
 '''
 Undersampling
 '''
+if sampling == 2:
+    from imblearn.under_sampling import CondensedNearestNeighbour
+    print("Undersampling")
+    cnn = CondensedNearestNeighbour()
+    X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
+    X_train_reshape_res, y_train_res = cnn.fit_resample(X_train_reshape, argmax_y_train)
+    X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
+    print("Resampled dataset shape ", Counter(y_train_res))
 
 '''
 Over- and Undersampling
 '''
+if sampling == 3:
+    from imblearn.combine import SMOTETomek
+    print("Over- and Undersampling")
+    smt = SMOTETomek()
+    X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
+    X_train_reshape_res, y_train_res = smt.fit_resample(X_train_reshape, argmax_y_train)
+    X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
+    print("Resampled dataset shape ", Counter(y_train_res))
 
 
+y_train = []
+for i in range(len(argmax_y_train)):
+    if argmax_y_train[i] == 0:
+        y_train.append([1, 0, 0])
+    elif argmax_y_train[i] == 1:
+        y_train.append([0, 1, 0])
+    else :
+        y_train.append([0, 0, 1])
 
 '''
 Split in train and test set
-'''
 '''
 
 test_percentage = 0.25
@@ -237,14 +275,13 @@ test_y = y_train[:int(test_percentage*len(y_train))]
 train_dataset = [train_X, train_y, test_X, test_y]
 
 test_dataset = [X_test]
-'''
+
 '''
 Save dataset
 '''
-'''
+
 with open(train_dataset_file_path, 'wb') as f:
     pickle.dump(train_dataset, f)
 
 with open(test_dataset_file_path, 'wb') as f:
     pickle.dump(test_dataset, f)
-'''
