@@ -55,12 +55,17 @@ with tf.Graph().as_default():
     sess = tf.Session(config=session_config)
 
     with sess.as_default():
+
+        print("Model creation")
+
         model = Model(
         max_sen_len = max_sen_len,
         embedding_dim = embedding_dim,
         class_num = n_class,
         hidden_size = hidden_size
         )
+
+        print("Model construction")
 
         model.build_model()
 
