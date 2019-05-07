@@ -203,9 +203,9 @@ Oversampling
 
 sm = SMOTE()
 print(np.shape(X_train))
-X_train_reshape = np.reshape(X_train(-1, 2*max_sen_len*embedding_dim))
+X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
 X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape, y_train)
-X_train_res = np.reshape(X_train_reshape_res(-1, 2, max_sen_len, embedding_dim))
+X_train_res = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
 print("Resampled dataset shape ", Counter(y_train_res))
 
 
