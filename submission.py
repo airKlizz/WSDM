@@ -29,7 +29,7 @@ hidden_size = 100
 x1 = [test_X[0][3]]
 x2 = [test_X[0][4]]
 
-timestamp = "1557135948"
+timestamp = "1557212168"
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
