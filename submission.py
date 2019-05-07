@@ -65,14 +65,14 @@ with graph.as_default():
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
 
-            print(predictions)
-
-            if predictions == 0:
+            if predictions[0] == 0:
                 submission[i][1] = "agreed"
-            elif predictions == 1:
+            elif predictions[0] == 1:
                 submission[i][1] = "disagreed"
-            else :
+            elif predictions[0] == 2:
                 submission[i][1] = "unrelated"
+            else :
+                print("Error prediction")
 
 with open(submission_file_path, newline='') as csvfile:
     writer = csv.writer(csvfile)
