@@ -119,19 +119,19 @@ def load_embedding(embedding_file_path, wordset, embedding_dim):
 wordset = set()
 
 for line in X_train:
-    line[3] = preprocessing(line[3])
-    line[4] = preprocessing(line[4])
-    for word in line[3]:
+    line[0] = preprocessing(line[0])
+    line[1] = preprocessing(line[1])
+    for word in line[0]:
         wordset.add(word)
-    for word in line[4]:
+    for word in line[1]:
         wordset.add(word)
 
 for line in X_test:
-    line[3] = preprocessing(line[3])
-    line[4] = preprocessing(line[4])
-    for word in line[3]:
+    line[0] = preprocessing(line[0])
+    line[1] = preprocessing(line[1])
+    for word in line[0]:
         wordset.add(word)
-    for word in line[4]:
+    for word in line[1]:
         wordset.add(word)
 
 word_embedding, words_dict = load_embedding(embedding_file_path, wordset, embedding_dim)
@@ -142,19 +142,19 @@ for line in X_train:
 
     sentence = []
     for i in range(max_sen_len):
-        if i < len(line[3]) and line[3][i] in words_dict:
-            sentence.append(word_embedding[words_dict[line[3][i]]])
+        if i < len(line[0]) and line[0][i] in words_dict:
+            sentence.append(word_embedding[words_dict[line[0][i]]])
         else :
             sentence.append(no_word_vector)
-    line[3] = np.array(sentence)
+    line[0] = np.array(sentence)
 
     sentence = []
     for i in range(max_sen_len):
-        if i < len(line[4]) and line[4][i] in words_dict:
-            sentence.append(word_embedding[words_dict[line[4][i]]])
+        if i < len(line[1]) and line[1][i] in words_dict:
+            sentence.append(word_embedding[words_dict[line[1][i]]])
         else :
             sentence.append(no_word_vector)
-    line[4] = np.array(sentence)
+    line[1] = np.array(sentence)
 
 argmax_y_train = []
 
