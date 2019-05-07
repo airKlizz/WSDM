@@ -35,7 +35,7 @@ X_test = []
 with open(train_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
-        X_train.append([row[i] for i in [0, 1, 2, 5, 6]])
+        X_train.append([row[i] for i in [5, 6]])
         y_train.append(row[7])
 
 X_train = X_train[1:100]
@@ -44,7 +44,7 @@ y_train = y_train[1:100]
 with open(test_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
-        X_test.append([row[i] for i in [0, 1, 2, 5, 6]])
+        X_test.append([row[i] for i in [5, 6]])
 
 X_test = X_test[1:100]
 
