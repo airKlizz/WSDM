@@ -7,8 +7,6 @@ import csv
 import tensorflow as tf
 import numpy as np
 
-from model import Model 
-
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 data_directory = "../Data"
@@ -17,6 +15,8 @@ backup_directory = "../Backup/"
 sample_submission_file_path = data_directory+"/sample_submission.csv"
 submission_file_path = data_directory+"/submission.csv"
 dataset_file_path = data_directory+"/test_dataset"
+
+batch_size = 200
 
 submission = []
 
@@ -55,24 +55,39 @@ with graph.as_default():
 
         model_predictions = graph.get_operation_by_name("predictions").outputs[0]
 
-        for i in range(len(test_X)):
-            print(i, "/", len(test_X))
+        batch = 0
+        idx_max = 0
+
+        while idx_max < len(test_X):
+            print(batch, "/", len(test_X)/batch)
+            idx_min = batch * batch_size
+            idx_max = min((batch+1) * batch_size, len(test_X)-1)
+            x1 = np.array([test_X[idx_min][3]])
+            x2 = np.array([test_X[idx_min][4]])
+
+            for i in range(idx_min+1, idx_max):
+                x1 = np.append(x1, np.array([test_X[i][3]]), axis=0)
+                x2 = np.append(x2, np.array([test_X[i][4]]), axis=0)
+
             feed_dict = {
-                model_x1: [test_X[i][3]],
-                model_x2: [test_X[i][4]],
+                model_x1: x1,
+                model_x2: x2,
                 model_y: np.array([[0, 0, 0]])
             }
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
 
-            if predictions[0] == 0:
-                submission[i][1] = "agreed"
-            elif predictions[0] == 1:
-                submission[i][1] = "disagreed"
-            elif predictions[0] == 2:
-                submission[i][1] = "unrelated"
-            else :
-                print("Error prediction")
+            for i in range(len(predictions)):
+                if predictions[i] == 0:
+                    submission[idx_min+i+1][1] = "agreed"
+                elif predictions[i] == 1:
+                    submission[idx_min+i+1][1] = "disagreed"
+                elif predictions[i] == 2:
+                    submission[idx_min+i+1][1] = "unrelated"
+                else :
+                    print("Error prediction")
+
+            batch += 1
 
 with open(submission_file_path, newline='') as csvfile:
     writer = csv.writer(csvfile)
