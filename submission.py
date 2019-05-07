@@ -59,7 +59,7 @@ with graph.as_default():
         idx_max = 0
 
         while idx_max < len(test_X):
-            print(batch, "/", len(test_X)/batch)
+            print(batch, "/", len(test_X)/batch_size)
             idx_min = batch * batch_size
             idx_max = min((batch+1) * batch_size, len(test_X)-1)
             x1 = np.array([test_X[idx_min][3]])
