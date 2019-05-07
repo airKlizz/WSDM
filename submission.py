@@ -62,7 +62,7 @@ with graph.as_default():
         feed_dict = {
             model_x1: x1,
             model_x2: x2,
-            model_y: np.array([[0, 0, 1]])
+            model_y: np.array([[0, 1, 0]])
         }
 
         accuracy = sess.run(model_accuracy, feed_dict=feed_dict)
