@@ -119,6 +119,10 @@ with tf.Graph().as_default():
 
                 y = train_y[idx_min:idx_max]
 
+                print("\nShape:")
+                print(np.shape(x1))
+                print(np.shape(x2))
+                print(np.shape(y))
 
                 feed_dict = {
                     model.x1: x1,
