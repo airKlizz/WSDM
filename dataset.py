@@ -208,6 +208,8 @@ print(np.shape(argmax_y_train))
 X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape, argmax_y_train)
 X_train_res = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
 print("Resampled dataset shape ", Counter(y_train_res))
+print(np.shape(X_train_res))
+print(np.shape(y_train_res))
 
 
 '''
