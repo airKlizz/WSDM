@@ -14,37 +14,21 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
-submission_file_path = data_directory+"/sample_submission.csv"
+sample_submission_file_path = data_directory+"/sample_submission.csv"
+submission_file_path = data_directory+"/submission.csv"
 dataset_file_path = data_directory+"/test_dataset"
 
 submission = []
 
-with open(submission_file_path, newline='') as csvfile:
+with open(sample_submission_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         submission.append([row[0], row[1]])
-
-print(len(submission))
-print(submission[0])
 
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
 
 test_X = np.array(dataset[0])
-
-print("test size ", len(test_X))
-
-n_class = 3
-embedding_dim = 100
-max_sen_len = 30
-
-hidden_size = 100
-
-x1 = []
-x2 = []
-for i in range(200):
-    x1.append(test_X[i][3])
-    x2.append(test_X[i][4])
 
 timestamp = "1557212168"
 
@@ -70,14 +54,25 @@ with graph.as_default():
         model_y = graph.get_operation_by_name("input/y").outputs[0]
 
         model_predictions = graph.get_operation_by_name("predictions").outputs[0]
-        model_accuracy = graph.get_operation_by_name("metrics/accuracy").outputs[0]
-        #model_c_matrix = graph.get_operation_by_name("metrics/c_matrix").outputs[0]
 
-        feed_dict = {
-            model_x1: x1,
-            model_x2: x2,
-            model_y: np.array([[1, 0, 0]])
-        }
+        for i in range(len(test_X)):
 
-        predictions = sess.run(model_predictions, feed_dict=feed_dict)
-        print("predictions", predictions)
+            feed_dict = {
+                model_x1: test_X[i][3],
+                model_x2: test_X[i][4],
+                model_y: np.array([[0, 0, 0]])
+            }
+
+            predictions = sess.run(model_predictions, feed_dict=feed_dict)
+
+            if predictions == 0:
+                submission[i][1] = "agreed"
+            elif predictions == 1:
+                submission[i][1] = "disagreed"
+            else :
+                submission[i][1] = "unrelated"
+
+with open(submission_file_path, newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    for row in submission:
+    writer.writerow(row)
