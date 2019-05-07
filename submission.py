@@ -65,5 +65,5 @@ with graph.as_default():
             model_y: np.array([[1, 0, 0]])
         }
 
-        accuracy = sess.run(model_accuracy, feed_dict=feed_dict)
-        print("Accurency", accuracy)
+        predictions = sess.run(model_predictions, feed_dict=feed_dict)
+        print("predictions", predictions)
