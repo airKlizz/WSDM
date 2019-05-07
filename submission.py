@@ -63,4 +63,4 @@ with graph.as_default():
         }
 
         accuracy = sess.run(model_accuracy, feed_dict=feed_dict)
-        print(c_matrix)
+        print(accuracy)
