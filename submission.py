@@ -58,8 +58,8 @@ with graph.as_default():
         for i in range(len(test_X)):
 
             feed_dict = {
-                model_x1: test_X[i][3],
-                model_x2: test_X[i][4],
+                model_x1: [test_X[i][3]],
+                model_x2: [test_X[i][4]],
                 model_y: np.array([[0, 0, 0]])
             }
 
