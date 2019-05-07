@@ -65,6 +65,8 @@ with graph.as_default():
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
 
+            print(predictions)
+
             if predictions == 0:
                 submission[i][1] = "agreed"
             elif predictions == 1:
