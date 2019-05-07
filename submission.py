@@ -89,7 +89,6 @@ with graph.as_default():
 
             batch += 1
 
-with open(sample_submission_file_path, newline='') as csvfile:
-    writer = csv.writer(csvfile)
-    for row in submission:
-        writer.writerow(row)
+with open(submission_file_path, 'w', newline='') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+    wr.writerow(submission)
