@@ -56,7 +56,7 @@ with graph.as_default():
         model_predictions = graph.get_operation_by_name("predictions").outputs[0]
 
         for i in range(len(test_X)):
-
+            print(i, "/", len(test_X))
             feed_dict = {
                 model_x1: [test_X[i][3]],
                 model_x2: [test_X[i][4]],
