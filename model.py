@@ -150,8 +150,9 @@ class Model(object):
             '''
             loss = 0
             weights_sum = 0
+            losses_shape = tf.shape(losses)
 
-            for i in range(len(losses)):
+            for i in range(losses_shape[0]):
                 if tf.argmax((self.y)[i]) == 0:
                     loss += losses[i]/15
                     weights_sum += 1/15
@@ -162,7 +163,7 @@ class Model(object):
                     loss += losses[i]/16
                     weights_sum += 1/16
 
-            self.loss = loss/len(losses)
+            self.loss = loss/losses_shape[0]
 
         with tf.name_scope("metrics"):
             correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
@@ -171,8 +172,9 @@ class Model(object):
             '''
             accuracy = 0
             weights_sum = 0
+            correct_predictions_shape = tf.shape(correct_predictions)
 
-            for i in range(len(correct_predictions)):
+            for i in range(correct_predictions_shape[0]):
                 if tf.argmax((self.y)[i]) == 0:
                     accuracy += correct_predictions[i]/15
                     weights_sum += 1/15
@@ -184,6 +186,6 @@ class Model(object):
                     weights_sum += 1/16
 
             with tf.name_scope("accuracy"):
-                self.accuracy = accuracy/len(correct_predictions)
+                self.accuracy = accuracy/correct_predictions_shape[0]
 
             self.c_matrix = tf.confusion_matrix(labels = tf.argmax(self.y, -1), predictions = self.predictions, name="c_matrix")
