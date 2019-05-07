@@ -54,7 +54,7 @@ with graph.as_default():
 
         model_predictions = graph.get_operation_by_name("predictions").outputs[0]
         model_accuracy = graph.get_operation_by_name("metrics/accuracy").outputs[0]
-        model_c_matrix = graph.get_operation_by_name("metrics/c_matrix").outputs[0]
+        #model_c_matrix = graph.get_operation_by_name("metrics/c_matrix").outputs[0]
 
         feed_dict = {
             model_x1: x1,
@@ -62,5 +62,5 @@ with graph.as_default():
             model_y: np.array([[0, 0, 1]])
         }
 
-        accuracy, c_matrix = sess.run([model_accuracy, model_c_matrix], feed_dict=feed_dict)
+        accuracy = sess.run(model_accuracy, feed_dict=feed_dict)
         print(c_matrix)
