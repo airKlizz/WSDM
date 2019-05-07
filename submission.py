@@ -25,6 +25,7 @@ with open(submission_file_path, newline='') as csvfile:
         submission.append([row[0], row[1]])
 
 print(len(submission))
+print(submission[0])
 
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
