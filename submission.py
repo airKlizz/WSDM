@@ -20,6 +20,8 @@ with open(dataset_file_path, 'rb') as f:
 
 test_X = np.array(dataset[0])
 
+print("test size ", len(test_X))
+
 n_class = 3
 embedding_dim = 100
 max_sen_len = 30
