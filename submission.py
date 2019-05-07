@@ -56,12 +56,12 @@ with graph.as_default():
         model_predictions = graph.get_operation_by_name("predictions").outputs[0]
 
         batch = 0
-        idx_min = batch * batch_size
-        idx_max = min((batch+1) * batch_size, len(test_X)-1)
+        idx_max = 0
 
         while idx_max < len(test_X)-1:
-            print(batch, "/", len(test_X)/batch_size)
-            print(idx_min, idx_max, len(test_X))
+
+            idx_min = batch * batch_size
+            idx_max = min((batch+1) * batch_size, len(test_X)-1)
             x1 = np.array([test_X[idx_min][3]])
             x2 = np.array([test_X[idx_min][4]])
 
@@ -88,10 +88,8 @@ with graph.as_default():
                     print("Error prediction")
 
             batch += 1
-            idx_min = batch * batch_size
-            idx_max = min((batch+1) * batch_size, len(test_X)-1)
 
-with open(submission_file_path, newline='') as csvfile:
+with open(sample_submission_file_path, newline='') as csvfile:
     writer = csv.writer(csvfile)
     for row in submission:
         writer.writerow(row)
