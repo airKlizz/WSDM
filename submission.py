@@ -45,23 +45,22 @@ with graph.as_default():
     sess = tf.Session(config=session_config)
     with sess.as_default():
 
-        #saver = tf.train.import_meta_graph("{}.meta".format(checkpoint_file))
-        #saver.restore(sess, checkpoint_file)
+        saver = tf.train.import_meta_graph("{}.meta".format(checkpoint_file))
+        saver.restore(sess, checkpoint_file)
 
-        model = Model(
-            max_sen_len = max_sen_len,
-            embedding_dim = embedding_dim,
-            class_num = n_class,
-            hidden_size = hidden_size
-        )
+        model_x1 = graph.get_operation_by_name("input/x1").outputs[0]
+        model_x2 = graph.get_operation_by_name("input/x2").outputs[0]
+        model_y = graph.get_operation_by_name("input/y").outputs[0]
 
-        model.build_model()
+        model_prediction = graph.get_operation_by_name("predictions").outputs[0]
+        model_accuracy = graph.get_operation_by_name("metrics/accuracy").outputs[0]
+        model_c_matrix = graph.get_operation_by_name("metrics/c_matrix").outputs[0]
 
         feed_dict = {
-            model.x1: x1,
-            model.x2: x2,
-            model.y: np.array([[0, 0, 1]])
+            model_x1: x1,
+            model_x2: x2,
+            model_y: np.array([[0, 0, 1]])
         }
 
-        accuracy, c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
+        accuracy, c_matrix = sess.run([model_accuracy, model_c_matrix], feed_dict=feed_dict)
         print(c_matrix)

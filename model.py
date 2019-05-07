@@ -130,7 +130,7 @@ class Model(object):
         v = tf.concat([v1, v2], -1)
         self.scores = tf.nn.softmax((tf.matmul(v, self.weights['f']) + self.biases['f']), axis=-1)
 
-        self.predictions = tf.argmax(self.scores, -1)
+        self.predictions = tf.argmax(self.scores, -1, name="predictions")
 
     def build_model(self):
 
@@ -149,5 +149,5 @@ class Model(object):
 
         with tf.name_scope("metrics"):
             correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
-            self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"))
-            self.c_matrix = tf.confusion_matrix(labels = tf.argmax(self.y, -1), predictions = self.predictions)
+            self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
+            self.c_matrix = tf.confusion_matrix(labels = tf.argmax(self.y, -1), predictions = self.predictions, name="c_matrix")
