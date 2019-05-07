@@ -133,11 +133,6 @@ with tf.Graph().as_default():
                     else :
                         class_weights.append(1/16)
 
-                print("\nShape:")
-                print(np.shape(x1))
-                print(np.shape(x2))
-                print(np.shape(y))
-
                 feed_dict = {
                     model.x1: x1,
                     model.x2: x2,
