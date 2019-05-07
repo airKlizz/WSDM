@@ -75,4 +75,4 @@ with graph.as_default():
 with open(submission_file_path, newline='') as csvfile:
     writer = csv.writer(csvfile)
     for row in submission:
-    writer.writerow(row)
+        writer.writerow(row)
