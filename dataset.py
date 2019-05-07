@@ -24,7 +24,7 @@ sampling :
     2 -> undersampling
     3 -> under and oversampling
 '''
-sampling = 2
+sampling = 3
 
 create_test_dataset = False
 
