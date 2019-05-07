@@ -13,6 +13,9 @@ from nltk import word_tokenize
 
 import numpy as np
 
+from collections import Counter
+from imblearn.over_sampling import SMOTE
+
 data_directory = "../Data"
 
 train_file_path = data_directory+"/train.csv"
@@ -35,15 +38,15 @@ with open(train_file_path, newline='') as csvfile:
         X_train.append([row[i] for i in [0, 1, 2, 5, 6]])
         y_train.append(row[7])
 
-X_train = X_train[1:]
-y_train = y_train[1:]
+X_train = X_train[1:100]
+y_train = y_train[1:100]
 
 with open(test_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         X_test.append([row[i] for i in [0, 1, 2, 5, 6]])
 
-X_test = X_test[1:]
+X_test = X_test[1:100]
 
 '''
 Data preprocessing
@@ -153,13 +156,18 @@ for line in X_train:
             sentence.append(no_word_vector)
     line[4] = np.array(sentence)
 
+argmax_y_train = []
+
 for i in range(len(y_train)):
     if y_train[i] == 'agreed':
         y_train[i] = np.array([1, 0, 0])
+        argmax_y_train.append(0)
     elif y_train[i] == 'disagreed':
         y_train[i] = np.array([0, 1, 0])
+        argmax_y_train.append(1)
     else :
         y_train[i] = np.array([0, 0, 1])
+        argmax_y_train.append(2)
 
 for line in X_test:
 
@@ -180,9 +188,38 @@ for line in X_test:
     line[4] = np.array(sentence)
 
 '''
+DATASET RE-SAMPLING
+'''
+
+print("Original dataset shape ", Counter(argmax_y_train))
+
+'''
+No modifiction
+'''
+
+'''
+Oversampling
+'''
+
+sm = SMOTE()
+X_train_res, y_train_res = sm.fit_resample(X_train, y_train)
+print("Resampled dataset shape ", Counter(y_train_res))
+
+
+'''
+Undersampling
+'''
+
+'''
+Over- and Undersampling
+'''
+
+
+
+'''
 Split in train and test set
 '''
-print("split in train and test set")
+'''
 
 test_percentage = 0.25
 
@@ -194,14 +231,14 @@ test_y = y_train[:int(test_percentage*len(y_train))]
 train_dataset = [train_X, train_y, test_X, test_y]
 
 test_dataset = [X_test]
-
+'''
 '''
 Save dataset
 '''
-print("save dataset")
-
+'''
 with open(train_dataset_file_path, 'wb') as f:
     pickle.dump(train_dataset, f)
 
 with open(test_dataset_file_path, 'wb') as f:
     pickle.dump(test_dataset, f)
+'''

@@ -32,7 +32,7 @@ max_sen_len = 30
 
 hidden_size = 100
 
-learning_rate = 0.001
+learning_rate = 0.0001
 batch_size = 100
 test_batch_size = 200
 num_epochs = 10
