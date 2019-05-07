@@ -91,4 +91,5 @@ with graph.as_default():
 
 with open(submission_file_path, 'w', newline='') as myfile:
     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-    wr.writerow(submission)
+    for i in range(len(submission)):
+        wr.writerow(submission[i])
