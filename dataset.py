@@ -26,6 +26,8 @@ sampling :
 '''
 sampling = 1
 
+create_test_dataset = False
+
 if sampling == 0:
     train_dataset_file_path = data_directory+"/train_dataset_no_sampling"
 elif sampling == 1:
@@ -184,23 +186,24 @@ for i in range(len(y_train)):
     else :
         argmax_y_train.append(2)
 
-for line in X_test:
+if create_test_dataset:
+    for line in X_test:
 
-    sentence = []
-    for i in range(max_sen_len):
-        if i < len(line[0]) and line[0][i] in words_dict:
-            sentence.append(word_embedding[words_dict[line[0][i]]])
-        else :
-            sentence.append(no_word_vector)
-    line[0] = np.array(sentence)
+        sentence = []
+        for i in range(max_sen_len):
+            if i < len(line[0]) and line[0][i] in words_dict:
+                sentence.append(word_embedding[words_dict[line[0][i]]])
+            else :
+                sentence.append(no_word_vector)
+        line[0] = np.array(sentence)
 
-    sentence = []
-    for i in range(max_sen_len):
-        if i < len(line[1]) and line[1][i] in words_dict:
-            sentence.append(word_embedding[words_dict[line[1][i]]])
-        else :
-            sentence.append(no_word_vector)
-    line[1] = np.array(sentence)
+        sentence = []
+        for i in range(max_sen_len):
+            if i < len(line[1]) and line[1][i] in words_dict:
+                sentence.append(word_embedding[words_dict[line[1][i]]])
+            else :
+                sentence.append(no_word_vector)
+        line[1] = np.array(sentence)
 
 '''
 DATASET RE-SAMPLING
@@ -274,7 +277,8 @@ test_y = y_train[:int(test_percentage*len(y_train))]
 
 train_dataset = [train_X, train_y, test_X, test_y]
 
-test_dataset = [X_test]
+if create_test_dataset:
+    test_dataset = [X_test]
 
 '''
 Save dataset
@@ -283,5 +287,6 @@ Save dataset
 with open(train_dataset_file_path, 'wb') as f:
     pickle.dump(train_dataset, f)
 
-with open(test_dataset_file_path, 'wb') as f:
-    pickle.dump(test_dataset, f)
+if create_test_dataset:
+    with open(test_dataset_file_path, 'wb') as f:
+        pickle.dump(test_dataset, f)
