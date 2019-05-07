@@ -13,7 +13,17 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
+submission_file_path = data_directory+"/sample_submission.csv"
 dataset_file_path = data_directory+"/test_dataset"
+
+submission = []
+
+with open(submission_file_path, newline='') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        submission.append([row[0], row[1]])
+
+print(len(submission))
 
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
