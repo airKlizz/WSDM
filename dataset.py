@@ -173,19 +173,19 @@ for line in X_test:
 
     sentence = []
     for i in range(max_sen_len):
-        if i < len(line[3]) and line[3][i] in words_dict:
-            sentence.append(word_embedding[words_dict[line[3][i]]])
+        if i < len(line[0]) and line[0][i] in words_dict:
+            sentence.append(word_embedding[words_dict[line[0][i]]])
         else :
             sentence.append(no_word_vector)
-    line[3] = np.array(sentence)
+    line[0] = np.array(sentence)
 
     sentence = []
     for i in range(max_sen_len):
-        if i < len(line[4]) and line[4][i] in words_dict:
-            sentence.append(word_embedding[words_dict[line[4][i]]])
+        if i < len(line[1]) and line[1][i] in words_dict:
+            sentence.append(word_embedding[words_dict[line[1][i]]])
         else :
             sentence.append(no_word_vector)
-    line[4] = np.array(sentence)
+    line[1] = np.array(sentence)
 
 '''
 DATASET RE-SAMPLING
