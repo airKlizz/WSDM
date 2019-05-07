@@ -73,8 +73,8 @@ with graph.as_default():
             feed_dict = {
                 model_x1: x1,
                 model_x2: x2,
-                model_y: np.array([[0, 0, 0]]),
-                model_class_weights: 0
+                model_y: np.zeros((len(x1), 3)),
+                model_class_weights: np.zeros(len(x1))
             }
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
