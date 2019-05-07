@@ -87,7 +87,12 @@ with tf.Graph().as_default():
             train_X = train_X[indices]
             train_y = train_y[indices]
             
+
             for batch in range(nb_batch_per_epoch):
+
+                '''
+                Previus batch creation :
+
                 idx = batch * batch_size
                 x1 = np.array([train_X[idx][3]])
                 x2 = np.array([train_X[idx][4]])
@@ -101,6 +106,19 @@ with tf.Graph().as_default():
                         x2 = np.append(x2, np.array([train_X[idx][4]]), axis=0)
                         y = np.append(y, np.array([train_y[idx]]), axis=0)
                         class_sum = np.add(class_sum, train_y[idx])
+                '''
+
+                idx_min = batch * batch_size
+                idx_max = min((batch+1) * batch_size, len(train_X)-1)
+                x1 = np.array([train_X[idx_min][3]])
+                x2 = np.array([train_X[idx_min][4]])
+
+                for i in range(idx_min+1, idx_max):
+                    x1 = np.append(x1, np.array([train_X[i][3]]), axis=0)
+                    x2 = np.append(x2, np.array([train_X[i][4]]), axis=0)
+
+                y = train_y[idx_min:idx_max]
+
 
                 feed_dict = {
                     model.x1: x1,
