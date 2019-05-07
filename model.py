@@ -152,7 +152,7 @@ class Model(object):
             weights_sum = 0
             losses_shape = tf.shape(losses)
 
-            for i in range(losses_shape[0]):
+            for i in range(losses_shape[0].eval()):
                 if tf.argmax((self.y)[i]) == 0:
                     loss += losses[i]/15
                     weights_sum += 1/15
@@ -174,7 +174,7 @@ class Model(object):
             weights_sum = 0
             correct_predictions_shape = tf.shape(correct_predictions)
 
-            for i in range(correct_predictions_shape[0]):
+            for i in range(correct_predictions_shape[0].eval()):
                 if tf.argmax((self.y)[i]) == 0:
                     accuracy += correct_predictions[i]/15
                     weights_sum += 1/15
