@@ -61,6 +61,7 @@ with graph.as_default():
 
         while idx_max < len(test_X):
             print(batch, "/", len(test_X)/batch_size)
+            print(idx_min, idx_max, len(test_X))
             x1 = np.array([test_X[idx_min][3]])
             x2 = np.array([test_X[idx_min][4]])
 
