@@ -24,7 +24,7 @@ sampling :
     2 -> undersampling
     3 -> under and oversampling
 '''
-sampling = 2
+sampling = 1
 
 create_test_dataset = False
 
@@ -138,6 +138,8 @@ def load_embedding(embedding_file_path, wordset, embedding_dim):
 
 wordset = set()
 
+print("HERE1")
+
 for line in X_train:
     line[0] = preprocessing(line[0])
     line[1] = preprocessing(line[1])
@@ -145,6 +147,8 @@ for line in X_train:
         wordset.add(word)
     for word in line[1]:
         wordset.add(word)
+
+print("HERE2")
 
 for line in X_test:
     line[0] = preprocessing(line[0])
@@ -154,9 +158,15 @@ for line in X_test:
     for word in line[1]:
         wordset.add(word)
 
+print("HERE2")
+
 word_embedding, words_dict = load_embedding(embedding_file_path, wordset, embedding_dim)
 
+print("HERE3")
+
 no_word_vector = np.zeros(embedding_dim)
+
+print("HERE4")
 
 for line in X_train:
 
@@ -177,6 +187,8 @@ for line in X_train:
     line[1] = np.array(sentence)
 
 argmax_y_train = []
+
+print("HERE5")
 
 for i in range(len(y_train)):
     if y_train[i] == 'agreed':
