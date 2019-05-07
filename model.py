@@ -14,6 +14,7 @@ class Model(object):
             self.x1 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x1")
             self.x2 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x2")
             self.y = tf.placeholder(tf.float32, [None, self.class_num], name="y")
+            self.class_weights = tf.placeholder(tf.float32, [None, 1], name="class_weights")
 
         with tf.name_scope('weights'):
             self.weights = {
@@ -148,44 +149,15 @@ class Model(object):
             ''' 
             Previus loss function : self.loss = tf.reduce_mean(losses)
             '''
-            loss = 0
-            weights_sum = 0
-            losses_shape = tf.shape(losses)
-
-            for i in range(losses_shape[0].eval()):
-                if tf.argmax((self.y)[i]) == 0:
-                    loss += losses[i]/15
-                    weights_sum += 1/15
-                elif tf.argmax((self.y)[i]) == 1:
-                    loss += losses[i]/5
-                    weights_sum += 1/5
-                elif tf.argmax((self.y)[i]) == 2:
-                    loss += losses[i]/16
-                    weights_sum += 1/16
-
-            self.loss = loss/losses_shape[0]
+            self.loss = (tf.reduce_sum(self.class_weights*losses) / tf.reduce_sum(self.class_weights))
+            
 
         with tf.name_scope("metrics"):
             correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
             ''' 
             Previus accuracy function : self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
             '''
-            accuracy = 0
-            weights_sum = 0
-            correct_predictions_shape = tf.shape(correct_predictions)
-
-            for i in range(correct_predictions_shape[0].eval()):
-                if tf.argmax((self.y)[i]) == 0:
-                    accuracy += correct_predictions[i]/15
-                    weights_sum += 1/15
-                elif tf.argmax((self.y)[i]) == 1:
-                    accuracy += correct_predictions[i]/5
-                    weights_sum += 1/5
-                elif tf.argmax((self.y)[i]) == 2:
-                    accuracy += correct_predictions[i]/16
-                    weights_sum += 1/16
-
             with tf.name_scope("accuracy"):
-                self.accuracy = accuracy/correct_predictions_shape[0]
+                self.accuracy = (tf.reduce_sum(self.class_weights*tf.cast(correct_predictions, "float")) / tf.reduce_sum(self.class_weights))
 
             self.c_matrix = tf.confusion_matrix(labels = tf.argmax(self.y, -1), predictions = self.predictions, name="c_matrix")

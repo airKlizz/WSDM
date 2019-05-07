@@ -124,6 +124,15 @@ with tf.Graph().as_default():
 
                 y = train_y[idx_min:idx_max]
 
+                class_weights = []
+                for label in y:
+                    if np.argmax(label) == 0:
+                        class_weights.append(1/15)
+                    elif np.argmax(label) == 1:
+                        class_weights.append(1/5)
+                    else :
+                        class_weights.append(1/16)
+
                 print("\nShape:")
                 print(np.shape(x1))
                 print(np.shape(x2))
@@ -132,7 +141,8 @@ with tf.Graph().as_default():
                 feed_dict = {
                     model.x1: x1,
                     model.x2: x2,
-                    model.y: y
+                    model.y: y,
+                    model.class_weights: class_weights
                 }
 
                 _, step, loss, accuracy = sess.run(
@@ -167,10 +177,20 @@ with tf.Graph().as_default():
 
                         y = test_y[idx_min:idx_max]
 
+                        class_weights = []
+                        for label in y:
+                            if np.argmax(label) == 0:
+                                class_weights.append(1/15)
+                            elif np.argmax(label) == 1:
+                                class_weights.append(1/5)
+                            else :
+                                class_weights.append(1/16)
+
                         feed_dict = {
                             model.x1: x1,
                             model.x2: x2,
-                            model.y: y
+                            model.y: y,
+                            model.class_weights: class_weights
                         }
 
                         batch_accuracy, batch_c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
