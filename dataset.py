@@ -38,15 +38,15 @@ with open(train_file_path, newline='') as csvfile:
         X_train.append([row[i] for i in [5, 6]])
         y_train.append(row[7])
 
-X_train = X_train[1:100]
-y_train = y_train[1:100]
+X_train = X_train[1:1000]
+y_train = y_train[1:1000]
 
 with open(test_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         X_test.append([row[i] for i in [5, 6]])
 
-X_test = X_test[1:100]
+X_test = X_test[1:1000]
 
 '''
 Data preprocessing
@@ -204,7 +204,7 @@ Oversampling
 sm = SMOTE()
 X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
 print(np.shape(X_train_reshape))
-print(argmax_y_train)
+print(np.shape(argmax_y_train))
 X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape, argmax_y_train)
 X_train_res = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
 print("Resampled dataset shape ", Counter(y_train_res))
