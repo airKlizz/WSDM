@@ -52,7 +52,7 @@ with graph.as_default():
         model_x2 = graph.get_operation_by_name("input/x2").outputs[0]
         model_y = graph.get_operation_by_name("input/y").outputs[0]
 
-        model_prediction = graph.get_operation_by_name("predictions").outputs[0]
+        model_prediction = graph.get_operation_by_name("prediction").outputs[0]
         model_accuracy = graph.get_operation_by_name("metrics/accuracy").outputs[0]
         model_c_matrix = graph.get_operation_by_name("metrics/c_matrix").outputs[0]
 
