@@ -26,8 +26,11 @@ max_sen_len = 30
 
 hidden_size = 100
 
-x1 = [test_X[0][3]]
-x2 = [test_X[0][4]]
+x1 = []
+x2 = []
+for i in range(200):
+    x1.append(test_X[i][3])
+    x2.append(test_X[i][4])
 
 timestamp = "1557212168"
 
@@ -63,4 +66,4 @@ with graph.as_default():
         }
 
         accuracy = sess.run(model_accuracy, feed_dict=feed_dict)
-        print(accuracy)
+        print("Accurency", accuracy)
