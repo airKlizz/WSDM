@@ -202,6 +202,7 @@ Oversampling
 '''
 
 sm = SMOTE()
+print(np.shape(X_train))
 X_train_res, y_train_res = sm.fit_resample(X_train, y_train)
 print("Resampled dataset shape ", Counter(y_train_res))
 
