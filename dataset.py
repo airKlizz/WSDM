@@ -244,7 +244,7 @@ if sampling == 1:
     sm = SMOTE()
     X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
 
-    batch_size = 1000
+    batch_size = 5000
     nb_batch_per_epoch = int(len(X_train_reshape)/batch_size+1)
 
     for batch in range(nb_batch_per_epoch):
