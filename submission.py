@@ -13,7 +13,7 @@ data_directory = "../Data"
 backup_directory = "../Backup/"
 
 sample_submission_file_path = data_directory+"/sample_submission.csv"
-submission_file_path = data_directory+"/submission.csv"
+submission_file_path = data_directory+"/submission_SSS.csv"
 dataset_file_path = data_directory+"/test_dataset"
 
 batch_size = 200
