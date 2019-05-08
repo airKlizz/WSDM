@@ -9,14 +9,14 @@ import time
 import tensorflow as tf
 import numpy as np
 
-from model import Model 
+from modelSSS import Model
 
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
-dataset_file_path = data_directory+"/train_dataset"
+dataset_file_path = data_directory+"/train_dataset_combine_sampling"
 
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
@@ -32,7 +32,7 @@ max_sen_len = 30
 
 hidden_size = 100
 
-learning_rate = 0.0001
+learning_rate = 0.001
 batch_size = 100
 test_batch_size = 200
 num_epochs = 10
