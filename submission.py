@@ -13,7 +13,7 @@ data_directory = "../Data"
 backup_directory = "../Backup/"
 
 sample_submission_file_path = data_directory+"/sample_submission.csv"
-submission_file_path = data_directory+"/submission_DDD.csv"
+submission_file_path = data_directory+"/submission_SDD.csv"
 dataset_file_path = data_directory+"/test_dataset"
 
 batch_size = 200
@@ -30,7 +30,8 @@ with open(dataset_file_path, 'rb') as f:
 
 test_X = np.array(dataset[0])
 
-timestamp = "1557321914"
+#timestamp = "1557321914" # DDD
+timestamp = '1557322767' # SDD
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
