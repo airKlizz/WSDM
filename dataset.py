@@ -245,10 +245,10 @@ X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
 print("Resampled dataset shape ", Counter(y_train_res))
 
 y_train = []
-for i in range(len(argmax_y_train)):
-    if argmax_y_train[i] == 0:
+for i in range(len(y_train_res)):
+    if y_train_res[i] == 0:
         y_train.append([1, 0, 0])
-    elif argmax_y_train[i] == 1:
+    elif y_train_res[i] == 1:
         y_train.append([0, 1, 0])
     else :
         y_train.append([0, 0, 1])
@@ -263,10 +263,10 @@ Split in train and test set
 
 test_percentage = 0.25
 
-train_X = X_train[int(test_percentage*len(X_train)):]
-train_y = y_train[int(test_percentage*len(y_train)):]
-test_X = X_train[:int(test_percentage*len(X_train))]
-test_y = y_train[:int(test_percentage*len(y_train))]
+train_X = np.array(X_train[int(test_percentage*len(X_train)):])
+train_y = np.array(y_train[int(test_percentage*len(y_train)):])
+test_X = np.array(X_train[:int(test_percentage*len(X_train))])
+test_y = np.array(y_train[:int(test_percentage*len(y_train))])
 
 train_dataset = [train_X, train_y, test_X, test_y]
 
