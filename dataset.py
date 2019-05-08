@@ -214,7 +214,7 @@ print("Original dataset shape ", Counter(argmax_y_train))
    
 sm = SMOTE()
 rus = RandomUnderSampler()
-sme = SMOTEENN()
+#sme = SMOTEENN()
 
 X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
 
@@ -229,10 +229,12 @@ for batch in range(nb_batch_per_epoch):
     if batch == 0:
         X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
     else :
+        '''
         if batch%3 == 0:
             print("SMOTEENN")
             X_batch_res, y_batch_res = sme.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
-        elif batch%2 == 0:
+        '''
+        if batch%2 == 0:
             print("RandomUnderSampler")
             X_batch_res, y_batch_res = rus.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
         else:
