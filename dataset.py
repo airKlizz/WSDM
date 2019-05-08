@@ -21,7 +21,7 @@ from collections import Counter
 
 data_directory = "../Data"
 
-train_dataset_file_path = data_directory+"/train_dataset_combine_sampling"
+train_dataset_file_path = data_directory+"/train_dataset_combine_sampling_ration_0.5"
 
 create_test_dataset = False
 
@@ -219,20 +219,17 @@ rus = RandomUnderSampler()
 X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
 
 batch_size = 5000
-nb_batch_per_epoch = int(len(X_train_reshape)/batch_size+1)
+nb_batch = int(len(X_train_reshape)/batch_size+1)/2
 
-for batch in range(nb_batch_per_epoch):
-    print(batch, "/", nb_batch_per_epoch)
+for batch in range(nb_batch):
+    print(batch, "/", nb_batch)
     idx_min = batch * batch_size
     idx_max = min((batch+1) * batch_size, len(X_train_reshape)-1)
     
     if batch == 0:
         X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
     else :
-        if batch%3 == 0:
-            print("RandomUnderSampler")
-            X_batch_res, y_batch_res = rus.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
-        elif batch%2 == 0:
+        if batch%2 == 0:
             print("RandomUnderSampler")
             X_batch_res, y_batch_res = rus.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
         else:
@@ -240,6 +237,9 @@ for batch in range(nb_batch_per_epoch):
             X_batch_res, y_batch_res = sm.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
         X_train_reshape_res = np.concatenate((X_train_reshape_res, X_batch_res), axis=0)
         y_train_res = np.concatenate((y_train_res, y_batch_res), axis=0)
+
+X_train_reshape_res = np.concatenate((X_train_reshape_res, X_train_reshape[idx_max:]), axis=0)
+y_train_res = np.concatenate((y_train_res, argmax_y_train[idx_max:]), axis=0)
 
 X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
 print("Resampled dataset shape ", Counter(y_train_res))
