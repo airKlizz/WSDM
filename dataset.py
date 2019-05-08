@@ -45,15 +45,15 @@ with open(train_file_path, newline='') as csvfile:
         X_train.append([row[i] for i in [5, 6]])
         y_train.append(row[7])
 
-X_train = X_train[1:30000]
-y_train = y_train[1:30000]
+X_train = X_train[1:]
+y_train = y_train[1:]
 
 with open(test_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         X_test.append([row[i] for i in [5, 6]])
 
-X_test = X_test[1:3000]
+X_test = X_test[1:]
 
 '''
 Data preprocessing
