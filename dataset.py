@@ -53,7 +53,7 @@ with open(test_file_path, newline='') as csvfile:
     for row in reader:
         X_test.append([row[i] for i in [5, 6]])
 
-X_test = X_test[1:30000]
+X_test = X_test[1:3000]
 
 '''
 Data preprocessing
@@ -248,6 +248,10 @@ for i in range(len(argmax_y_train)):
         y_train.append([0, 1, 0])
     else :
         y_train.append([0, 0, 1])
+
+print("shape")
+print(np.shape(X_train))
+print(np.shape(y_train))
 
 '''
 Split in train and test set
