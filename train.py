@@ -16,7 +16,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="4"
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
-dataset_file_path = data_directory+"/train_dataset_combine_sampling"
+dataset_file_path = data_directory+"/train_dataset_combine_sampling_ratio_0.5"
 
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
@@ -76,7 +76,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "modelSDD")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "modelSDD_0.5")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
