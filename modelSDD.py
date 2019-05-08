@@ -103,8 +103,7 @@ class Model(object):
 
     def build_model(self):
 
-        self.inter_attention_1_to_2()
-        self.inter_attention_2_to_1()
+        self.inter_attention()
         self.long_short_memory_encoder_1()
         self.long_short_memory_encoder_2()
         self.prediction()
