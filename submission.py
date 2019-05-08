@@ -52,7 +52,6 @@ with graph.as_default():
         model_x1 = graph.get_operation_by_name("input/x1").outputs[0]
         model_x2 = graph.get_operation_by_name("input/x2").outputs[0]
         model_y = graph.get_operation_by_name("input/y").outputs[0]
-        model_class_weights = graph.get_operation_by_name("input/class_weights").outputs[0]
 
         model_predictions = graph.get_operation_by_name("predictions").outputs[0]
 
