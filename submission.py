@@ -30,7 +30,7 @@ with open(dataset_file_path, 'rb') as f:
 
 test_X = np.array(dataset[0])
 
-timestamp = "1557229516"
+timestamp = "1557316949"
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
