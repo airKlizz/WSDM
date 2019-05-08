@@ -219,7 +219,7 @@ rus = RandomUnderSampler()
 X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
 
 batch_size = 5000
-nb_batch = int(len(X_train_reshape)/batch_size+1)/2
+nb_batch = int((len(X_train_reshape)/batch_size+1)/2)
 
 for batch in range(nb_batch):
     print(batch, "/", nb_batch)
