@@ -11,6 +11,10 @@ import nltk
 import inflect
 from nltk import word_tokenize
 
+from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import CondensedNearestNeighbour
+from imblearn.combine import SMOTETomek
+
 import numpy as np
 
 from collections import Counter
@@ -138,9 +142,11 @@ def load_embedding(embedding_file_path, wordset, embedding_dim):
 
 wordset = set()
 
-print("HERE1")
+i = 0
 
 for line in X_train:
+    print(i, "/", len(X_train))
+    i +=1
     line[0] = preprocessing(line[0])
     line[1] = preprocessing(line[1])
     for word in line[0]:
@@ -233,11 +239,26 @@ if sampling == 0:
 Oversampling
 '''
 if sampling == 1:
-    from imblearn.over_sampling import SMOTE
+    
     print("Oversampling")
     sm = SMOTE()
     X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
-    X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape, argmax_y_train)
+
+    batch_size = 1000
+    nb_batch_per_epoch = int(len(X_train_reshape)/batch_size+1)
+
+    for batch in range(nb_batch_per_epoch):
+        print(batch, "/", nb_batch_per_epoch)
+        idx_min = batch * batch_size
+        idx_max = min((batch+1) * batch_size, len(X_train_reshape)-1)
+        
+        if batch == 0:
+            X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
+        else :
+            X_batch_res, y_batch_res = sm.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
+            X_train_reshape_res = np.concatenate((X_train_reshape_res, X_batch_res), axis=0)
+            y_train_res = np.concatenate((y_train_res, y_batch_res), axis=0)
+
     X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
     print("Resampled dataset shape ", Counter(y_train_res))
 
@@ -246,7 +267,7 @@ if sampling == 1:
 Undersampling
 '''
 if sampling == 2:
-    from imblearn.under_sampling import CondensedNearestNeighbour
+    
     print("Undersampling")
     cnn = CondensedNearestNeighbour()
     X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
@@ -258,7 +279,7 @@ if sampling == 2:
 Over- and Undersampling
 '''
 if sampling == 3:
-    from imblearn.combine import SMOTETomek
+    
     print("Over- and Undersampling")
     smt = SMOTETomek()
     X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
