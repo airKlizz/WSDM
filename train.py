@@ -97,14 +97,26 @@ with tf.Graph().as_default():
 
                 idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
+
+                '''
                 x1 = np.array([train_X[idx_min][3]])
                 x2 = np.array([train_X[idx_min][4]])
 
                 for i in range(idx_min+1, idx_max):
                     x1 = np.append(x1, np.array([train_X[i][3]]), axis=0)
                     x2 = np.append(x2, np.array([train_X[i][4]]), axis=0)
+                '''
+
+                print(np.shape(train_X))
+
+                x1 = train_X[idx_min:idx_max, 0]
+                x2 = train_X[idx_min:idx_max, 1]
 
                 y = train_y[idx_min:idx_max]
+
+                print(np.shape(x1))
+                print(np.shape(x2))
+                print(np.shape(y))
 
                 class_weights = []
                 for label in y:
@@ -119,7 +131,6 @@ with tf.Graph().as_default():
                     model.x1: x1,
                     model.x2: x2,
                     model.y: y,
-                    model.class_weights: class_weights
                 }
 
                 _, step, loss, accuracy = sess.run(
@@ -145,14 +156,26 @@ with tf.Graph().as_default():
                     for test_batch in range(nb_batch_per_epoch_test):
                         idx_min = test_batch * test_batch_size
                         idx_max = min((test_batch+1) * test_batch_size, len(test_X)-1)
+                        
+                        '''
                         x1 = np.array([test_X[idx_min][3]])
                         x2 = np.array([test_X[idx_min][4]])
 
                         for i in range(idx_min+1, idx_max):
                             x1 = np.append(x1, np.array([test_X[i][3]]), axis=0)
                             x2 = np.append(x2, np.array([test_X[i][4]]), axis=0)
+                        '''
+
+                        print(np.shape(test_X))
+
+                        x1 = test_X[idx_min:idx_max, 0]
+                        x2 = test_X[idx_min:idx_max, 1]
 
                         y = test_y[idx_min:idx_max]
+
+                        print(np.shape(x1))
+                        print(np.shape(x2))
+                        print(np.shape(y))
 
                         class_weights = []
                         for label in y:
