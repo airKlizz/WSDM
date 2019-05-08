@@ -21,9 +21,26 @@ from collections import Counter
 
 data_directory = "../Data"
 
-train_dataset_file_path = data_directory+"/train_dataset_combine_sampling"
+'''
+sampling :
+    0 -> no modification
+    1 -> oversampling
+    2 -> undersampling
+    3 -> under and oversampling
+'''
+sampling = 1
 
 create_test_dataset = False
+
+if sampling == 0:
+    train_dataset_file_path = data_directory+"/train_dataset_no_sampling"
+elif sampling == 1:
+    train_dataset_file_path = data_directory+"/train_dataset_oversampling"
+elif sampling == 2:
+    train_dataset_file_path = data_directory+"/train_dataset_undersampling"
+else :
+    train_dataset_file_path = data_directory+"/train_dataset_combinesampling"
+
 
 train_file_path = data_directory+"/train.csv"
 test_file_path = data_directory+"/test.csv"
@@ -45,15 +62,15 @@ with open(train_file_path, newline='') as csvfile:
         X_train.append([row[i] for i in [5, 6]])
         y_train.append(row[7])
 
-X_train = X_train[1:30000]
-y_train = y_train[1:30000]
+X_train = X_train[1:]
+y_train = y_train[1:]
 
 with open(test_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         X_test.append([row[i] for i in [5, 6]])
 
-X_test = X_test[1:30000]
+X_test = X_test[1:]
 
 '''
 Data preprocessing
@@ -210,35 +227,66 @@ if create_test_dataset:
 DATASET RE-SAMPLING
 '''
 
-   
-sm = SMOTE()
-cnn = CondensedNearestNeighbour()
-smt = SMOTETomek()
+print("Original dataset shape ", Counter(argmax_y_train))
 
-X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
+'''
+No modifiction
+'''
+if sampling == 0:
+    print("No modification")
 
-batch_size = 5000
-nb_batch_per_epoch = int(len(X_train_reshape)/batch_size+1)
-
-for batch in range(nb_batch_per_epoch):
-    print(batch, "/", nb_batch_per_epoch)
-    idx_min = batch * batch_size
-    idx_max = min((batch+1) * batch_size, len(X_train_reshape)-1)
+'''
+Oversampling
+'''
+if sampling == 1:
     
-    if batch == 0:
-        X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
-    else :
-        if batch%3 == 0:
-            X_batch_res, y_batch_res = smt.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
-        elif batch%2 == 0:
-            X_batch_res, y_batch_res = cnn.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
-        else:
-            X_batch_res, y_batch_res = sm.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
-        X_train_reshape_res = np.concatenate((X_train_reshape_res, X_batch_res), axis=0)
-        y_train_res = np.concatenate((y_train_res, y_batch_res), axis=0)
+    print("Oversampling")
+    sm = SMOTE()
+    X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
 
-X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
-print("Resampled dataset shape ", Counter(y_train_res))
+    batch_size = 5000
+    nb_batch_per_epoch = int(len(X_train_reshape)/batch_size+1)
+
+    for batch in range(nb_batch_per_epoch):
+        print(batch, "/", nb_batch_per_epoch)
+        idx_min = batch * batch_size
+        idx_max = min((batch+1) * batch_size, len(X_train_reshape)-1)
+        
+        if batch == 0:
+            X_train_reshape_res, y_train_res = sm.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
+        else :
+            X_batch_res, y_batch_res = sm.fit_resample(X_train_reshape[idx_min:idx_max], argmax_y_train[idx_min:idx_max])
+            X_train_reshape_res = np.concatenate((X_train_reshape_res, X_batch_res), axis=0)
+            y_train_res = np.concatenate((y_train_res, y_batch_res), axis=0)
+
+    X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
+    print("Resampled dataset shape ", Counter(y_train_res))
+
+
+'''
+Undersampling
+'''
+if sampling == 2:
+    
+    print("Undersampling")
+    cnn = CondensedNearestNeighbour()
+    X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
+    X_train_reshape_res, y_train_res = cnn.fit_resample(X_train_reshape, argmax_y_train)
+    X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
+    print("Resampled dataset shape ", Counter(y_train_res))
+
+'''
+Over- and Undersampling
+'''
+if sampling == 3:
+    
+    print("Over- and Undersampling")
+    smt = SMOTETomek()
+    X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
+    X_train_reshape_res, y_train_res = smt.fit_resample(X_train_reshape, argmax_y_train)
+    X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
+    print("Resampled dataset shape ", Counter(y_train_res))
+
 
 y_train = []
 for i in range(len(argmax_y_train)):

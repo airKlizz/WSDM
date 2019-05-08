@@ -22,7 +22,8 @@ class Model(object):
 
                 'p_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
 
-                'z': tf.Variable(tf.random_uniform([2*self.embedding_dim+self.hidden_size, self.hidden_size], -0.01, 0.01)),
+                'z_1': tf.Variable(tf.random_uniform([self.embedding_dim+self.hidden_size, self.hidden_size], -0.01, 0.01)),
+                'z_2': tf.Variable(tf.random_uniform([self.embedding_dim+self.hidden_size, self.hidden_size], -0.01, 0.01)),
 
                 'f': tf.Variable(tf.random_uniform([2*self.hidden_size, self.class_num], -0.01, 0.01)),
             }
@@ -33,7 +34,8 @@ class Model(object):
 
                 'p_1_to_2': tf.Variable(tf.random_uniform([1], -0.01, 0.01)),
 
-                'z': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
+                'z_1': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
+                'z_2': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
 
                 'f': tf.Variable(tf.random_uniform([self.class_num], -0.01, 0.01)),
             }
@@ -72,21 +74,29 @@ class Model(object):
 
         self.v_a_2_to_1 = tf.reshape(tf.matmul(a_2, self.x2), [-1, self.embedding_dim])
 
-        self.v_a = tf.concat([self.v_a_1_to_2, self.v_a_2_to_1], axis=-1)
-
         
 
-    def long_short_memory_encoder(self):
+    def long_short_memory_encoder_1(self):
 
         lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
         LSTM_layer = tf.keras.layers.RNN(lstm_cell)
-        self.v_c = LSTM_layer(tf.concat([self.x1, self.x2], axis=1))
+        self.v_c_1 = LSTM_layer(self.x1)
+
+    def long_short_memory_encoder_2(self):
+        
+        lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
+        LSTM_layer = tf.keras.layers.RNN(lstm_cell)
+        self.v_c_2 = LSTM_layer(self.x2)
 
     def prediction(self):
 
-        v = tf.concat([self.v_a, self.v_c], -1)
-        v = tf.nn.relu(tf.matmul(v, self.weights['z']) + self.biases['z'])
+        v1 = tf.concat([self.v_a_1_to_2, self.v_c_1], -1)
+        v1 = tf.nn.relu(tf.matmul(v1, self.weights['z_1']) + self.biases['z_1'])
 
+        v2 = tf.concat([self.v_a_2_to_1, self.v_c_2], -1)
+        v2 = tf.nn.relu(tf.matmul(v2, self.weights['z_2']) + self.biases['z_2'])
+
+        v = tf.concat([v1, v2], -1)
         self.scores = tf.nn.softmax((tf.matmul(v, self.weights['f']) + self.biases['f']), axis=-1)
 
         self.predictions = tf.argmax(self.scores, -1, name="predictions")
