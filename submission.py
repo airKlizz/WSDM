@@ -74,7 +74,6 @@ with graph.as_default():
                 model_x1: x1,
                 model_x2: x2,
                 model_y: np.zeros((len(x1), 3)),
-                model_class_weights: np.zeros(len(x1))
             }
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)

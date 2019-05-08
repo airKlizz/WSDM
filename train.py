@@ -95,24 +95,6 @@ with tf.Graph().as_default():
 
             for batch in range(nb_batch_per_epoch):
 
-                '''
-                Previus batch creation :
-
-                idx = batch * batch_size
-                x1 = np.array([train_X[idx][3]])
-                x2 = np.array([train_X[idx][4]])
-                y = np.array([train_y[idx]])
-
-                class_sum = train_y[idx]
-                while np.sum(class_sum) < batch_size:
-                    idx = (idx+1)%len(train_X)
-                    if class_sum[np.argmax(train_y[idx])] <= batch_size/n_class+1:
-                        x1 = np.append(x1, np.array([train_X[idx][3]]), axis=0)
-                        x2 = np.append(x2, np.array([train_X[idx][4]]), axis=0)
-                        y = np.append(y, np.array([train_y[idx]]), axis=0)
-                        class_sum = np.add(class_sum, train_y[idx])
-                '''
-
                 idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
                 x1 = np.array([train_X[idx_min][3]])
@@ -185,7 +167,6 @@ with tf.Graph().as_default():
                             model.x1: x1,
                             model.x2: x2,
                             model.y: y,
-                            model.class_weights: class_weights
                         }
 
                         batch_accuracy, batch_c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)

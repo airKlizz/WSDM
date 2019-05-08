@@ -278,8 +278,8 @@ Save dataset
 '''
 
 with open(train_dataset_file_path, 'wb') as f:
-    pickle.dump(train_dataset, f)
+    pickle.dump(train_dataset, f, protocol=4)
 
 if create_test_dataset:
     with open(test_dataset_file_path, 'wb') as f:
-        pickle.dump(test_dataset, f)
+        pickle.dump(test_dataset, f, protocol=4)
