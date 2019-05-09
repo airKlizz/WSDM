@@ -21,7 +21,7 @@ from collections import Counter
 
 data_directory = "../Data"
 
-train_dataset_file_path = data_directory+"/train_dataset_combine_sampling_ration_0.5"
+train_dataset_file_path = data_directory+"/train_dataset_combine_sampling_ration_0.75"
 
 create_test_dataset = False
 
@@ -219,7 +219,7 @@ rus = RandomUnderSampler()
 X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
 
 batch_size = 5000
-nb_batch = int((len(X_train_reshape)/batch_size+1)/2)
+nb_batch = int((len(X_train_reshape)/batch_size+1)*0.75)
 
 for batch in range(nb_batch):
     print(batch, "/", nb_batch)
@@ -276,10 +276,14 @@ if create_test_dataset:
 '''
 Save dataset
 '''
+print("Save dataset")
 
 with open(train_dataset_file_path, 'wb') as f:
     pickle.dump(train_dataset, f, protocol=4)
 
+print("train dataset done")
+
 if create_test_dataset:
     with open(test_dataset_file_path, 'wb') as f:
         pickle.dump(test_dataset, f, protocol=4)
+    print("test dataset done")
