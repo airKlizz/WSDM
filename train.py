@@ -22,6 +22,10 @@ with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
 
 print("DATASET :", np.shape(dataset))
+print("train_X :", np.shape(dataset[0]))
+print("train_y :", np.shape(dataset[1]))
+print("test_X :", np.shape(dataset[2]))
+print("test_y :", np.shape(dataset[3]))
 
 train_X = np.array(dataset[0])
 train_y = np.array(dataset[1])

@@ -21,7 +21,7 @@ from collections import Counter
 
 data_directory = "../Data"
 
-train_dataset_file_path = data_directory+"/train_dataset_combine_sampling_ration_0.75"
+train_dataset_file_path = data_directory+"/train_dataset_under_sampling_ration_0.65"
 
 create_test_dataset = False
 
@@ -214,12 +214,36 @@ print("Original dataset shape ", Counter(argmax_y_train))
    
 sm = SMOTE()
 rus = RandomUnderSampler()
-#sme = SMOTEENN()
+
+X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
+
+idx_min = 0
+idx_max = int(len(X_train_reshape)*0.65)
+
+print("RandomUnderSampler")
+X_train_reshape_res, y_train_res = rus.fit_resample(X_train_reshape[:idx_max], argmax_y_train[:idx_max])
+
+X_train_reshape_res = np.concatenate((X_train_reshape_res, X_train_reshape[idx_max:]), axis=0)
+y_train_res = np.concatenate((y_train_res, argmax_y_train[idx_max:]), axis=0)
+
+X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
+print("Resampled dataset shape ", Counter(y_train_res))
+
+y_train = []
+for i in range(len(y_train_res)):
+    if y_train_res[i] == 0:
+        y_train.append([1, 0, 0])
+    elif y_train_res[i] == 1:
+        y_train.append([0, 1, 0])
+    else :
+        y_train.append([0, 0, 1])
+
+'''
 
 X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
 
 batch_size = 5000
-nb_batch = int((len(X_train_reshape)/batch_size+1)*0.75)
+nb_batch = int((len(X_train_reshape)/batch_size+1)*0.65)
 
 for batch in range(nb_batch):
     print(batch, "/", nb_batch)
@@ -252,6 +276,8 @@ for i in range(len(y_train_res)):
         y_train.append([0, 1, 0])
     else :
         y_train.append([0, 0, 1])
+'''
+
 
 print("shape")
 print(np.shape(X_train))
