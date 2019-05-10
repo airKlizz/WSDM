@@ -9,14 +9,14 @@ import time
 import tensorflow as tf
 import numpy as np
 
-from modelSSS import Model
+from modelSSSc import Model
 
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
-dataset_file_path = data_directory+"/train_dataset_under_sampling_ration_0.65"
+dataset_file_path = data_directory+"/train_dataset_combine_sampling_ration_0.75.65"
 
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
@@ -82,7 +82,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "model_SSS_undersampling_0.65")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "model_SSSc_combine_sampling_0.75")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
@@ -122,6 +122,7 @@ with tf.Graph().as_default():
                     model.x1: x1,
                     model.x2: x2,
                     model.y: y,
+                    model.class_weights: class_weights,
                 }
 
                 _, step, loss, accuracy = sess.run(
@@ -166,6 +167,7 @@ with tf.Graph().as_default():
                             model.x1: x1,
                             model.x2: x2,
                             model.y: y,
+                            model.class_weights: class_weights,
                         }
 
                         batch_accuracy, batch_c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)

@@ -24,7 +24,7 @@ class Model(object):
 
                 'z': tf.Variable(tf.random_uniform([2*self.embedding_dim+self.hidden_size, self.hidden_size], -0.01, 0.01)),
 
-                'f': tf.Variable(tf.random_uniform([2*self.hidden_size, self.class_num], -0.01, 0.01)),
+                'f': tf.Variable(tf.random_uniform([self.hidden_size, self.class_num], -0.01, 0.01)),
             }
 
         with tf.name_scope('biases'):
