@@ -7,13 +7,13 @@ import csv
 import tensorflow as tf
 import numpy as np
 
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
 sample_submission_file_path = data_directory+"/sample_submission.csv"
-submission_file_path = data_directory+"/submission_DDD.csv"
+submission_file_path = data_directory+"/submission_SSSc_0.75.csv"
 dataset_file_path = data_directory+"/test_dataset"
 
 batch_size = 200
@@ -30,8 +30,9 @@ with open(dataset_file_path, 'rb') as f:
 
 test_X = np.array(dataset[0])
 
-timestamp = "1557409770" # DDD
+#timestamp = "1557409770" # DDD
 #timestamp = '1557322767' # SDD
+timestamp = '1557478792' #SSSc
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
@@ -53,6 +54,7 @@ with graph.as_default():
         model_x1 = graph.get_operation_by_name("input/x1").outputs[0]
         model_x2 = graph.get_operation_by_name("input/x2").outputs[0]
         model_y = graph.get_operation_by_name("input/y").outputs[0]
+        model_class_weights = graph.get_operation_by_name("input/class_weights").outputs[0]
 
         model_predictions = graph.get_operation_by_name("predictions").outputs[0]
 
@@ -74,6 +76,7 @@ with graph.as_default():
                 model_x1: x1,
                 model_x2: x2,
                 model_y: np.zeros((len(x1), 3)),
+                model_class_weights: np.ones(len(x1)),
             }
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
