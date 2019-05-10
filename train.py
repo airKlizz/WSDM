@@ -9,14 +9,14 @@ import time
 import tensorflow as tf
 import numpy as np
 
-from modelDDD import Model
+from modelSSS import Model
 
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
-dataset_file_path = data_directory+"/train_dataset_combine_sampling_ration_0.75"
+dataset_file_path = data_directory+"/train_dataset_under_sampling_ration_0.65"
 
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
@@ -82,7 +82,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "model_DDD_0.75")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "model_SSS_undersampling_0.65")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
