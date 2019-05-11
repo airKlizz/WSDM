@@ -96,15 +96,20 @@ class Model(object):
         self.prediction()
         
         with tf.name_scope("loss"):
-            losses = tf.nn.softmax_cross_entropy_with_logits_v2(
+            '''losses = tf.nn.softmax_cross_entropy_with_logits_v2(
                 logits = self.scores,
                 labels = self.y
-            )
-            #self.loss = tf.reduce_mean(losses)
-            self.loss = (tf.reduce_sum((1/self.class_weights)*losses) / tf.reduce_sum((1/self.class_weights)))
+            )'''
+            
+            losses = tf.losses.sparse_softmax_cross_entropy(
+                labels=self.y,
+                logits=self.scores,
+                weights=self.class_weights)
+            self.loss = tf.reduce_mean(losses)
+            #`  self.loss = (tf.reduce_sum((1/self.class_weights)*losses) / tf.reduce_sum((1/self.class_weights)))
             
         with tf.name_scope("metrics"):
             correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
-            #self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
-            self.accuracy = (tf.reduce_sum(self.class_weights*tf.cast(correct_predictions, "float")) / tf.reduce_sum(self.class_weights))
+            self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
+            #self.accuracy = (tf.reduce_sum(self.class_weights*tf.cast(correct_predictions, "float")) / tf.reduce_sum(self.class_weights))
             self.c_matrix = tf.confusion_matrix(labels = tf.argmax(self.y, -1), predictions = self.predictions, name="c_matrix")
