@@ -101,7 +101,7 @@ class Model(object):
                 labels = self.y
             )
             #self.loss = tf.reduce_mean(losses)
-            self.loss = (tf.reduce_sum(self.class_weights*losses) / tf.reduce_sum(self.class_weights))
+            self.loss = (tf.reduce_sum((1/self.class_weights)*losses) / tf.reduce_sum((1/self.class_weights))
             
         with tf.name_scope("metrics"):
             correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
