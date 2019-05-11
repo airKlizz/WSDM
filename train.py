@@ -133,7 +133,7 @@ with tf.Graph().as_default():
                     feed_dict=feed_dict)
                 time_str = datetime.datetime.now().isoformat()
                 print("{}: step {}/{}, loss {:g}, acc {:g}".format(time_str, step, num_epochs*nb_batch_per_epoch, loss, accuracy))
-                print("loss: {:g}, loss inv: {:g}, loss norm: {:g}".format(loss, loss_inv, loss_norm))
+                print("loss: {:g}, loss norm: {:g}".format(loss, loss_norm))
                 print(c_matrix)
 
                 current_step = tf.train.global_step(sess, global_step)
