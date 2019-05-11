@@ -102,13 +102,13 @@ class Model(object):
             )'''
             
             losses = tf.losses.sparse_softmax_cross_entropy(
-                labels=self.y,
+                labels=tf.argmax(self.y, -1),
                 logits=self.scores,
                 weights=self.class_weights)
             self.loss = tf.reduce_mean(losses)
 
             losses_inv = tf.losses.sparse_softmax_cross_entropy(
-                labels=self.y,
+                labels=tf.argmax(self.y, -1),
                 logits=self.scores,
                 weights=1/self.class_weights)
             self.loss_inv = tf.reduce_mean(losses_inv)
