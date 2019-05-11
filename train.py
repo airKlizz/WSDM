@@ -38,11 +38,11 @@ max_sen_len = 30
 
 hidden_size = 100
 
-learning_rate = 0.0005
-batch_size = 300
+learning_rate = 0.001
+batch_size = 100
 test_batch_size = 200
 num_epochs = 10
-evaluate_every = 250
+evaluate_every = 500
 
 nb_batch_per_epoch = int(len(train_X)/batch_size+1)
 nb_batch_per_epoch_test = int(len(test_X)/test_batch_size+1)
