@@ -14,7 +14,7 @@ class Model(object):
             self.x1 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x1")
             self.x2 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x2")
             self.y = tf.placeholder(tf.float32, [None, self.class_num], name="y")
-            self.class_weights = tf.placeholder(tf.float32, [None, self.class_num], name="class_weights")
+            self.class_weights = tf.placeholder(tf.float32, [None], name="class_weights")
 
         with tf.name_scope('weights'):
             self.weights = {
