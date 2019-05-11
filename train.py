@@ -109,7 +109,7 @@ with tf.Graph().as_default():
 
                 y = train_y[idx_min:idx_max]
 
-                '''
+                
                 class_weights = []
                 for label in y:
                     if np.argmax(label) == 0:
@@ -118,8 +118,8 @@ with tf.Graph().as_default():
                         class_weights.append(8266/320552)
                     else :
                         class_weights.append(219313/320552)
-                '''
-                class_weights = [92973/320552, 8266/320552, 219313/320552]  
+                
+                #class_weights = [92973/320552, 8266/320552, 219313/320552]  
 
                 feed_dict = {
                     model.x1: x1,
@@ -159,7 +159,7 @@ with tf.Graph().as_default():
 
                         y = test_y[idx_min:idx_max]
 
-                        '''
+                        
                         class_weights = []
                         for label in y:
                             if np.argmax(label) == 0:
@@ -168,8 +168,8 @@ with tf.Graph().as_default():
                                 class_weights.append(8266/320552)
                             else :
                                 class_weights.append(219313/320552)
-                        '''
-                        class_weights = [92973/320552, 8266/320552, 219313/320552]  
+                        
+                        #class_weights = [92973/320552, 8266/320552, 219313/320552]  
 
 
                         feed_dict = {
