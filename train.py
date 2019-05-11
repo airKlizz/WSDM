@@ -128,8 +128,8 @@ with tf.Graph().as_default():
                     model.class_weights: class_weights,
                 }
 
-                _, step, loss, loss_inv, loss_norm, accuracy, c_matrix = sess.run(
-                    [train_op, global_step, model.loss, model.loss_inv, model.loss_norm, model.accuracy, model.c_matrix], 
+                _, step, loss, loss_norm, accuracy, c_matrix = sess.run(
+                    [train_op, global_step, model.loss, model.loss_norm, model.accuracy, model.c_matrix], 
                     feed_dict=feed_dict)
                 time_str = datetime.datetime.now().isoformat()
                 print("{}: step {}/{}, loss {:g}, acc {:g}".format(time_str, step, num_epochs*nb_batch_per_epoch, loss, accuracy))
