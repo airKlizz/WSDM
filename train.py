@@ -38,8 +38,8 @@ max_sen_len = 30
 
 hidden_size = 100
 
-learning_rate = 0.0001
-batch_size = 200
+learning_rate = 0.0005
+batch_size = 300
 test_batch_size = 200
 num_epochs = 10
 evaluate_every = 250
@@ -125,11 +125,12 @@ with tf.Graph().as_default():
                     model.class_weights: class_weights,
                 }
 
-                _, step, loss, accuracy = sess.run(
-                    [train_op, global_step, model.loss, model.accuracy], 
+                _, step, loss, accuracy, c_matrix = sess.run(
+                    [train_op, global_step, model.loss, model.accuracy, model.c_matrix], 
                     feed_dict=feed_dict)
                 time_str = datetime.datetime.now().isoformat()
                 print("{}: step {}/{}, loss {:g}, acc {:g}".format(time_str, step, num_epochs*nb_batch_per_epoch, loss, accuracy))
+                print(c_matrix)
 
                 current_step = tf.train.global_step(sess, global_step)
 
