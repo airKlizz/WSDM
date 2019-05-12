@@ -9,14 +9,15 @@ import time
 import tensorflow as tf
 import numpy as np
 
-from modelSSS_attention import Model
+from modelSSS import Model
 
 os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
-data_directory = "../Data"
-backup_directory = "../Backup/"
+data_directory = "../Data2"
+backup_directory = "../Backup2/"
 
-dataset_file_path = data_directory+"/train_dataset_2"
+#dataset_file_path = data_directory+"/train_dataset_2"
+dataset_file_path = data_directory+"/train_dataset"
 
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
@@ -82,7 +83,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "model_SSSc_attention")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "model_SSS")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
@@ -148,16 +149,15 @@ with tf.Graph().as_default():
                     model.x1: x1,
                     model.x2: x2,
                     model.y: y,
-                    model.class_weights: class_weights,
-                    model.class_weights_accuracy: class_weights_accuracy,
+                    #model.class_weights: class_weights,
+                    #model.class_weights_accuracy: class_weights_accuracy,
                 }
 
-                _, step, loss, loss_norm, accuracy, c_matrix = sess.run(
-                    [train_op, global_step, model.loss, model.loss_norm, model.accuracy, model.c_matrix], 
+                _, step, loss, accuracy, c_matrix = sess.run(
+                    [train_op, global_step, model.loss, model.accuracy, model.c_matrix], 
                     feed_dict=feed_dict)
                 time_str = datetime.datetime.now().isoformat()
                 print("{}: step {}/{}, loss {:g}, acc {:g}".format(time_str, step, num_epochs*nb_batch_per_epoch, loss, accuracy))
-                print("loss: {:g}, loss norm: {:g}".format(loss, loss_norm))
                 print(c_matrix)
 
                 current_step = tf.train.global_step(sess, global_step)
@@ -204,8 +204,8 @@ with tf.Graph().as_default():
                             model.x1: x1,
                             model.x2: x2,
                             model.y: y,
-                            model.class_weights: class_weights,
-                            model.class_weights_accuracy: class_weights_accuracy,
+                            #model.class_weights: class_weights,
+                            #model.class_weights_accuracy: class_weights_accuracy,
                         }
 
                         batch_accuracy, batch_c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
