@@ -69,7 +69,9 @@ X_test = X_test[1:]
 
 with open(train_file_path) as f:
     content = f.readlines()
+    i = 0
     for row in content:
+        print(i, "/", len(content))
         json_file = open(row_file_path, "w")
         json_file.write(row)
         json_file.close()
