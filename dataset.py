@@ -22,6 +22,7 @@ from collections import Counter
 
 #data_directory = "../Data"
 data_directory = "../Data2"
+data_directory_1 = "../Data"
 
 train_dataset_file_path = data_directory+"/train_dataset"
 test_dataset_file_path = data_directory+"/test_dataset"
@@ -35,7 +36,7 @@ test_file_path = data_directory+"/snli_1.0_test.jsonl"
 
 row_file_path = data_directory+"/row.json"
 
-embedding_file_path = data_directory+"/glove.6B.100d.txt"
+embedding_file_path = data_directory_1+"/glove.6B.100d.txt"
 test_dataset_file_path = data_directory+"/test_dataset"
 
 
