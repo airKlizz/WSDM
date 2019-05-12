@@ -82,7 +82,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "model_SSSc_v2")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "model_SSSc_v3")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
@@ -130,13 +130,17 @@ with tf.Graph().as_default():
                 '''
 
                 class_weights = []
+                class_weights_accuracy = []
                 for label in y:
                     if np.argmax(label) == 0:
-                        class_weights.append(1/15)
+                        class_weights.append((92973/320552)/15)
+                        class_weights_accuracy.append(1/15)
                     elif np.argmax(label) == 1:
-                        class_weights.append(1/5)
+                        class_weights.append((8266/320552)/5)
+                        class_weights_accuracy.append(1/5)
                     else :
-                        class_weights.append(1/16)
+                        class_weights.append((219313/320552)/16)
+                        class_weights_accuracy.append(1/16)
                 
                 #class_weights = [92973/320552, 8266/320552, 219313/320552]  
 
@@ -145,6 +149,7 @@ with tf.Graph().as_default():
                     model.x2: x2,
                     model.y: y,
                     model.class_weights: class_weights,
+                    model.class_weights_accuracy: class_weights_accuracy,
                 }
 
                 _, step, loss, loss_norm, accuracy, c_matrix = sess.run(
@@ -180,13 +185,17 @@ with tf.Graph().as_default():
 
                         
                         class_weights = []
+                        class_weights_accuracy = []
                         for label in y:
                             if np.argmax(label) == 0:
-                                class_weights.append(1/15)
+                                class_weights.append((92973/320552)/15)
+                                class_weights_accuracy.append(1/15)
                             elif np.argmax(label) == 1:
-                                class_weights.append(1/5)
+                                class_weights.append((8266/320552)/5)
+                                class_weights_accuracy.append(1/5)
                             else :
-                                class_weights.append(1/16)
+                                class_weights.append((219313/320552)/16)
+                                class_weights_accuracy.append(1/16)
                         
                         #class_weights = [92973/320552, 8266/320552, 219313/320552]  
 
@@ -196,6 +205,7 @@ with tf.Graph().as_default():
                             model.x2: x2,
                             model.y: y,
                             model.class_weights: class_weights,
+                            model.class_weights_accuracy: class_weights_accuracy,
                         }
 
                         batch_accuracy, batch_c_matrix = sess.run([model.accuracy, model.c_matrix], feed_dict=feed_dict)
