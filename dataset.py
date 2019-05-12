@@ -4,6 +4,7 @@ CREATE THE DATASET FROM THE CSV FILES
 print("Load csv files")
 
 import csv
+import json
 import pickle
 
 import re, unicodedata
@@ -19,15 +20,21 @@ import numpy as np
 
 from collections import Counter
 
-data_directory = "../Data"
+#data_directory = "../Data"
+data_directory = "../Data2"
 
-train_dataset_file_path = data_directory+"/train_dataset_2"
-test_dataset_file_path = data_directory+"/test_dataset_2"
+train_dataset_file_path = data_directory+"/train_dataset"
+test_dataset_file_path = data_directory+"/test_dataset"
 
-create_test_dataset = True
+create_test_dataset = False
 
-train_file_path = data_directory+"/train.csv"
-test_file_path = data_directory+"/test.csv"
+#train_file_path = data_directory+"/train.csv"
+#test_file_path = data_directory+"/test.csv"
+train_file_path = data_directory+"/snli_1.0_train.jsonl"
+test_file_path = data_directory+"/snli_1.0_test.jsonl"
+
+row_file_path = data_directory+"/row.json"
+
 embedding_file_path = data_directory+"/glove.6B.100d.txt"
 test_dataset_file_path = data_directory+"/test_dataset"
 
@@ -39,6 +46,8 @@ X_train = []
 y_train = []
 
 X_test = []
+
+'''
 
 with open(train_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
@@ -55,6 +64,25 @@ with open(test_file_path, newline='') as csvfile:
         X_test.append([row[i] for i in [5, 6]])
 
 X_test = X_test[1:]
+
+'''
+
+with open(train_file_path) as f:
+    content = f.readlines()
+    for row in content:
+        json_file = open(row_file_path, "w")
+        json_file.write(row)
+        json_file.close()
+        
+        file = open(row_file_path) 
+        row_json = json.load(file)
+        
+        X_train.append([row_json["sentence1"], row_json["sentence2"]])
+        y_train.append(row_json["gold_label"])
+
+        file.close()
+
+
 
 '''
 Data preprocessing
@@ -181,9 +209,9 @@ argmax_y_train = []
 print("HERE5")
 
 for i in range(len(y_train)):
-    if y_train[i] == 'agreed':
+    if y_train[i] == 'entailment':
         argmax_y_train.append(0)
-    elif y_train[i] == 'disagreed':
+    elif y_train[i] == 'contradiction':
         argmax_y_train.append(1)
     else :
         argmax_y_train.append(2)
