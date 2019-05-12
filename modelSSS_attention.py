@@ -88,7 +88,7 @@ class Model(object):
     def attention_LSTM(self):
 
         v_c_reshape = tf.reshape(self.v_c, [-1, self.hidden_size])
-        alpha = tf.matmul(v_c_reshape, self.weights['attention']) + self.weights['attention'] # (-1*2*30, 100) ** (-1, 100, 1) -> (-1, 2*30)
+        alpha = tf.matmul(v_c_reshape, self.weights['attention']) + self.biases['attention'] # (-1*2*30, 100) ** (-1, 100, 1) -> (-1, 2*30)
         alpha = tf.nn.softmax(alpha, axis=-1)
         alpha = tf.reshape(alpha, [-1]) 
 
