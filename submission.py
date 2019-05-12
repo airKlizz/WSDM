@@ -93,6 +93,7 @@ with graph.as_default():
                     submission[idx_min+i+1][1] = "unrelated"
                 else :
                     print("Error prediction")
+                print(predictions[i], submission[idx_min+i+1])
 
             batch += 1
 

@@ -23,9 +23,7 @@ class Model(object):
 
                 'p_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
 
-                'attention' : tf.Variable(tf.random_uniform([self.max_sen_len, 1], -0.01, 0.01)),
-
-                'z': tf.Variable(tf.random_uniform([2*self.embedding_dim+self.max_sen_len, self.hidden_size], -0.01, 0.01)),
+                'z': tf.Variable(tf.random_uniform([2*self.embedding_dim+self.hidden_size, self.hidden_size], -0.01, 0.01)),
 
                 'f': tf.Variable(tf.random_uniform([self.hidden_size, self.class_num], -0.01, 0.01)),
             }
@@ -80,25 +78,17 @@ class Model(object):
     def long_short_memory_encoder(self):
 
         lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
-        LSTM_layer = tf.keras.layers.RNN(lstm_cell, return_sequences=True) # -1, 30, 100
+        LSTM_layer = tf.keras.layers.RNN(lstm_cell)
         self.v_c = LSTM_layer(tf.concat([self.x1, self.x2], axis=1))
-
-    def attention_LSTM(self):
-
-        alpha = tf.matmul(tf.transpose(self.weights['attention']), self.v_c)
-        alpha = tf.reshape(alpha, [-1, self.hidden_size])
-        alpha = tf.nn.softmax(alpha, axis=-1)
-        alpha = tf.reshape(alpha, [-1, self.hidden_size, 1])
-
-        self.h = tf.tanh(tf.matmul(self.v_c, alpha)) # -1, 30, 1
-        self.h = tf.reshape(self.h, [-1, self.max_sen_len])
 
     def prediction(self):
 
-        v = tf.concat([self.v_a, self.h], -1)
+        v = tf.concat([self.v_a, self.v_c], -1)
         v = tf.nn.relu(tf.matmul(v, self.weights['z']) + self.biases['z'])
 
-        self.scores = tf.nn.softmax((tf.matmul(v, self.weights['f']) + self.biases['f']), axis=-1)
+        v_dropout = tf.nn.dropout(v)
+
+        self.scores = tf.nn.softmax((tf.matmul(v_dropout, self.weights['f']) + self.biases['f']), axis=-1)
 
         self.predictions = tf.argmax(self.scores, -1, name="predictions")
 
@@ -106,7 +96,6 @@ class Model(object):
 
         self.inter_attention()
         self.long_short_memory_encoder()
-        self.attention_LSTM()
         self.prediction()
         
         with tf.name_scope("loss"):
@@ -115,8 +104,9 @@ class Model(object):
                 labels = self.y
             )
             self.loss = tf.reduce_mean(losses)
-            
+
             self.loss_norm = tf.reduce_mean(losses)
+           
 
         with tf.name_scope("metrics"):
             correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
