@@ -73,17 +73,10 @@ with open(train_file_path) as f:
     for row in content:
         print(i, "/", len(content))
         i += 1
-        json_file = open(row_file_path, "w")
-        json_file.write(row)
-        json_file.close()
-        
-        file = open(row_file_path) 
-        row_json = json.load(file)
+        row_json = json.loads(row)
         
         X_train.append([row_json["sentence1"], row_json["sentence2"]])
         y_train.append(row_json["gold_label"])
-
-        file.close()
 
 
 
