@@ -7,13 +7,13 @@ import csv
 import tensorflow as tf
 import numpy as np
 
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
 sample_submission_file_path = data_directory+"/sample_submission.csv"
-submission_file_path = data_directory+"/submission_SSSc_v3.csv"
+submission_file_path = data_directory+"/submission_SSSc_dropout.csv"
 dataset_file_path = data_directory+"/test_dataset"
 
 batch_size = 200
@@ -34,7 +34,8 @@ test_X = np.array(dataset[0])
 #timestamp = '1557322767' # SDD
 #timestamp = '1557478792' #SSSc
 #timestamp = '1557596444' #SScv2
-timestamp = '1557654254' #SScv3
+#timestamp = '1557654254' #SScv3
+timestamp = '1557663468' # SSS dropout
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
