@@ -11,7 +11,7 @@ import numpy as np
 
 from modelSSSc import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 data_directory = "../Data"
 backup_directory = "../Backup/"
@@ -82,7 +82,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "model_SSSc_v3")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "model_SSSc_v4")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
