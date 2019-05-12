@@ -109,7 +109,7 @@ class Model(object):
                 logits=self.scores,
                 weights=self.class_weights)
             self.loss = tf.reduce_mean(losses)
-
+'''
             losses_norm = tf.nn.softmax_cross_entropy_with_logits_v2(
                 logits = self.scores,
                 labels = self.y
@@ -117,7 +117,7 @@ class Model(object):
             self.loss_norm = tf.reduce_mean(losses_norm)
 
             self.loss = (tf.reduce_sum((1/self.class_weights)*losses) / tf.reduce_sum((1/self.class_weights)))
-            '''
+            
 
         with tf.name_scope("metrics"):
             correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
