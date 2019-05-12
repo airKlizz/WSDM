@@ -11,13 +11,15 @@ import numpy as np
 
 from modelSSS import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 data_directory = "../Data2"
 backup_directory = "../Backup2/"
 
 #dataset_file_path = data_directory+"/train_dataset_2"
 dataset_file_path = data_directory+"/train_dataset"
+
+print("Restore Data")
 
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
