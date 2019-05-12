@@ -7,13 +7,13 @@ import csv
 import tensorflow as tf
 import numpy as np
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
 sample_submission_file_path = data_directory+"/sample_submission.csv"
-submission_file_path = data_directory+"/submission_SSSc_0.75.csv"
+submission_file_path = data_directory+"/submission_SSSc_v2.csv"
 dataset_file_path = data_directory+"/test_dataset"
 
 batch_size = 200
@@ -32,7 +32,8 @@ test_X = np.array(dataset[0])
 
 #timestamp = "1557409770" # DDD
 #timestamp = '1557322767' # SDD
-timestamp = '1557478792' #SSSc
+#timestamp = '1557478792' #SSSc
+timestamp = '1557596444' #SScv2
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
