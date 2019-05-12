@@ -133,13 +133,13 @@ with tf.Graph().as_default():
                 class_weights_accuracy = []
                 for label in y:
                     if np.argmax(label) == 0:
-                        class_weights.append((92973/320552)/15)
+                        class_weights.append((3/10)/15)
                         class_weights_accuracy.append(1/15)
                     elif np.argmax(label) == 1:
-                        class_weights.append((8266/320552)/5)
+                        class_weights.append((2/10)/5)
                         class_weights_accuracy.append(1/5)
                     else :
-                        class_weights.append((219313/320552)/16)
+                        class_weights.append((5/10)/16)
                         class_weights_accuracy.append(1/16)
                 
                 #class_weights = [92973/320552, 8266/320552, 219313/320552]  
