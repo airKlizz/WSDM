@@ -23,9 +23,9 @@ class Model(object):
 
                 'p_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
 
-                'attention' : tf.Variable(tf.random_uniform([2*self.max_sen_len, 1], -0.01, 0.01)),
+                'attention' : tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
 
-                'z': tf.Variable(tf.random_uniform([2*self.embedding_dim+self.max_sen_len, self.hidden_size], -0.01, 0.01)),
+                'z': tf.Variable(tf.random_uniform([2*self.embedding_dim+self.hidden_size, self.hidden_size], -0.01, 0.01)),
 
                 'f': tf.Variable(tf.random_uniform([self.hidden_size, self.class_num], -0.01, 0.01)),
             }
@@ -35,6 +35,8 @@ class Model(object):
                 'q_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
 
                 'p_1_to_2': tf.Variable(tf.random_uniform([1], -0.01, 0.01)),
+
+                'attention': tf.Variable(tf.random_uniform([1], -0.01, 0.01)),
 
                 'z': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
 
@@ -85,13 +87,13 @@ class Model(object):
 
     def attention_LSTM(self):
 
-        alpha = tf.matmul(tf.transpose(self.weights['attention']), self.v_c)
-        alpha = tf.reshape(alpha, [-1, self.hidden_size])
+        v_c_reshape = tf.reshape(self.v_c, [-1, self.hidden_size])
+        alpha = tf.matmul(v_c_reshape, self.weights['attention']) + self.weights['attention'] # (-1*2*30, 100) ** (-1, 100, 1) -> (-1, 2*30)
         alpha = tf.nn.softmax(alpha, axis=-1)
-        alpha = tf.reshape(alpha, [-1, self.hidden_size, 1])
+        alpha = tf.reshape(alpha, [-1, 1, self.hidden_size]) 
 
-        self.h = tf.tanh(tf.matmul(self.v_c, alpha)) # -1, 30, 1
-        self.h = tf.reshape(self.h, [-1, self.max_sen_len])
+        self.h = tf.tanh(tf.matmul(alpha, self.v_c)) # (-1, 1, 2*30) ** (-1, 2*30, 100) -> (-1, 100)
+        self.h = tf.reshape(self.h, [-1, self.hidden_size])
 
     def prediction(self):
 
