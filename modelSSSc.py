@@ -116,7 +116,7 @@ class Model(object):
             )
             self.loss_norm = tf.reduce_mean(losses_norm)
 
-            self.loss = (tf.reduce_sum((1/self.class_weights)*losses) / tf.reduce_sum((1/self.class_weights)))
+            #self.loss = (tf.reduce_sum((1/self.class_weights)*losses) / tf.reduce_sum((1/self.class_weights)))
             
 
         with tf.name_scope("metrics"):
