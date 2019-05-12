@@ -23,7 +23,7 @@ class Model(object):
 
                 'p_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
 
-                'attention' : tf.Variable(tf.random_uniform([self.max_sen_len, 1], -0.01, 0.01)),
+                'attention' : tf.Variable(tf.random_uniform([2*self.max_sen_len, 1], -0.01, 0.01)),
 
                 'z': tf.Variable(tf.random_uniform([2*self.embedding_dim+self.max_sen_len, self.hidden_size], -0.01, 0.01)),
 
