@@ -72,6 +72,7 @@ with open(train_file_path) as f:
     i = 0
     for row in content:
         print(i, "/", len(content))
+        i += 1
         json_file = open(row_file_path, "w")
         json_file.write(row)
         json_file.close()
