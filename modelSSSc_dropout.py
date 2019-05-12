@@ -63,6 +63,9 @@ class Model(object):
 
         s_1_to_2 = tf.nn.relu(tf.matmul(concat, self.weights['q_1_to_2']) + self.biases['q_1_to_2'])
         s_1_to_2 = tf.matmul(s_1_to_2, self.weights['p_1_to_2']) + self.biases['p_1_to_2']
+
+        s_1_to_2 = tf.nn.dropout(s_1_to_2, rate=0.2)
+
         s_1_to_2 = tf.reshape(s_1_to_2, [-1, self.max_sen_len, self.max_sen_len])
 
         a_1 = tf.reshape(tf.nn.softmax(tf.reduce_max(s_1_to_2, axis=-1), axis=-1), [-1, 1, self.max_sen_len])
@@ -77,7 +80,7 @@ class Model(object):
 
     def long_short_memory_encoder(self):
 
-        lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
+        lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size, dropout=0.2)
         LSTM_layer = tf.keras.layers.RNN(lstm_cell)
         self.v_c = LSTM_layer(tf.concat([self.x1, self.x2], axis=1))
 
@@ -86,7 +89,7 @@ class Model(object):
         v = tf.concat([self.v_a, self.v_c], -1)
         v = tf.nn.relu(tf.matmul(v, self.weights['z']) + self.biases['z'])
 
-        v_dropout = tf.nn.dropout(v)
+        v_dropout = tf.nn.dropout(v, rate=0.2)
 
         self.scores = tf.nn.softmax((tf.matmul(v_dropout, self.weights['f']) + self.biases['f']), axis=-1)
 

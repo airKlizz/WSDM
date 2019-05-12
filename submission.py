@@ -67,7 +67,7 @@ with graph.as_default():
         while idx_max < len(test_X)-1:
 
             idx_min = batch * batch_size
-            idx_max = min((batch+1) * batch_size, len(test_X)-1)
+            idx_max = min((batch+1) * batch_size, len(test_X))
             x1 = np.array([test_X[idx_min][3]])
             x2 = np.array([test_X[idx_min][4]])
 
@@ -93,7 +93,6 @@ with graph.as_default():
                     submission[idx_min+i+1][1] = "unrelated"
                 else :
                     print("Error prediction")
-                print(predictions[i], submission[idx_min+i+1])
 
             batch += 1
 
