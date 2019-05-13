@@ -130,7 +130,7 @@ with tf.Graph().as_default():
 
                 y = train_y[idx_min:idx_max]
 
-                '''
+                
 
                 class_weights = []
                 class_weights_accuracy = []
