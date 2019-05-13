@@ -104,7 +104,7 @@ with tf.Graph().as_default():
 
             for batch in range(nb_batch_per_epoch):
 
-                
+                '''
                 #Previus batch creation :
 
                 idx = batch * batch_size
