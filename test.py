@@ -41,9 +41,9 @@ class_weights = [1/15, 1/5, 1/16]
 #timestamp = '1557654254' #SScv3
 #timestamp = '1557655718' #SScv4
 #timestamp = '1557663468' # SSS dropout
-timestamp = '1557913992' 
+timestamp = '1557914015' 
 
-specifications = 'DDD original dataset'
+specifications = 'SDD original dataset'
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
