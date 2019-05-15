@@ -103,7 +103,6 @@ with tf.Graph().as_default():
 
             for batch in range(nb_batch_per_epoch):
 
-                
                 # normalize_batch_size :
 
                 idx = batch * batch_size
