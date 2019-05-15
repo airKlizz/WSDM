@@ -22,6 +22,8 @@ class Model(object):
 
                 'p_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
 
+                'lstm': tf.Variable(tf.random_uniform([3*self.hidden_size, self.hidden_size], -0.01, 0.01)),
+
                 'z': tf.Variable(tf.random_uniform([2*self.embedding_dim+self.hidden_size, self.hidden_size], -0.01, 0.01)),
 
                 'f': tf.Variable(tf.random_uniform([self.hidden_size, self.class_num], -0.01, 0.01)),
@@ -32,6 +34,8 @@ class Model(object):
                 'q_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
 
                 'p_1_to_2': tf.Variable(tf.random_uniform([1], -0.01, 0.01)),
+
+                'lstm': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
 
                 'z': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
 
@@ -84,13 +88,13 @@ class Model(object):
 
         lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
         LSTM_layer = tf.keras.layers.RNN(lstm_cell)
-        self.v_c_dot = LSTM_layer(tf.concat([self.x1, self.x2], axis=1))
+        self.v_c_dot = LSTM_layer(tf.multiply(self.x1, self.x2))
 
     def LSTM_minus(self):
 
         lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
         LSTM_layer = tf.keras.layers.RNN(lstm_cell)
-        self.v_c_minus = LSTM_layer(tf.subtract([self.x1, self.x2], axis=1))
+        self.v_c_minus = LSTM_layer(tf.math.subtract(self.x1, self.x2))
 
     def LSTM_dense_layer(self):
 

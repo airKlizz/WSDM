@@ -41,7 +41,7 @@ class_weights = [1/15, 1/5, 1/16]
 #timestamp = '1557654254' #SScv3
 #timestamp = '1557655718' #SScv4
 #timestamp = '1557663468' # SSS dropout
-timestamp = '1557917420' 
+timestamp = '1557915875' 
 
 specifications = 'SSS original dataset with normalized batch_size'
 
