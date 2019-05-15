@@ -10,7 +10,7 @@ import numpy as np
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 data_directory = "../Data"
-backup_directory = "../Backup/"
+backup_directory = "../Models/"
 
 dataset_file_path = data_directory+"/train_dataset_2"
 #dataset_file_path = data_directory+"/train_dataset"
@@ -32,6 +32,7 @@ test_X = np.array(dataset[2])
 test_y = np.array(dataset[3])
 
 batch_size = 200
+class_weights = [1/15, 1/5, 1/16]
 
 #timestamp = "1557409770" # DDD
 #timestamp = '1557322767' # SDD
@@ -40,9 +41,9 @@ batch_size = 200
 #timestamp = '1557654254' #SScv3
 #timestamp = '1557655718' #SScv4
 #timestamp = '1557663468' # SSS dropout
-timestamp = '1557322767' #SDD
+timestamp = '1557913992' 
 
-specifications = 'model SDD'
+specifications = 'DDD original dataset'
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
@@ -78,8 +79,10 @@ with graph.as_default():
         idx_max = 0
 
         accuracy_test = 0
+        accuracy_test_weights = 0
+        sum_weights = 0
 
-        while idx_max < len(test_X)-1:
+        while batch < 10:
             print(batch, "/", len(test_X)/batch_size)
             idx_min = batch * batch_size
             idx_max = min((batch+1) * batch_size, len(test_X))
@@ -106,17 +109,23 @@ with graph.as_default():
             for i in range(len(predictions)):
                 if predictions[i] == np.argmax(y[i]):
                     accuracy_test +=1
+                    accuracy_test_weights += class_weights[np.argmax(y[i])]
+                
+                sum_weights += class_weights[np.argmax(y[i])]
 
             batch += 1
         
         accuracy_test = accuracy_test/len(test_X)
+        accuracy_test_weights = accuracy_test_weights/sum_weights
 
         batch = 0
         idx_max = 0
 
         accuracy_train = 0
+        accuracy_train_weights = 0
+        sum_weights = 0
 
-        while idx_max < len(train_X)-1:
+        while batch < 10:
             print(batch, "/", len(train_X)/batch_size)
             idx_min = batch * batch_size
             idx_max = min((batch+1) * batch_size, len(train_X))
@@ -143,14 +152,18 @@ with graph.as_default():
             for i in range(len(predictions)):
                 if predictions[i] == np.argmax(y[i]):
                     accuracy_train +=1
+                    accuracy_train_weights += class_weights[np.argmax(y[i])]
+                
+                sum_weights += class_weights[np.argmax(y[i])]
 
             batch += 1
         
-        accuracy_train = accuracy_train/len(train_X)
+        accuracy_train = accuracy_train/len(test_X)
+        accuracy_train_weights = accuracy_train_weights/sum_weights
 
 
 
 file = open("results.txt","a") 
-line = timestamp+" - "+specifications+" : test "+str(accuracy_test)+" train "+str(accuracy_train)+"\n"
+line = timestamp+" - "+specifications+" : test "+str(accuracy_test)+" train "+str(accuracy_train)+" test weights "+str(accuracy_test_weights)+" train weights "+str(accuracy_train_weights)+"\n"
 file.write(line) 
 file.close() 
