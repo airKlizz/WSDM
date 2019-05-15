@@ -7,12 +7,12 @@ import csv
 import tensorflow as tf
 import numpy as np
 
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
-data_directory = "../Data2"
-backup_directory = "../Backup2/"
+data_directory = "../Data"
+backup_directory = "../Models/"
 
-dataset_file_path = data_directory+"/train_dataset"
+dataset_file_path = data_directory+"/train_dataset_2"
 #dataset_file_path = data_directory+"/train_dataset"
 
 print("Restore Data")
@@ -41,9 +41,9 @@ class_weights = [1/15, 1/5, 1/16]
 #timestamp = '1557654254' #SScv3
 #timestamp = '1557655718' #SScv4
 #timestamp = '1557663468' # SSS dropout
-timestamp = '1557907907' 
+timestamp = '1557926061' 
 
-specifications = 'DDD original dataset normalized batch'
+specifications = ' SSS with attention original dataset normalized batch'
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
@@ -158,7 +158,7 @@ with graph.as_default():
 
 
 
-file = open("results2.txt","a") 
+file = open("results.txt","a") 
 line = timestamp+" - "+specifications+" : test "+str(accuracy_test)+" train "+str(accuracy_train)+" test weights "+str(accuracy_test_weights)+" train weights "+str(accuracy_train_weights)+"\n"
 file.write(line) 
 file.close() 
