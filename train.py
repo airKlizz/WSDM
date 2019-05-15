@@ -11,7 +11,7 @@ import numpy as np
 
 from modelSSS_attention import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 data_directory = "../Data2"
 backup_directory = "../Backup2/"
