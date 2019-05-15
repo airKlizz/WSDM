@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "3_SSS_original_dataset")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "4_SSS_original_dataset_class_weights")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
@@ -150,7 +150,7 @@ with tf.Graph().as_default():
                     model.x1: x1,
                     model.x2: x2,
                     model.y: y,
-                    #model.class_weights: class_weights,
+                    model.class_weights: class_weights,
                     #model.class_weights_accuracy: class_weights_accuracy,
                 }
 
@@ -203,7 +203,7 @@ with tf.Graph().as_default():
                             model.x1: x1,
                             model.x2: x2,
                             model.y: y,
-                            #model.class_weights: class_weights,
+                            model.class_weights: class_weights,
                             #model.class_weights_accuracy: class_weights_accuracy,
                         }
 
