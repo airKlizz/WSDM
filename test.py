@@ -139,10 +139,8 @@ with graph.as_default():
                 model_x1: x1,
                 model_x2: x2,
                 model_y: y,
+                model_class_weights: np.ones(len(x1))
             }
-
-            if class_weights_bool:
-                feed_dict["model_class_weights"] = np.ones(len(x1))
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
 
