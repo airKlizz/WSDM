@@ -9,7 +9,7 @@ import time
 import tensorflow as tf
 import numpy as np
 
-from modelSSS_dropout import Model
+from modelSSS_attention import Model
 
 os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "13_SSS_dropout_original_dataset_normalized_batch")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "15_SSS_attention_original_dataset_normalized_batch")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
