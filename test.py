@@ -74,7 +74,7 @@ with graph.as_default():
         accuracy_test = 0
 
         while idx_max < len(test_X)-1:
-
+            print(batch, "/", len(test_X)/batch)
             idx_min = batch * batch_size
             idx_max = min((batch+1) * batch_size, len(test_X))
             x1 = np.array([test_X[idx_min][3]])
@@ -103,11 +103,13 @@ with graph.as_default():
         
         accuracy_test = accuracy_test/len(test_X)
 
+        batch = 0
+        idx_max = 0
 
         accuracy_train = 0
 
         while idx_max < len(train_X)-1:
-
+            print(batch, "/", len(train_X)/batch)
             idx_min = batch * batch_size
             idx_max = min((batch+1) * batch_size, len(train_X))
             x1 = np.array([train_X[idx_min][3]])
