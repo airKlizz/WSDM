@@ -1,10 +1,6 @@
 import os
 
-for _, dirs, _ in os.walk("../Backup", topdown=False):
-   for name in dirs:
-      print(name)
-
-print("DEDE")
+_, dirs, _ os.walk("../Backup", topdown=False)
 
 for folder in dirs:
     print(folder)

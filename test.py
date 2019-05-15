@@ -83,13 +83,13 @@ with graph.as_default():
             print(batch, "/", len(test_X)/batch_size)
             idx_min = batch * batch_size
             idx_max = min((batch+1) * batch_size, len(test_X))
-            x1 = np.array([test_X[idx_min][3]])
-            x2 = np.array([test_X[idx_min][4]])
+            x1 = np.array([test_X[idx_min][0]])
+            x2 = np.array([test_X[idx_min][1]])
             y = np.array([test_y[idx_min]])
 
             for i in range(idx_min+1, idx_max):
-                x1 = np.append(x1, np.array([test_X[i][3]]), axis=0)
-                x2 = np.append(x2, np.array([test_X[i][4]]), axis=0)
+                x1 = np.append(x1, np.array([test_X[i][0]]), axis=0)
+                x2 = np.append(x2, np.array([test_X[i][1]]), axis=0)
                 y = np.array([test_y[i]])
 
             feed_dict = {
@@ -120,13 +120,13 @@ with graph.as_default():
             print(batch, "/", len(train_X)/batch_size)
             idx_min = batch * batch_size
             idx_max = min((batch+1) * batch_size, len(train_X))
-            x1 = np.array([train_X[idx_min][3]])
-            x2 = np.array([train_X[idx_min][4]])
+            x1 = np.array([train_X[idx_min][0]])
+            x2 = np.array([train_X[idx_min][1]])
             y = np.array([train_y[idx_min]])
 
             for i in range(idx_min+1, idx_max):
-                x1 = np.append(x1, np.array([train_X[i][3]]), axis=0)
-                x2 = np.append(x2, np.array([train_X[i][4]]), axis=0)
+                x1 = np.append(x1, np.array([train_X[i][0]]), axis=0)
+                x2 = np.append(x2, np.array([train_X[i][1]]), axis=0)
                 y = np.array([train_y[i]])
 
             feed_dict = {
