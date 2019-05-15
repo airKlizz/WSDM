@@ -14,8 +14,7 @@ class Model(object):
             self.x1 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x1")
             self.x2 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x2")
             self.y = tf.placeholder(tf.float32, [None, self.class_num], name="y")
-            self.class_weights = tf.placeholder(tf.float32, [None], name="class_weights")
-            self.class_weights_accuracy = tf.placeholder(tf.float32, [None], name="class_weights_accuracy")
+            #self.class_weights = tf.placeholder(tf.float32, [None], name="class_weights")
 
         with tf.name_scope('weights'):
             self.weights = {
@@ -112,16 +111,21 @@ class Model(object):
         self.prediction()
         
         with tf.name_scope("loss"):
+
+            '''losses = tf.losses.sparse_softmax_cross_entropy(
+                labels=tf.argmax(self.y, -1),
+                logits=self.scores,
+                weights=self.class_weights)'''
+
             losses = tf.nn.softmax_cross_entropy_with_logits_v2(
                 logits = self.scores,
                 labels = self.y
             )
+
             self.loss = tf.reduce_mean(losses)
             
-            self.loss_norm = tf.reduce_mean(losses)
-
         with tf.name_scope("metrics"):
             correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
-            #self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
-            self.accuracy = (tf.reduce_sum(self.class_weights_accuracy*tf.cast(correct_predictions, "float")) / tf.reduce_sum(self.class_weights_accuracy))
+            self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
+            #self.accuracy = (tf.reduce_sum(self.class_weights*tf.cast(correct_predictions, "float")) / tf.reduce_sum(self.class_weights))
             self.c_matrix = tf.confusion_matrix(labels = tf.argmax(self.y, -1), predictions = self.predictions, name="c_matrix")
