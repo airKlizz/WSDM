@@ -15,13 +15,14 @@ class Model(object):
             self.x2 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x2")
             self.y = tf.placeholder(tf.float32, [None, self.class_num], name="y")
             self.class_weights = tf.placeholder(tf.float32, [None], name="class_weights")
-            self.class_weights_accuracy = tf.placeholder(tf.float32, [None], name="class_weights_accuracy")
 
         with tf.name_scope('weights'):
             self.weights = {
                 'q_1_to_2': tf.Variable(tf.random_uniform([2 * embedding_dim, self.hidden_size], -0.01, 0.01)),
 
                 'p_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
+
+                'inter_attention': tf.Variable(tf.random_uniform([4*self.embedding_dim, 2*self.embedding_dim], -0.01, 0.01)),
 
                 'z': tf.Variable(tf.random_uniform([2*self.embedding_dim+self.hidden_size, self.hidden_size], -0.01, 0.01)),
 
@@ -32,7 +33,9 @@ class Model(object):
             self.biases = {
                 'q_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
 
-                'p_1_to_2': tf.Variable(tf.random_uniform([1], -0.01, 0.01)),
+                'inter_attention': tf.Variable(tf.random_uniform([2*self.embedding_dim], -0.01, 0.01)),
+
+                'p_1_to_2': tf.Variable(tf.random_uniform([], -0.01, 0.01)),
 
                 'z': tf.Variable(tf.random_uniform([self.hidden_size], -0.01, 0.01)),
 
@@ -73,7 +76,11 @@ class Model(object):
 
         self.v_a_2_to_1 = tf.reshape(tf.matmul(a_2, self.x2), [-1, self.embedding_dim])
 
-        self.v_a = tf.concat([self.v_a_1_to_2, self.v_a_2_to_1], axis=-1)
+        self.v_a_concat = tf.concat([self.v_a_1_to_2, self.v_a_2_to_1], axis=-1) # (-1, 2*embedding_dim)
+        self.v_a_dot = tf.multiply(self.v_a_1_to_2, self.v_a_2_to_1) # (-1, embedding_dim)
+        self.v_a_minus = tf.math.subtract(self.v_a_1_to_2, self.v_a_2_to_1) # (-1, embedding_dim)
+
+        self.v_a = tf.nn.relu(tf.matmul(tf.concat([self.v_a_concat, self.v_a_dot, self.v_a_minus], axis=-1), self.weights['inter_attention'])) + self.biases['inter_attention']
 
     def long_short_memory_encoder(self):
 
@@ -97,30 +104,21 @@ class Model(object):
         self.prediction()
         
         with tf.name_scope("loss"):
-            losses = tf.nn.softmax_cross_entropy_with_logits_v2(
-                logits = self.scores,
-                labels = self.y
-            )
-            self.loss = tf.reduce_mean(losses)
-            '''
-            
+
             losses = tf.losses.sparse_softmax_cross_entropy(
                 labels=tf.argmax(self.y, -1),
                 logits=self.scores,
                 weights=self.class_weights)
-            self.loss = tf.reduce_mean(losses)
-'''
-            losses_norm = tf.nn.softmax_cross_entropy_with_logits_v2(
+
+            '''losses = tf.nn.softmax_cross_entropy_with_logits_v2(
                 logits = self.scores,
                 labels = self.y
-            )
-            self.loss_norm = tf.reduce_mean(losses_norm)
+            )'''
 
-            #self.loss = (tf.reduce_sum((1/self.class_weights)*losses) / tf.reduce_sum((1/self.class_weights)))
+            self.loss = tf.reduce_mean(losses)
             
-
         with tf.name_scope("metrics"):
             correct_predictions = tf.equal(self.predictions, tf.argmax(self.y, -1))
-            #self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
-            self.accuracy = (tf.reduce_sum(self.class_weights_accuracy*tf.cast(correct_predictions, "float")) / tf.reduce_sum(self.class_weights_accuracy))
+            self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"), name="accuracy")
+            #self.accuracy = (tf.reduce_sum(self.class_weights*tf.cast(correct_predictions, "float")) / tf.reduce_sum(self.class_weights))
             self.c_matrix = tf.confusion_matrix(labels = tf.argmax(self.y, -1), predictions = self.predictions, name="c_matrix")
