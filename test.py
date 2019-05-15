@@ -7,7 +7,7 @@ import csv
 import tensorflow as tf
 import numpy as np
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 data_directory = "../Data"
 backup_directory = "../Models/"
@@ -41,9 +41,9 @@ class_weights = [1/15, 1/5, 1/16]
 #timestamp = '1557654254' #SScv3
 #timestamp = '1557655718' #SScv4
 #timestamp = '1557663468' # SSS dropout
-timestamp = '1557915875' 
+timestamp = '1557917718' 
 
-specifications = 'SSS original dataset with normalized batch_size'
+specifications = 'SSS combine sampling dataset 0,75'
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)

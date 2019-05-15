@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "11_SSS_combine_dataset_0,6 5")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "6_SSS_original_dataset_normalized_batch_class_weights")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
