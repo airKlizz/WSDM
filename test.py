@@ -151,7 +151,6 @@ with graph.as_default():
 
 
 file = open("results.txt","a") 
- 
-file.write(timestamp, " - ", specifications, " : ", "test ",accuracy_test, " train ", accuracy_train, "\n") 
- 
+line = timestamp+" - "+specifications+" : test "+str(accuracy_test)+" train "+str(accuracy_train)+"\n"
+file.write(line) 
 file.close() 
