@@ -65,7 +65,12 @@ with graph.as_default():
         model_x1 = graph.get_operation_by_name("input/x1").outputs[0]
         model_x2 = graph.get_operation_by_name("input/x2").outputs[0]
         model_y = graph.get_operation_by_name("input/y").outputs[0]
-        model_class_weights = graph.get_operation_by_name("input/class_weights").outputs[0]
+        try:
+            model_class_weights = graph.get_operation_by_name("input/class_weights").outputs[0]
+            class_weights_bool = True
+        except:
+            class_weights_bool = False
+
 
         model_predictions = graph.get_operation_by_name("predictions").outputs[0]
 
@@ -91,8 +96,10 @@ with graph.as_default():
                 model_x1: x1,
                 model_x2: x2,
                 model_y: y,
-                model_class_weights: np.ones(len(x1)),
             }
+
+            if class_weights_bool:
+                feed_dict["model_class_weights"] = np.ones(len(x1))
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
 
@@ -126,8 +133,10 @@ with graph.as_default():
                 model_x1: x1,
                 model_x2: x2,
                 model_y: y,
-                model_class_weights: np.ones(len(x1)),
             }
+
+            if class_weights_bool:
+                feed_dict["model_class_weights"] = np.ones(len(x1))
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
 
