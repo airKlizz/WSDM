@@ -74,11 +74,27 @@ class Model(object):
 
         self.v_a = tf.concat([self.v_a_1_to_2, self.v_a_2_to_1], axis=-1)
 
-    def long_short_memory_encoder(self):
+    def LSTM_concat(self):
 
         lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
         LSTM_layer = tf.keras.layers.RNN(lstm_cell)
-        self.v_c = LSTM_layer(tf.concat([self.x1, self.x2], axis=1))
+        self.v_c_concat = LSTM_layer(tf.concat([self.x1, self.x2], axis=1))
+
+    def LSTM_dot(self):
+
+        lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
+        LSTM_layer = tf.keras.layers.RNN(lstm_cell)
+        self.v_c_dot = LSTM_layer(tf.concat([self.x1, self.x2], axis=1))
+
+    def LSTM_minus(self):
+
+        lstm_cell = tf.keras.layers.LSTMCell(self.hidden_size)
+        LSTM_layer = tf.keras.layers.RNN(lstm_cell)
+        self.v_c_minus = LSTM_layer(tf.subtract([self.x1, self.x2], axis=1))
+
+    def LSTM_dense_layer(self):
+
+        self.v_c = tf.matmul()
 
     def prediction(self):
 

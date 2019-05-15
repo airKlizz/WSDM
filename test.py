@@ -43,7 +43,7 @@ class_weights = [1/15, 1/5, 1/16]
 #timestamp = '1557663468' # SSS dropout
 timestamp = '1557917420' 
 
-specifications = 'SSS combine sampling dataset'
+specifications = 'SSS original dataset with normalized batch_size'
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
