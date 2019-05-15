@@ -10,7 +10,7 @@ import numpy as np
 os.environ["CUDA_VISIBLE_DEVICES"]="5"
 
 data_directory = "../Data"
-backup_directory = "../Backup/"
+backup_directory = "../Models/"
 
 sample_submission_file_path = data_directory+"/sample_submission.csv"
 submission_file_path = data_directory+"/submission_5.csv"
