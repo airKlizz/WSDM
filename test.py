@@ -7,7 +7,7 @@ import csv
 import tensorflow as tf
 import numpy as np
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 data_directory = "../Data"
 backup_directory = "../Models/"
