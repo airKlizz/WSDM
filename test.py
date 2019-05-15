@@ -87,7 +87,7 @@ with graph.as_default():
             x2 = np.array([test_X[idx_min][1]])
             y = np.array([test_y[idx_min]])
 
-            for i in range(idx_min+1, idx_max):
+            for i in range(idx_min, idx_max):
                 x1 = np.append(x1, np.array([test_X[i][0]]), axis=0)
                 x2 = np.append(x2, np.array([test_X[i][1]]), axis=0)
                 y = np.array([test_y[i]])
@@ -103,8 +103,11 @@ with graph.as_default():
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
 
+            print(predictions)
+            print(y)
+
             for i in range(len(predictions)):
-                if predictions[i] == np.argmax(y[i]):
+                if predictions[i] == np.argmax(y[idx_min+i]):
                     accuracy_test +=1
 
             batch += 1
@@ -124,7 +127,7 @@ with graph.as_default():
             x2 = np.array([train_X[idx_min][1]])
             y = np.array([train_y[idx_min]])
 
-            for i in range(idx_min+1, idx_max):
+            for i in range(idx_min, idx_max):
                 x1 = np.append(x1, np.array([train_X[i][0]]), axis=0)
                 x2 = np.append(x2, np.array([train_X[i][1]]), axis=0)
                 y = np.array([train_y[i]])
@@ -140,8 +143,12 @@ with graph.as_default():
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
 
+            print(predictions)
+            print(y)
+
             for i in range(len(predictions)):
-                if predictions[i] == np.argmax(y[i]):
+                print(predictions[i])
+                if predictions[i] == np.argmax(y[idx_min+i]):
                     accuracy_train +=1
 
             batch += 1
