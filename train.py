@@ -11,12 +11,12 @@ import numpy as np
 
 from modelSSS import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
-data_directory = "../Data"
-backup_directory = "../Models/"
+data_directory = "../Data2"
+backup_directory = "../Backup2/"
 
-dataset_file_path = data_directory+"/train_dataset_2"
+dataset_file_path = data_directory+"/train_dataset"
 
 print("Restore Data")
 
@@ -40,10 +40,10 @@ max_sen_len = 30
 
 hidden_size = 100
 
-learning_rate = 0.0001
+learning_rate = 0.001
 batch_size = 100
 test_batch_size = 200
-num_epochs = 20
+num_epochs = 10
 evaluate_every = 500
 
 nb_batch_per_epoch = int(len(train_X)/batch_size+1)
@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "21_SSS_original_dataset_normalized_batch_class_weights_lr_0.0001_epoch_20")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "1_SSS_normalized_batch")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
@@ -148,7 +148,7 @@ with tf.Graph().as_default():
                     model.x1: x1,
                     model.x2: x2,
                     model.y: y,
-                    model.class_weights: class_weights,
+                    #model.class_weights: class_weights,
                     #model.class_weights_accuracy: class_weights_accuracy,
                 }
 
@@ -201,7 +201,7 @@ with tf.Graph().as_default():
                             model.x1: x1,
                             model.x2: x2,
                             model.y: y,
-                            model.class_weights: class_weights,
+                            #model.class_weights: class_weights,
                             #model.class_weights_accuracy: class_weights_accuracy,
                         }
 
