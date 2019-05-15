@@ -80,9 +80,10 @@ with graph.as_default():
 
         accuracy_test = 0
         accuracy_test_weights = 0
+        sum_accuracy = 0
         sum_weights = 0
 
-        while batch < 10:
+        while batch < 50:
             print(batch, "/", len(test_X)/batch_size)
             idx_min = batch * batch_size
             idx_max = min((batch+1) * batch_size, len(test_X))
@@ -111,11 +112,12 @@ with graph.as_default():
                     accuracy_test +=1
                     accuracy_test_weights += class_weights[np.argmax(y[i])]
                 
+                sum_accuracy += 1
                 sum_weights += class_weights[np.argmax(y[i])]
 
             batch += 1
         
-        accuracy_test = accuracy_test/len(test_X)
+        accuracy_test = accuracy_test/sum_accuracy
         accuracy_test_weights = accuracy_test_weights/sum_weights
 
         batch = 0
@@ -123,9 +125,10 @@ with graph.as_default():
 
         accuracy_train = 0
         accuracy_train_weights = 0
+        sum_accuracy = 0
         sum_weights = 0
 
-        while batch < 10:
+        while batch < 50:
             print(batch, "/", len(train_X)/batch_size)
             idx_min = batch * batch_size
             idx_max = min((batch+1) * batch_size, len(train_X))
@@ -154,11 +157,12 @@ with graph.as_default():
                     accuracy_train +=1
                     accuracy_train_weights += class_weights[np.argmax(y[i])]
                 
+                sum_accuracy += 1
                 sum_weights += class_weights[np.argmax(y[i])]
 
             batch += 1
         
-        accuracy_train = accuracy_train/len(test_X)
+        accuracy_train = accuracy_train/sum_accuracy
         accuracy_train_weights = accuracy_train_weights/sum_weights
 
 
