@@ -9,9 +9,9 @@ import time
 import tensorflow as tf
 import numpy as np
 
-from modelSSS_attention import Model
+from modelSSS_multi_LSTM import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="5"
 
 data_directory = "../Data2"
 backup_directory = "../Backup2/"
@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "2_SSS_attention_normalized_batch")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "2_SSS_multi_LSTM_normalized_batch")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
