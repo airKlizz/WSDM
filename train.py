@@ -40,10 +40,10 @@ max_sen_len = 30
 
 hidden_size = 100
 
-learning_rate = 0.001
-batch_size = 300
+learning_rate = 0.0001
+batch_size = 100
 test_batch_size = 200
-num_epochs = 10
+num_epochs = 20
 evaluate_every = 500
 
 nb_batch_per_epoch = int(len(train_X)/batch_size+1)
@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "21_SSS_original_dataset_normalized_batch_class_weights_batch_size_300")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "21_SSS_original_dataset_normalized_batch_class_weights_lr_0.0001_epoch_20")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
