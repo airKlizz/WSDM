@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "4_SSS_original_dataset_class_weights")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "5_SSS_original_dataset_normalized_batch")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
@@ -103,8 +103,8 @@ with tf.Graph().as_default():
 
             for batch in range(nb_batch_per_epoch):
 
-                '''
-                #Previus batch creation :
+                
+                # normalize_batch_size :
 
                 idx = batch * batch_size
                 x1 = np.array([train_X[idx][0]])
@@ -119,15 +119,15 @@ with tf.Graph().as_default():
                         x2 = np.append(x2, np.array([train_X[idx][1]]), axis=0)
                         y = np.append(y, np.array([train_y[idx]]), axis=0)
                         class_sum = np.add(class_sum, train_y[idx])
-                '''
+                
 
-                idx_min = batch * batch_size
+                '''idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
 
                 x1 = train_X[idx_min:idx_max, 0]
                 x2 = train_X[idx_min:idx_max, 1]
 
-                y = train_y[idx_min:idx_max]
+                y = train_y[idx_min:idx_max]'''
 
                 
 
@@ -150,7 +150,7 @@ with tf.Graph().as_default():
                     model.x1: x1,
                     model.x2: x2,
                     model.y: y,
-                    model.class_weights: class_weights,
+                    #model.class_weights: class_weights,
                     #model.class_weights_accuracy: class_weights_accuracy,
                 }
 
@@ -203,7 +203,7 @@ with tf.Graph().as_default():
                             model.x1: x1,
                             model.x2: x2,
                             model.y: y,
-                            model.class_weights: class_weights,
+                            #model.class_weights: class_weights,
                             #model.class_weights_accuracy: class_weights_accuracy,
                         }
 
