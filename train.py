@@ -11,12 +11,12 @@ import numpy as np
 
 from modelSSS import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 data_directory = "../Data"
 backup_directory = "../Models/"
 
-dataset_file_path = data_directory+"/train_dataset_2"
+dataset_file_path = data_directory+"/train_dataset_combine_sampling"
 
 print("Restore Data")
 
@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "5_SSS_original_dataset_normalized_batch")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "7_SSS_combine_dataset_1")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
@@ -106,7 +106,7 @@ with tf.Graph().as_default():
                 
                 # normalize_batch_size :
 
-                idx = batch * batch_size
+                '''idx = batch * batch_size
                 x1 = np.array([train_X[idx][0]])
                 x2 = np.array([train_X[idx][1]])
                 y = np.array([train_y[idx]])
@@ -118,16 +118,16 @@ with tf.Graph().as_default():
                         x1 = np.append(x1, np.array([train_X[idx][0]]), axis=0)
                         x2 = np.append(x2, np.array([train_X[idx][1]]), axis=0)
                         y = np.append(y, np.array([train_y[idx]]), axis=0)
-                        class_sum = np.add(class_sum, train_y[idx])
+                        class_sum = np.add(class_sum, train_y[idx])'''
                 
 
-                '''idx_min = batch * batch_size
+                idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
 
                 x1 = train_X[idx_min:idx_max, 0]
                 x2 = train_X[idx_min:idx_max, 1]
 
-                y = train_y[idx_min:idx_max]'''
+                y = train_y[idx_min:idx_max]
 
                 
 
