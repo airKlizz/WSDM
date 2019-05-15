@@ -12,8 +12,8 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 data_directory = "../Data"
 backup_directory = "../Backup/"
 
-#dataset_file_path = data_directory+"/train_dataset_2"
-dataset_file_path = data_directory+"/train_dataset"
+dataset_file_path = data_directory+"/train_dataset_2"
+#dataset_file_path = data_directory+"/train_dataset"
 
 print("Restore Data")
 
@@ -38,9 +38,10 @@ batch_size = 200
 #timestamp = '1557478792' #SSSc
 #timestamp = '1557596444' #SScv2
 #timestamp = '1557654254' #SScv3
-timestamp = '1557663468' # SSS dropout
+timestamp = '1557655718' #SScv4
+#timestamp = '1557663468' # SSS dropout
 
-specifications = 'SSS with dropout'
+specifications = 'model_SSSc_v4'
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
