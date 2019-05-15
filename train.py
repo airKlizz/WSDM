@@ -9,9 +9,9 @@ import time
 import tensorflow as tf
 import numpy as np
 
-from modelSSS_multi_compare import Model
+from modelSSS import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 data_directory = "../Data"
 backup_directory = "../Models/"
@@ -41,7 +41,7 @@ max_sen_len = 30
 hidden_size = 100
 
 learning_rate = 0.001
-batch_size = 100
+batch_size = 300
 test_batch_size = 200
 num_epochs = 10
 evaluate_every = 500
@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "18_SSS_multi_compare_original_dataset_normalized_batch")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "21_SSS_original_dataset_normalized_batch_class_weights_batch_size_300")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
