@@ -11,7 +11,7 @@ import numpy as np
 
 from modelDDD import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 data_directory = "../Data"
 backup_directory = "../Models/"
