@@ -150,7 +150,7 @@ with tf.Graph().as_default():
                     model.x1: x1,
                     model.x2: x2,
                     model.y: y,
-                    #model.class_weights: class_weights,
+                    model.class_weights: class_weights,
                     #model.class_weights_accuracy: class_weights_accuracy,
                 }
 
@@ -203,7 +203,7 @@ with tf.Graph().as_default():
                             model.x1: x1,
                             model.x2: x2,
                             model.y: y,
-                            #model.class_weights: class_weights,
+                            model.class_weights: class_weights,
                             #model.class_weights_accuracy: class_weights_accuracy,
                         }
 
