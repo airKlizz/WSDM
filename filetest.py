@@ -1,6 +1,6 @@
 import os
 
-_, dirs, _ os.walk("../Backup", topdown=False)
+root, dirs, files = os.walk("../Backup", topdown=False)
 
 for folder in dirs:
     print(folder)
