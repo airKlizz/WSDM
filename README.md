@@ -66,3 +66,7 @@ labels is a (-1, 3) array. -1 is the number of data and 3 is the number of class
 ## Train, test and submission
 
 These scripts allow to train the model, test to obtain accuracy and create a submission csv file for the Kaggle competition.
+
+## Results
+
+results.txt stores the test results for WSDM dataset and results2.txt for Stanford dataset.
