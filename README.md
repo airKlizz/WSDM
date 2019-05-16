@@ -61,6 +61,7 @@ The dataset.py script allows to create pickle files of the data. The train_datas
 * test_y : containing testing labels.
 
 data is a (-1, 2, max_sentence_length, embedding_dimension) array. -1 is the number of data and 2 is for sentences A and B.
+
 labels is a (-1, 3) array. -1 is the number of data and 3 is the number of classes (agreed, disagreed and unrelated).
 
 ## Train, test and submission
@@ -69,4 +70,5 @@ These scripts allow to train the model, test to obtain accuracy and create a sub
 
 ## Results
 
-results.txt stores the test results for WSDM dataset and results2.txt for Stanford dataset.
+results.txt stores the test results for WSDM dataset and results2.txt for Stanford dataset. Results.odt contains the same results as results.txt with some comments
+
