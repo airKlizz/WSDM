@@ -13,7 +13,7 @@ data_directory = "../Data"
 backup_directory = "../Models/"
 
 sample_submission_file_path = data_directory+"/sample_submission.csv"
-submission_file_path = data_directory+"/submission_XXX.csv"
+submission_file_path = data_directory+"/submission_15_2.csv"
 dataset_file_path = data_directory+"/test_dataset_2"
 
 batch_size = 200
@@ -35,7 +35,7 @@ print("Shape:")
 print(len(test_id))
 print(np.shape(test_X))
 
-timestamp = 'XXXXXXX' 
+timestamp = '1557926061' 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
