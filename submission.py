@@ -40,7 +40,7 @@ timestamp = '1557926061'
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
 
-results_dict = []
+results_dict = {}
 
 graph = tf.Graph()
 with graph.as_default():
@@ -86,11 +86,11 @@ with graph.as_default():
 
             for i in range(len(predictions)):
                 if predictions[i] == 0:
-                    results_dict[batch_id] = "agreed"
+                    results_dict[batch_id[i]] = "agreed"
                 elif predictions[i] == 1:
-                    results_dict[batch_id] = "disagreed"
+                    results_dict[batch_id[i]] = "disagreed"
                 elif predictions[i] == 2:
-                    results_dict[batch_id] = "unrelated"
+                    results_dict[batch_id[i]] = "unrelated"
                 else :
                     print("Error prediction")
 
