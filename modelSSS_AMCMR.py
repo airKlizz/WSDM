@@ -116,11 +116,11 @@ class Model(object):
         self.v_c_dot = LSTM_layer(tf.multiply(self.x1, self.x2))
 
         v_c_reshape = tf.reshape(self.v_c_dot, [-1, self.hidden_size])
-        alpha = tf.matmul(v_c_reshape, self.weights['attention_dot']) + self.biases['attention_dot'] # (-1*2*30, 100) ** (-1, 100, 1) -> (-1, 2*30)
+        alpha = tf.matmul(v_c_reshape, self.weights['attention_dot']) + self.biases['attention_dot'] # (-1*30, 100) ** (-1, 100, 1) -> (-1, 30)
         alpha = tf.nn.softmax(alpha, axis=-1)
-        alpha = tf.reshape(alpha, [-1, 1, 2*self.max_sen_len]) 
+        alpha = tf.reshape(alpha, [-1, 1, self.max_sen_len]) 
 
-        self.h_dot = tf.tanh(tf.matmul(alpha, self.v_c_dot)) # (-1, 1, 2*30) ** (-1, 2*30, 100) -> (-1, 100)
+        self.h_dot = tf.tanh(tf.matmul(alpha, self.v_c_dot)) # (-1, 1, 30) ** (-1, 30, 100) -> (-1, 100)
         self.h_dot = tf.reshape(self.h_dot, [-1, self.hidden_size])
 
     def attention_LSTM_minus(self):
@@ -130,11 +130,11 @@ class Model(object):
         self.v_c_minus = LSTM_layer(tf.math.subtract(self.x1, self.x2))
 
         v_c_reshape = tf.reshape(self.v_c_minus, [-1, self.hidden_size])
-        alpha = tf.matmul(v_c_reshape, self.weights['attention_minus']) + self.biases['attention_minus'] # (-1*2*30, 100) ** (-1, 100, 1) -> (-1, 2*30)
+        alpha = tf.matmul(v_c_reshape, self.weights['attention_minus']) + self.biases['attention_minus'] # (-1*30, 100) ** (-1, 100, 1) -> (-1, 30)
         alpha = tf.nn.softmax(alpha, axis=-1)
-        alpha = tf.reshape(alpha, [-1, 1, 2*self.max_sen_len]) 
+        alpha = tf.reshape(alpha, [-1, 1, self.max_sen_len]) 
 
-        self.h_minus = tf.tanh(tf.matmul(alpha, self.v_c_minus)) # (-1, 1, 2*30) ** (-1, 2*30, 100) -> (-1, 100)
+        self.h_minus = tf.tanh(tf.matmul(alpha, self.v_c_minus)) # (-1, 1, 30) ** (-1, 30, 100) -> (-1, 100)
         self.h_minus = tf.reshape(self.h_minus, [-1, self.hidden_size])
 
     def attention_multi_LSTM(self):
