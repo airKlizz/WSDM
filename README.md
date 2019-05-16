@@ -64,6 +64,9 @@ data is a (-1, 2, max_sentence_length, embedding_dimension) array. -1 is the num
 
 labels is a (-1, 3) array. -1 is the number of data and 3 is the number of classes (agreed, disagreed and unrelated).
 
+
+The script can also be used to create a resampling dataset. It uses a mix between under random sampling and over SMOTE sampling. The parameters ratio_sampling determines the ration of the dataset resampled.
+
 ## Train, test and submission
 
 These scripts allow to train the model, test to obtain accuracy and create a submission csv file for the Kaggle competition.
