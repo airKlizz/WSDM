@@ -51,3 +51,18 @@ Same model as modelSSS expect that we don't only concatenate inter-attention of 
 ### modelSSS_AMCMR
 Same model as modelSSS with multi_LSTM and attention on each one and multi_compare.
 
+
+## Dataset
+
+The dataset.py script allows to create pickle files of the data. The train_dataset pickle file contains 4 lists :
+* train_X : containing training data,
+* train_y : containing training labels,
+* test_X : containing testing data,
+* test_y : containing testing labels.
+
+data is a (-1, 2, max_sentence_length, embedding_dimension) array. -1 is the number of data and 2 is for sentences A and B.
+labels is a (-1, 3) array. -1 is the number of data and 3 is the number of classes (agreed, disagreed and unrelated).
+
+## Train, test and submission
+
+These scripts allow to train the model, test to obtain accuracy and create a submission csv file for the Kaggle competition.
