@@ -9,9 +9,9 @@ import time
 import tensorflow as tf
 import numpy as np
 
-from modelSSS_multi_LSTM import Model
+from modelSSS_AMCMR import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="5"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 data_directory = "../Data2"
 backup_directory = "../Backup2/"
@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "3_SSS_multi_LSTM_normalized_batch")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "SSS AMCMR original dataset normalized batch and class weights")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
@@ -148,7 +148,7 @@ with tf.Graph().as_default():
                     model.x1: x1,
                     model.x2: x2,
                     model.y: y,
-                    #model.class_weights: class_weights,
+                    model.class_weights: class_weights,
                     #model.class_weights_accuracy: class_weights_accuracy,
                 }
 
@@ -201,7 +201,7 @@ with tf.Graph().as_default():
                             model.x1: x1,
                             model.x2: x2,
                             model.y: y,
-                            #model.class_weights: class_weights,
+                            model.class_weights: class_weights,
                             #model.class_weights_accuracy: class_weights_accuracy,
                         }
 
