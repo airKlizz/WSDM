@@ -103,8 +103,7 @@ with tf.Graph().as_default():
 
             for batch in range(nb_batch_per_epoch):
 
-                # normalize_batch_size :
-
+                # normalized batch :
                 idx = batch * batch_size
                 x1 = np.array([train_X[idx][0]])
                 x2 = np.array([train_X[idx][1]])
@@ -119,8 +118,8 @@ with tf.Graph().as_default():
                         y = np.append(y, np.array([train_y[idx]]), axis=0)
                         class_sum = np.add(class_sum, train_y[idx])
                 
-
-                '''idx_min = batch * batch_size
+                '''# original batch
+                idx_min = batch * batch_size
                 idx_max = min((batch+1) * batch_size, len(train_X)-1)
 
                 x1 = train_X[idx_min:idx_max, 0]
@@ -187,16 +186,15 @@ with tf.Graph().as_default():
                         class_weights_accuracy = []
                         for label in y:
                             if np.argmax(label) == 0:
-                                class_weights.append((92973/320552)/15)
+                                class_weights.append((3/10)/15)
                                 class_weights_accuracy.append(1/15)
                             elif np.argmax(label) == 1:
-                                class_weights.append((8266/320552)/5)
+                                class_weights.append((2/10)/5)
                                 class_weights_accuracy.append(1/5)
                             else :
-                                class_weights.append((219313/320552)/16)
+                                class_weights.append((5/10)/16)
                                 class_weights_accuracy.append(1/16)
-                        
-
+                                
                         feed_dict = {
                             model.x1: x1,
                             model.x2: x2,

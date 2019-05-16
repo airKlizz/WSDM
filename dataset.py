@@ -20,7 +20,10 @@ import numpy as np
 
 from collections import Counter
 
-#data_directory = "../Data"
+'''# WSDM DATASET
+data_directory = "../Data"'''
+
+# STANFORD DATASET
 data_directory = "../Data2"
 data_directory_1 = "../Data"
 
@@ -29,11 +32,14 @@ test_dataset_file_path = data_directory+"/test_dataset"
 
 create_test_dataset = False
 
-#train_file_path = data_directory+"/train.csv"
-#test_file_path = data_directory+"/test.csv"
+
+'''# WSDM DATASET
+train_file_path = data_directory+"/train.csv"
+test_file_path = data_directory+"/test.csv"'''
+
+# STANFORD DATASET
 train_file_path = data_directory+"/snli_1.0_train.jsonl"
 test_file_path = data_directory+"/snli_1.0_test.jsonl"
-
 row_file_path = data_directory+"/row.json"
 
 embedding_file_path = data_directory_1+"/glove.6B.100d.txt"
@@ -49,25 +55,23 @@ y_train = []
 X_test = []
 
 '''
-
+# WSDM DATASET
 with open(train_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         X_train.append([row[i] for i in [5, 6]])
         y_train.append(row[7])
-
 X_train = X_train[1:]
 y_train = y_train[1:]
-
 with open(test_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         X_test.append([row[i] for i in [5, 6]])
-
 X_test = X_test[1:]
 
 '''
 
+# STANFORD DATASET
 with open(train_file_path) as f:
     content = f.readlines()
     i = 0
@@ -75,10 +79,8 @@ with open(train_file_path) as f:
         print(i, "/", len(content))
         i += 1
         row_json = json.loads(row)
-        
         X_train.append([row_json["sentence1"], row_json["sentence2"]])
         y_train.append(row_json["gold_label"])
-
 
 
 '''
@@ -163,9 +165,8 @@ for line in X_train:
     for word in line[1]:
         wordset.add(word)
 
-print("HERE2")
-
 for line in X_test:
+    print(i, "/", len(X_test))
     line[0] = preprocessing(line[0])
     line[1] = preprocessing(line[1])
     for word in line[0]:
@@ -173,15 +174,9 @@ for line in X_test:
     for word in line[1]:
         wordset.add(word)
 
-print("HERE2")
-
 word_embedding, words_dict = load_embedding(embedding_file_path, wordset, embedding_dim)
 
-print("HERE3")
-
 no_word_vector = np.zeros(embedding_dim)
-
-print("HERE4")
 
 for line in X_train:
 
@@ -203,8 +198,16 @@ for line in X_train:
 
 argmax_y_train = []
 
-print("HERE5")
+'''# WSDM DATASET
+for i in range(len(y_train)):
+    if y_train[i] == 'agreed':
+        argmax_y_train.append(0)
+    elif y_train[i] == 'disagreed':
+        argmax_y_train.append(1)
+    else :
+        argmax_y_train.append(2)'''
 
+# STANFORD DATASET
 for i in range(len(y_train)):
     if y_train[i] == 'entailment':
         argmax_y_train.append(0)
@@ -213,32 +216,40 @@ for i in range(len(y_train)):
     else :
         argmax_y_train.append(2)
 
-if create_test_dataset:
-    for line in X_test:
+'''# WSDM DATASET
+for line in X_test:
+    sentence = []
+    for i in range(max_sen_len):
+        if i < len(line[0]) and line[0][i] in words_dict:
+            sentence.append(word_embedding[words_dict[line[0][i]]])
+        else :
+            sentence.append(no_word_vector)
+    line[0] = np.array(sentence)
+    sentence = []
+    for i in range(max_sen_len):
+        if i < len(line[1]) and line[1][i] in words_dict:
+            sentence.append(word_embedding[words_dict[line[1][i]]])
+        else :
+            sentence.append(no_word_vector)
+    line[1] = np.array(sentence)'''
 
-        sentence = []
-        for i in range(max_sen_len):
-            if i < len(line[0]) and line[0][i] in words_dict:
-                sentence.append(word_embedding[words_dict[line[0][i]]])
-            else :
-                sentence.append(no_word_vector)
-        line[0] = np.array(sentence)
-
-        sentence = []
-        for i in range(max_sen_len):
-            if i < len(line[1]) and line[1][i] in words_dict:
-                sentence.append(word_embedding[words_dict[line[1][i]]])
-            else :
-                sentence.append(no_word_vector)
-        line[1] = np.array(sentence)
+y_train = []
+for i in range(len(argmax_y_train)):
+    if argmax_y_train[i] == 0:
+        y_train.append([1, 0, 0])
+    elif argmax_y_train[i] == 1:
+        y_train.append([0, 1, 0])
+    else :
+        y_train.append([0, 0, 1])
 
 '''
 DATASET RE-SAMPLING
 '''
-
 print("Original dataset shape ", Counter(argmax_y_train))
+
 '''   
-sm = SMOTE()
+# UNDERSAMPLING
+
 rus = RandomUnderSampler()
 
 X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
@@ -255,22 +266,19 @@ y_train_res = np.concatenate((y_train_res, argmax_y_train[idx_max:]), axis=0)
 X_train = np.reshape(X_train_reshape_res, (-1, 2, max_sen_len, embedding_dim))
 print("Resampled dataset shape ", Counter(y_train_res))
 '''
-y_train = []
-for i in range(len(argmax_y_train)):
-    if argmax_y_train[i] == 0:
-        y_train.append([1, 0, 0])
-    elif argmax_y_train[i] == 1:
-        y_train.append([0, 1, 0])
-    else :
-        y_train.append([0, 0, 1])
-
 
 '''
+# UNDERSAMPLING AND SMOTE
+
+sm = SMOTE()
+rus = RandomUnderSampler()
+
+ratio_sampling = 0.65
 
 X_train_reshape = np.reshape(X_train, (-1, 2*max_sen_len*embedding_dim))
 
 batch_size = 5000
-nb_batch = int((len(X_train_reshape)/batch_size+1)*0.65)
+nb_batch = int((len(X_train_reshape)/batch_size+1)*ratio_sampling)
 
 for batch in range(nb_batch):
     print(batch, "/", nb_batch)
@@ -305,7 +313,6 @@ for i in range(len(y_train_res)):
         y_train.append([0, 0, 1])
 '''
 
-
 print("shape")
 print(np.shape(X_train))
 print(np.shape(y_train))
@@ -323,8 +330,8 @@ test_y = np.array(y_train[:int(test_percentage*len(y_train))])
 
 train_dataset = [train_X, train_y, test_X, test_y]
 
-if create_test_dataset:
-    test_dataset = [X_test]
+# WSDM DATASET
+test_dataset = [X_test]
 
 '''
 Save dataset
@@ -336,10 +343,10 @@ with open(train_dataset_file_path, 'wb') as f:
 
 print("train dataset done")
 
-if create_test_dataset:
-    with open(test_dataset_file_path, 'wb') as f:
-        pickle.dump(test_dataset, f, protocol=4)
-    print("test dataset done")
+# WSDM DATASET
+with open(test_dataset_file_path, 'wb') as f:
+    pickle.dump(test_dataset, f, protocol=4)
+print("test dataset done")
 
 
 # Counter({2: 219313, 0: 92973, 1: 8266}) sum: 320552
