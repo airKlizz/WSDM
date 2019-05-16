@@ -50,12 +50,15 @@ y_train = y_train[1:]
 
 
 X_test = []
+test_id = []
 
 with open(test_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         X_test.append([row[i] for i in [5, 6]])
+        test_id.append(row[0])
 
+test_id = test_id[1:]
 X_test = X_test[1:]
 
 '''
@@ -249,7 +252,7 @@ for i in range(len(y_train_res)):
 Split in train and test set
 '''
 
-test_dataset = [X_test]
+test_dataset = [test_id, X_test]
 
 '''
 Save dataset
