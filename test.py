@@ -7,7 +7,7 @@ import csv
 import tensorflow as tf
 import numpy as np
 
-os.environ["CUDA_VISIBLE_DEVICES"]="5"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 data_directory = "../Data"
 backup_directory = "../Models/"
@@ -41,9 +41,9 @@ class_weights = [1/15, 1/5, 1/16]
 #timestamp = '1557654254' #SScv3
 #timestamp = '1557655718' #SScv4
 #timestamp = '1557663468' # SSS dropout
-timestamp = '1557931578' 
+timestamp = '1557936857' 
 
-specifications = 'DDD original dataset normalized batch'
+specifications = 'SSS multi compare original dataset normalized batch'
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
