@@ -41,9 +41,9 @@ class_weights = [1/15, 1/5, 1/16]
 #timestamp = '1557654254' #SScv3
 #timestamp = '1557655718' #SScv4
 #timestamp = '1557663468' # SSS dropout
-timestamp = '1557936857' 
+timestamp = '1557935959' 
 
-specifications = 'SSS multi compare original dataset normalized batch'
+specifications = 'DDD combine sampling dataset 0.75'
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
