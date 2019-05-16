@@ -41,9 +41,9 @@ class_weights = [1/15, 1/5, 1/16]
 #timestamp = '1557654254' #SScv3
 #timestamp = '1557655718' #SScv4
 #timestamp = '1557663468' # SSS dropout
-timestamp = '1557935959' 
+timestamp = '1557936966' 
 
-specifications = 'DDD combine sampling dataset 0.75'
+specifications = 'SSS original dataset normalized batch, class weights and batch size 300'
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
@@ -66,7 +66,7 @@ with graph.as_default():
         model_x1 = graph.get_operation_by_name("input/x1").outputs[0]
         model_x2 = graph.get_operation_by_name("input/x2").outputs[0]
         model_y = graph.get_operation_by_name("input/y").outputs[0]
-        #model_class_weights = graph.get_operation_by_name("input/class_weights").outputs[0]
+        model_class_weights = graph.get_operation_by_name("input/class_weights").outputs[0]
 
         model_predictions = graph.get_operation_by_name("predictions").outputs[0]
 
@@ -95,7 +95,7 @@ with graph.as_default():
                 model_x1: x1,
                 model_x2: x2,
                 model_y: y,
-                #model_class_weights: np.ones(len(x1))
+                model_class_weights: np.ones(len(x1))
             }
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
@@ -138,7 +138,7 @@ with graph.as_default():
                 model_x1: x1,
                 model_x2: x2,
                 model_y: y,
-                #model_class_weights: np.ones(len(x1))
+                model_class_weights: np.ones(len(x1))
             }
 
             predictions = sess.run(model_predictions, feed_dict=feed_dict)
