@@ -43,7 +43,7 @@ Same model as modelSSS but with dropout one every layer (inter-attention layer, 
 Same model as modelSSS but with a self attention layer after LSTM. In this model we take LSTM outputs of all words and apply self attention. 
 
 ### modelSSS_multi_LSTM
-Same model as modelSSS expect that we apply LSTM on the concatenation, the dot product and the minus of sentences A and B. After we use a dense layer to obtain the LSTM representation of these 2 sentences.
+Same model as modelSSS expect that we apply LSTM on the concatenation, the dot product and the substraction of sentences A and B. After we use a dense layer to obtain the LSTM representation of these 2 sentences.
 
 ### modelSSS_multi_compare
 Same model as modelSSS expect that we don't only concatenate inter-attention of A and B but we also do a dot product and a subtraction of them.
