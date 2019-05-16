@@ -96,10 +96,16 @@ with graph.as_default():
 
             batch += 1
 
+print("HEREE")
+
 for i in range(1, len(submission)):
     submission[i][1] = results_dict[submission[i][0]]
+
+print("HEREE2")
 
 with open(submission_file_path, 'w', newline='') as myfile:
     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
     for i in range(len(submission)):
         wr.writerow(submission[i])
+
+print("HEREE3")
