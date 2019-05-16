@@ -13,8 +13,8 @@ data_directory = "../Data"
 backup_directory = "../Models/"
 
 sample_submission_file_path = data_directory+"/sample_submission.csv"
-submission_file_path = data_directory+"/submission_15.csv"
-dataset_file_path = data_directory+"/test_dataset"
+submission_file_path = data_directory+"/submission_XXX.csv"
+dataset_file_path = data_directory+"/test_dataset_2"
 
 batch_size = 200
 
@@ -28,12 +28,19 @@ with open(sample_submission_file_path, newline='') as csvfile:
 with open(dataset_file_path, 'rb') as f:
     dataset = pickle.load(f)
 
-test_X = np.array(dataset[0])
+test_id = dataset[0]
+test_X = np.array(dataset[1])
 
-timestamp = '1557926061' 
+print("Shape:")
+print(len(test_id))
+print(np.shape(test_X))
+
+timestamp = 'XXXXXXX' 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
+
+results_dict = []
 
 graph = tf.Graph()
 with graph.as_default():
@@ -59,16 +66,14 @@ with graph.as_default():
         batch = 0
         idx_max = 0
 
-        while idx_max < len(test_X)-1:
+        while idx_max < len(test_X):
 
             idx_min = batch * batch_size
             idx_max = min((batch+1) * batch_size, len(test_X))
-            x1 = np.array([test_X[idx_min][3]])
-            x2 = np.array([test_X[idx_min][4]])
-
-            for i in range(idx_min+1, idx_max):
-                x1 = np.append(x1, np.array([test_X[i][3]]), axis=0)
-                x2 = np.append(x2, np.array([test_X[i][4]]), axis=0)
+            
+            x1 = test_X[idx_min:idx_max, 0]
+            x2 = test_X[idx_min:idx_max, 1]
+            batch_id = test_id[idx_min:idx_max]
 
             feed_dict = {
                 model_x1: x1,
@@ -81,15 +86,18 @@ with graph.as_default():
 
             for i in range(len(predictions)):
                 if predictions[i] == 0:
-                    submission[idx_min+i+1][1] = "agreed"
+                    results_dict[batch_id] = "agreed"
                 elif predictions[i] == 1:
-                    submission[idx_min+i+1][1] = "disagreed"
+                    results_dict[batch_id] = "disagreed"
                 elif predictions[i] == 2:
-                    submission[idx_min+i+1][1] = "unrelated"
+                    results_dict[batch_id] = "unrelated"
                 else :
                     print("Error prediction")
 
             batch += 1
+
+for i in range(1, len(submission)):
+    submission[i][1] = results_dict[submission[i][0]]
 
 with open(submission_file_path, 'w', newline='') as myfile:
     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
