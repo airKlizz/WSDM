@@ -106,7 +106,7 @@ class Model(object):
         alpha = tf.nn.softmax(alpha, axis=-1)
         alpha = tf.reshape(alpha, [-1, 1, 2*self.max_sen_len]) 
 
-        self.h_concat = tf.tanh(tf.matmul(alpha, self.v_c)) # (-1, 1, 2*30) ** (-1, 2*30, 100) -> (-1, 100)
+        self.h_concat = tf.tanh(tf.matmul(alpha, self.v_c_concat)) # (-1, 1, 2*30) ** (-1, 2*30, 100) -> (-1, 100)
         self.h_concat = tf.reshape(self.h_concat, [-1, self.hidden_size])
 
     def attention_LSTM_dot(self):
@@ -120,7 +120,7 @@ class Model(object):
         alpha = tf.nn.softmax(alpha, axis=-1)
         alpha = tf.reshape(alpha, [-1, 1, 2*self.max_sen_len]) 
 
-        self.h_dot = tf.tanh(tf.matmul(alpha, self.v_c)) # (-1, 1, 2*30) ** (-1, 2*30, 100) -> (-1, 100)
+        self.h_dot = tf.tanh(tf.matmul(alpha, self.v_c_dot)) # (-1, 1, 2*30) ** (-1, 2*30, 100) -> (-1, 100)
         self.h_dot = tf.reshape(self.h_dot, [-1, self.hidden_size])
 
     def attention_LSTM_minus(self):
@@ -134,7 +134,7 @@ class Model(object):
         alpha = tf.nn.softmax(alpha, axis=-1)
         alpha = tf.reshape(alpha, [-1, 1, 2*self.max_sen_len]) 
 
-        self.h_minus = tf.tanh(tf.matmul(alpha, self.v_c)) # (-1, 1, 2*30) ** (-1, 2*30, 100) -> (-1, 100)
+        self.h_minus = tf.tanh(tf.matmul(alpha, self.v_c_minus)) # (-1, 1, 2*30) ** (-1, 2*30, 100) -> (-1, 100)
         self.h_minus = tf.reshape(self.h_minus, [-1, self.hidden_size])
 
     def attention_multi_LSTM(self):
