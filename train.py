@@ -13,10 +13,10 @@ from modelSSS_AMCMR import Model
 
 os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
-data_directory = "../Data"
-backup_directory = "../Models/"
+data_directory = "../Data2"
+backup_directory = "../Backup2/"
 
-dataset_file_path = data_directory+"/train_dataset_2"
+dataset_file_path = data_directory+"/train_dataset"
 
 print("Restore Data")
 
@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "23_SSS_AMCMR_original_dataset_normalized_batch_class_weights")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "4_SSS_AMCMR_normalized_batch_class_weights")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
