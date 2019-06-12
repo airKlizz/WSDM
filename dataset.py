@@ -332,7 +332,7 @@ train_X = np.array(X_train[int(test_percentage*len(X_train)):])
 train_X_lenght = np.array(X_train_lenght[int(test_percentage*len(X_train_lenght)):])
 train_y = np.array(y_train[int(test_percentage*len(y_train)):])
 test_X = np.array(X_train[:int(test_percentage*len(X_train))])
-test_X_lenght = np.array(X_test_lenght[int(test_percentage*len(X_test_lenght)):])
+test_X_lenght = np.array(X_test_lenght[:int(test_percentage*len(X_test_lenght))])
 test_y = np.array(y_train[:int(test_percentage*len(y_train))])
 
 train_dataset = [train_X, train_X_lenght, train_y, test_X, test_X_lenght, test_y]
