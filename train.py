@@ -11,12 +11,12 @@ import numpy as np
 
 from modelSSS_AMCMR import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="2"
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
-data_directory = "../Data2"
-backup_directory = "../Backup2/"
+data_directory = "../Data"
+backup_directory = "../Models/"
 
-dataset_file_path = data_directory+"/train_dataset"
+dataset_file_path = data_directory+"/train_dataset_300"
 
 print("Restore Data")
 
@@ -35,10 +35,10 @@ test_X = np.array(dataset[2])
 test_y = np.array(dataset[3])
 
 n_class = 3
-embedding_dim = 100
-max_sen_len = 30
+embedding_dim = 300
+max_sen_len = 50
 
-hidden_size = 100
+hidden_size = 300
 
 learning_rate = 0.001
 batch_size = 100
@@ -84,7 +84,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "4_SSS_AMCMR_normalized_batch_class_weights")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "SSS_AMCMR_normalized_batch_class_weights_embedding_300")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
