@@ -38,7 +38,7 @@ test_y = np.array(dataset[3])
 
 n_class = 3
 embedding_dim = 100
-max_sen_len = 50
+max_sen_len = 30
 
 hidden_size = 100
 
