@@ -30,9 +30,11 @@ print("test_X :", np.shape(dataset[2]))
 print("test_y :", np.shape(dataset[3]))
 
 train_X = np.array(dataset[0])
-train_y = np.array(dataset[1])
-test_X = np.array(dataset[2])
-test_y = np.array(dataset[3])
+train_X_lenght = np.array(dataset[1])
+train_y = np.array(dataset[2])
+test_X = np.array(dataset[3])
+test_X_lenght = np.array(dataset[4])
+test_y = np.array(dataset[5])
 
 n_class = 3
 embedding_dim = 300
