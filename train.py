@@ -40,7 +40,7 @@ n_class = 3
 embedding_dim = 300
 max_sen_len = 50
 
-hidden_size = 300
+hidden_size = 100
 
 learning_rate = 0.001
 batch_size = 100
