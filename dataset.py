@@ -20,58 +20,63 @@ import numpy as np
 
 from collections import Counter
 
-'''# WSDM DATASET
-data_directory = "../Data"'''
+# WSDM DATASET
+data_directory = "../Data"
 
-# STANFORD DATASET
+'''# STANFORD DATASET
 data_directory = "../Data2"
-data_directory_1 = "../Data"
+data_directory_1 = "../Data"'''
 
-train_dataset_file_path = data_directory+"/train_dataset"
-test_dataset_file_path = data_directory+"/test_dataset"
+train_dataset_file_path = data_directory+"/train_dataset_300"
+test_dataset_file_path = data_directory+"/test_dataset_300"
 
 create_test_dataset = False
 
 
-'''# WSDM DATASET
+# WSDM DATASET
 train_file_path = data_directory+"/train.csv"
-test_file_path = data_directory+"/test.csv"'''
+test_file_path = data_directory+"/test.csv"
 
-# STANFORD DATASET
+'''# STANFORD DATASET
 train_file_path = data_directory+"/snli_1.0_train.jsonl"
 test_file_path = data_directory+"/snli_1.0_test.jsonl"
-row_file_path = data_directory+"/row.json"
+row_file_path = data_directory+"/row.json"'''
 
-embedding_file_path = data_directory_1+"/glove.6B.100d.txt"
+embedding_file_path = data_directory+"/glove.6B.300d.txt"
 test_dataset_file_path = data_directory+"/test_dataset"
 
 
-embedding_dim = 100
-max_sen_len = 30
+embedding_dim = 300
+max_sen_len = 50
 
 X_train = []
+X_train_lenght = []
 y_train = []
 
 X_test = []
+X_test_lenght = []
 
-'''
+
 # WSDM DATASET
 with open(train_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         X_train.append([row[i] for i in [5, 6]])
+        X_train_lenght.append([len(row[i]) for i in [5, 6]])
         y_train.append(row[7])
 X_train = X_train[1:]
+X_train_lenght = X_train_lenght[1:]
 y_train = y_train[1:]
 with open(test_file_path, newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         X_test.append([row[i] for i in [5, 6]])
+        X_test_lenght.append([len(row[i]) for i in [5, 6]])
 X_test = X_test[1:]
+X_test_lenght = X_test_lenght[1:]
 
-'''
 
-# STANFORD DATASET
+'''# STANFORD DATASET
 with open(train_file_path) as f:
     content = f.readlines()
     i = 0
@@ -80,7 +85,7 @@ with open(train_file_path) as f:
         i += 1
         row_json = json.loads(row)
         X_train.append([row_json["sentence1"], row_json["sentence2"]])
-        y_train.append(row_json["gold_label"])
+        y_train.append(row_json["gold_label"])'''
 
 
 '''
@@ -198,25 +203,25 @@ for line in X_train:
 
 argmax_y_train = []
 
-'''# WSDM DATASET
+# WSDM DATASET
 for i in range(len(y_train)):
     if y_train[i] == 'agreed':
         argmax_y_train.append(0)
     elif y_train[i] == 'disagreed':
         argmax_y_train.append(1)
     else :
-        argmax_y_train.append(2)'''
+        argmax_y_train.append(2)
 
-# STANFORD DATASET
+'''# STANFORD DATASET
 for i in range(len(y_train)):
     if y_train[i] == 'entailment':
         argmax_y_train.append(0)
     elif y_train[i] == 'contradiction':
         argmax_y_train.append(1)
     else :
-        argmax_y_train.append(2)
+        argmax_y_train.append(2)'''
 
-'''# WSDM DATASET
+# WSDM DATASET
 for line in X_test:
     sentence = []
     for i in range(max_sen_len):
@@ -231,7 +236,7 @@ for line in X_test:
             sentence.append(word_embedding[words_dict[line[1][i]]])
         else :
             sentence.append(no_word_vector)
-    line[1] = np.array(sentence)'''
+    line[1] = np.array(sentence)
 
 y_train = []
 for i in range(len(argmax_y_train)):
@@ -324,14 +329,16 @@ Split in train and test set
 test_percentage = 0.20
 
 train_X = np.array(X_train[int(test_percentage*len(X_train)):])
+train_X_lenght = np.array(X_train_lenght[int(test_percentage*len(X_train_lenght)):])
 train_y = np.array(y_train[int(test_percentage*len(y_train)):])
 test_X = np.array(X_train[:int(test_percentage*len(X_train))])
+test_X_lenght = np.array(X_test_lenght[int(test_percentage*len(X_test_lenght)):])
 test_y = np.array(y_train[:int(test_percentage*len(y_train))])
 
-train_dataset = [train_X, train_y, test_X, test_y]
+train_dataset = [train_X, train_X_lenght, train_y, test_X, test_X_lenght, test_y]
 
 # WSDM DATASET
-test_dataset = [X_test]
+test_dataset = [X_test, X_test_lenght]
 
 '''
 Save dataset
@@ -340,7 +347,6 @@ print("Save dataset")
 
 with open(train_dataset_file_path, 'wb') as f:
     pickle.dump(train_dataset, f, protocol=4)
-
 print("train dataset done")
 
 # WSDM DATASET
