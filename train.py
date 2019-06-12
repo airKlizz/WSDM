@@ -9,14 +9,14 @@ import time
 import tensorflow as tf
 import numpy as np
 
-from modelSSS_AMCMR import Model
+from modelSSS_multi_inter import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="4"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 data_directory = "../Data"
 backup_directory = "../Models/"
 
-dataset_file_path = data_directory+"/train_dataset_300"
+dataset_file_path = data_directory+"/train_dataset"
 
 print("Restore Data")
 
@@ -25,19 +25,19 @@ with open(dataset_file_path, 'rb') as f:
 
 print("DATASET :", np.shape(dataset))
 print("train_X :", np.shape(dataset[0]))
-print("train_y :", np.shape(dataset[2]))
-print("test_X :", np.shape(dataset[3]))
-print("test_y :", np.shape(dataset[5]))
+print("train_y :", np.shape(dataset[1]))
+print("test_X :", np.shape(dataset[2]))
+print("test_y :", np.shape(dataset[3]))
 
 train_X = np.array(dataset[0])
-train_X_lenght = np.array(dataset[1])
-train_y = np.array(dataset[2])
-test_X = np.array(dataset[3])
-test_X_lenght = np.array(dataset[4])
-test_y = np.array(dataset[5])
+#train_X_lenght = np.array(dataset[1])
+train_y = np.array(dataset[1])
+test_X = np.array(dataset[2])
+#test_X_lenght = np.array(dataset[4])
+test_y = np.array(dataset[3])
 
 n_class = 3
-embedding_dim = 300
+embedding_dim = 100
 max_sen_len = 50
 
 hidden_size = 100

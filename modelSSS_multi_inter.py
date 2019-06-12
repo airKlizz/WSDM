@@ -14,11 +14,11 @@ class Model(object):
             self.x1 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x1")
             self.x2 = tf.placeholder(tf.float32, [None, self.max_sen_len, self.embedding_dim], name="x2")
             self.y = tf.placeholder(tf.float32, [None, self.class_num], name="y")
-            #self.class_weights = tf.placeholder(tf.float32, [None], name="class_weights")
+            self.class_weights = tf.placeholder(tf.float32, [None], name="class_weights")
 
         with tf.name_scope('weights'):
             self.weights = {
-                'q_1_to_2': tf.Variable(tf.random_uniform([2 * embedding_dim, self.hidden_size], -0.01, 0.01)),
+                'q_1_to_2': tf.Variable(tf.random_uniform([4*embedding_dim, self.hidden_size], -0.01, 0.01)),
 
                 'p_1_to_2': tf.Variable(tf.random_uniform([self.hidden_size, 1], -0.01, 0.01)),
 
@@ -60,7 +60,13 @@ class Model(object):
         concat = tf.concat([x1_increase, x2_increase], axis=-1)
         concat = tf.reshape(concat, [-1, 2*self.embedding_dim])
 
-        s_1_to_2 = tf.nn.relu(tf.matmul(concat, self.weights['q_1_to_2']) + self.biases['q_1_to_2'])
+        dot = tf.multiply(x1_increase, x2_increase)
+        dot = tf.reshape(dot, [-1, self.embedding_dim])
+
+        substract = tf.math.subtract(x1_increase, x2_increase)
+        substract = tf.reshape(substract, [-1, self.embedding_dim])
+
+        s_1_to_2 = tf.nn.relu(tf.matmul(tf.concat([concat, dot, substract], axis=-1), self.weights['q_1_to_2']) + self.biases['q_1_to_2'])
         s_1_to_2 = tf.matmul(s_1_to_2, self.weights['p_1_to_2']) + self.biases['p_1_to_2']
         s_1_to_2 = tf.reshape(s_1_to_2, [-1, self.max_sen_len, self.max_sen_len])
 
@@ -97,15 +103,15 @@ class Model(object):
         
         with tf.name_scope("loss"):
 
-            '''losses = tf.losses.sparse_softmax_cross_entropy(
+            losses = tf.losses.sparse_softmax_cross_entropy(
                 labels=tf.argmax(self.y, -1),
                 logits=self.scores,
-                weights=self.class_weights)'''
+                weights=self.class_weights)
 
-            losses = tf.nn.softmax_cross_entropy_with_logits_v2(
+            '''losses = tf.nn.softmax_cross_entropy_with_logits_v2(
                 logits = self.scores,
                 labels = self.y
-            )
+            )'''
 
             self.loss = tf.reduce_mean(losses)
             
