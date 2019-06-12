@@ -11,10 +11,10 @@ import numpy as np
 
 from modelSSS import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 data_directory = "../Data"
-backup_directory = "../Backup/"
+backup_directory = "../Models/"
 
 dataset_file_path = data_directory+"/train_dataset"
 
@@ -86,7 +86,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "SSS")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "SSS_multi_inter")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
