@@ -34,6 +34,7 @@ test_X = np.array(dataset[1])
 print("Shape:")
 print(len(test_id))
 print(np.shape(test_X))
+print(len(test_X[0][0]))
 
 timestamp = '1560412409' 
 
