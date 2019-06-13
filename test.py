@@ -41,10 +41,13 @@ class_weights = [1/15, 1/5, 1/16]
 #timestamp = '1557655718' #SScv4
 #timestamp = '1557663468' # SSS dropout
 #timestamp = '1557994803' # SSS AMCMR
-timestamp = '1560412409' # SSS multi-inter
+#timestamp = '1560412409' # SSS multi-inter
+timestamp = '1560420670' # SSS_AMCMRMI
 
 
-specifications = 'SSS multi inter original dataset normalized batch class_weights'
+
+
+specifications = 'SSS AMCMRMI original dataset normalized batch class_weights'
 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
