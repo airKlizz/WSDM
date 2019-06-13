@@ -9,7 +9,7 @@ import time
 import tensorflow as tf
 import numpy as np
 
-from modelSSS import Model
+from modelSSS_multi_inter import Model
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
