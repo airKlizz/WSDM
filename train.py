@@ -86,7 +86,7 @@ with tf.Graph().as_default():
 
         timestamp = str(int(time.time()))
         checkpoint_dir = os.path.abspath(backup_directory+timestamp)
-        checkpoint_prefix = os.path.join(checkpoint_dir, "SSS_multi_inter")
+        checkpoint_prefix = os.path.join(checkpoint_dir, "SSS_AMCMRMI")
 
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
 
