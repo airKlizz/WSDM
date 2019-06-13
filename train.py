@@ -16,7 +16,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="2"
 data_directory = "../Data"
 backup_directory = "../Models/"
 
-dataset_file_path = data_directory+"/train_dataset"
+dataset_file_path = data_directory+"/train_dataset_300"
 
 print("Restore Data")
 
