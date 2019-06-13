@@ -7,14 +7,14 @@ import csv
 import tensorflow as tf
 import numpy as np
 
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 data_directory = "../Data"
 backup_directory = "../Models/"
 
 sample_submission_file_path = data_directory+"/sample_submission.csv"
-submission_file_path = data_directory+"/submission_23.csv"
-dataset_file_path = data_directory+"/test_dataset_2"
+submission_file_path = data_directory+"/submission_multi_inter.csv"
+dataset_file_path = data_directory+"/test_dataset"
 
 batch_size = 200
 
@@ -35,7 +35,7 @@ print("Shape:")
 print(len(test_id))
 print(np.shape(test_X))
 
-timestamp = '1557994803' 
+timestamp = '1560412409' 
 
 checkpoint_dir = os.path.abspath(backup_directory+timestamp)
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
