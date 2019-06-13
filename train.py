@@ -11,7 +11,7 @@ import numpy as np
 
 from modelSSS_AMCMR import Model
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 data_directory = "../Data"
 backup_directory = "../Models/"
