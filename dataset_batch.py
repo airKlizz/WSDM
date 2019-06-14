@@ -180,15 +180,13 @@ for line in X_train:
             sentence.append(no_word_vector)
     line[1] = np.array(sentence)
 
-y_train = []
-
 for i in range(len(y_train)):
     if y_train[i] == 'agreed':
-        y_train.append([1, 0, 0])
+        y_train[i] = np.array([1, 0, 0])
     elif y_train[i] == 'disagreed':
-        y_train.append([0, 1, 0])
+        y_train[i] = np.array([0, 1, 0])
     else :
-        y_train.append([0, 0, 1])
+        y_train[i] = np.array([0, 0, 1])
 
 '''for line in X_test:
     sentence = []
