@@ -250,8 +250,8 @@ for epoch in range(num_epochs):
             if class_sum[np.argmax(train_y[idx])] <= batch_size/n_class+1:
                 x1 = np.append(x1, np.array([train_X[idx][0]]), axis=0)
                 x2 = np.append(x2, np.array([train_X[idx][1]]), axis=0)
-                l1 = np.append(x1, np.array([train_X_lenght[idx][0]]), axis=0)
-                l2 = np.append(x2, np.array([train_X_lenght[idx][1]]), axis=0)
+                l1 = np.append(l1, np.array([train_X_lenght[idx][0]]), axis=0)
+                l2 = np.append(l2, np.array([train_X_lenght[idx][1]]), axis=0)
                 y = np.append(y, np.array([train_y[idx]]), axis=0)
                 class_sum = np.add(class_sum, train_y[idx])
 
