@@ -255,8 +255,9 @@ for epoch in range(num_epochs):
                 y = np.append(y, np.array([train_y[idx]]), axis=0)
                 class_sum = np.add(class_sum, train_y[idx])
 
+        dataset = np.array([x1, x2, l1, l2, y])
         with open(train_dataset_file_path+str(epoch)+"_"+str(batch), 'wb') as f:
-            pickle.dump(np.array([x1, x2, l1, l2, y]), f)
+            pickle.dump(dataset, f)
 
 test_dataset = np.array([test_X, test_X_lenght, test_y])
 
