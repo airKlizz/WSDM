@@ -226,11 +226,6 @@ Create batches and save data
 '''
 print('Create batches and save data')
 
-test_dataset = np.array([test_X, test_X_lenght, test_y])
-
-with open(test_dataset_file_path, 'wb') as f:
-    pickle.dump(test_dataset, f)
-
 for epoch in range(num_epochs):
     print('epoch :', epoch, '/', num_epochs)
     indices = np.arange(len(train_X))
@@ -264,6 +259,11 @@ for epoch in range(num_epochs):
 
         with open(train_dataset_file_path+str(epoch)+"_"+str(batch), 'wb') as f:
             pickle.dump(np.array([x1, x2, l1, l2, y]), f)
+
+test_dataset = np.array([test_X, test_X_lenght, test_y])
+
+with open(test_dataset_file_path, 'wb') as f:
+    pickle.dump(test_dataset, f, protocol='4')
 
 
 '''with open(test_dataset_file_path, 'wb') as f:
